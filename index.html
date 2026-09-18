@@ -6,7 +6,7 @@
 </head>
 <body>
 <title>Thirty Indicators</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@500;700;900&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
 <style>
   :root {
     --page: #f9f9f7;
@@ -17,7 +17,7 @@
     --grid: #e1e0d9;
     --baseline: #c3c2b7;
     --ring: rgba(11, 11, 11, 0.10);
-    --accent: #2a78d6;
+    --accent: #a51c30;
     --dom-1: #2a78d6;
     --dom-2: #eb6834;
     --dom-3: #1baf7a;
@@ -42,7 +42,7 @@
       --grid: #2c2c2a;
       --baseline: #383835;
       --ring: rgba(255, 255, 255, 0.10);
-      --accent: #3987e5;
+      --accent: #d97781;
       --dom-1: #3987e5;
       --dom-2: #d95926;
       --dom-3: #199e70;
@@ -63,7 +63,7 @@
     --grid: #2c2c2a;
     --baseline: #383835;
     --ring: rgba(255, 255, 255, 0.10);
-    --accent: #3987e5;
+    --accent: #d97781;
     --dom-1: #3987e5;
     --dom-2: #d95926;
     --dom-3: #199e70;
@@ -79,8 +79,8 @@
     background: var(--page);
     color: var(--ink);
     font-family: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-    font-size: 15px;
-    line-height: 1.5;
+    font-size: 16px;
+    line-height: 1.55;
     margin: 0;
     padding-block: 0 40px;
     padding-inline: 20px;
@@ -90,51 +90,53 @@
   /* ---------- Masthead ---------- */
   header.masthead {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    gap: 14px 24px;
-    padding-block: 22px 14px;
-    border-bottom: 2px solid var(--ink);
-    margin-bottom: 18px;
+    text-align: center;
+    gap: 10px;
+    padding-block: 28px 20px;
+    border-bottom: 3px double var(--ink);
+    margin-bottom: 20px;
   }
-  .masthead-copy { max-width: 700px; }
   .eyebrow {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--ink-2);
-    margin: 0 0 6px;
+    color: var(--accent);
+    margin: 0;
   }
   h1 {
-    font-family: "Libre Franklin", "Public Sans", system-ui, sans-serif;
-    font-weight: 900;
-    font-size: clamp(26px, 4vw, 34px);
+    font-family: "Libre Caslon Text", Georgia, "Times New Roman", serif;
+    font-weight: 700;
+    font-size: clamp(34px, 5vw, 52px);
     line-height: 1.04;
-    letter-spacing: -0.015em;
-    margin: 0 0 8px;
+    letter-spacing: 0.005em;
+    margin: 0;
     text-wrap: balance;
   }
-  .standfirst { color: var(--ink-2); margin: 0; max-width: 72ch; font-size: 14px; }
+  .standfirst { color: var(--ink-2); margin: 0; max-width: 66ch; font-size: 15.5px; }
 
   .hero-tile {
     background: var(--surface);
     border: 1px solid var(--ring);
     border-radius: 6px;
-    padding: 12px 18px;
+    padding: 12px 22px;
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 18px;
+    margin-top: 4px;
   }
+  .hero-meta { text-align: left; }
   .hero-figure {
-    font-family: "Libre Franklin", system-ui, sans-serif;
-    font-weight: 900;
-    font-size: 40px;
+    font-family: "Libre Caslon Text", Georgia, serif;
+    font-weight: 700;
+    font-size: 42px;
     line-height: 1;
     display: flex;
     align-items: baseline;
     gap: 6px;
+    font-variant-numeric: lining-nums;
   }
   .hero-figure .of-100 { font-size: 14px; font-weight: 600; color: var(--ink-muted); font-family: "Public Sans", system-ui, sans-serif; }
   .hero-meta .tile-label {
@@ -171,9 +173,9 @@
     margin-bottom: 8px;
   }
   .chart-title {
-    font-family: "Libre Franklin", system-ui, sans-serif;
+    font-family: "Libre Caslon Text", Georgia, serif;
     font-weight: 700;
-    font-size: 16px;
+    font-size: 18px;
     margin: 0;
   }
   .legend { display: flex; flex-wrap: wrap; gap: 5px 14px; padding: 0; margin: 0; list-style: none; }
@@ -225,7 +227,7 @@
     border: 0;
     padding: 0;
     margin: 0;
-    cursor: default;
+    cursor: pointer;
     font: inherit;
   }
   .bar-fill {
@@ -322,9 +324,9 @@
     margin-bottom: 12px;
   }
   h2 {
-    font-family: "Libre Franklin", system-ui, sans-serif;
+    font-family: "Libre Caslon Text", Georgia, serif;
     font-weight: 700;
-    font-size: 18px;
+    font-size: 21px;
     margin: 0;
   }
   .section-note { color: var(--ink-2); margin: -6px 0 12px; max-width: 90ch; font-size: 13px; }
@@ -397,9 +399,9 @@
     flex: none;
   }
   .dialog-head h3 {
-    font-family: "Libre Franklin", system-ui, sans-serif;
+    font-family: "Libre Caslon Text", Georgia, serif;
     font-weight: 700;
-    font-size: 16px;
+    font-size: 18px;
     margin: 0;
   }
   .dialog-close {
@@ -436,6 +438,15 @@
     margin-right: 8px;
     vertical-align: baseline;
   }
+  .history-svg { width: 100%; height: auto; display: block; margin-top: 4px; }
+  .history-svg .h-grid { stroke: var(--grid); stroke-width: 1; }
+  .history-svg .h-zero { stroke: var(--baseline); }
+  .history-svg .h-axis { fill: var(--ink-muted); font-size: 10px; }
+  .history-svg .h-line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+  .history-svg .h-guide { stroke: var(--ink-muted); stroke-dasharray: 3 3; }
+  .history-svg .h-hlabel { fill: var(--ink); font-size: 11px; font-weight: 600; }
+  .history-note { font-size: 12.5px; color: var(--ink-muted); margin: 8px 0 0; max-width: 76ch; }
+
   td .delta-up { color: var(--status-good); }
   td .delta-down { color: var(--status-critical); }
   @media (prefers-color-scheme: light) {
@@ -471,8 +482,9 @@
   }
   @media (min-width: 900px) and (max-height: 780px) {
     .standfirst, .section-note, .chart-footnote, .lever-desc { display: none; }
-    header.masthead { padding-block: 14px 10px; margin-bottom: 12px; }
-    h1 { font-size: 24px; margin-bottom: 0; }
+    header.masthead { padding-block: 14px 12px; margin-bottom: 12px; gap: 6px; }
+    h1 { font-size: 30px; }
+    .hero-tile { padding-block: 8px; margin-top: 0; }
     .hero-figure { font-size: 32px; }
     .lever { padding-block: 8px 7px; }
   }
@@ -480,11 +492,9 @@
 
 <div class="shell">
   <header class="masthead">
-    <div class="masthead-copy">
-      <p class="eyebrow">Reunion Committee &middot; Discussion Prototype &middot; Meeting of Mon Sept 28, 10 a.m.</p>
-      <h1>Thirty Indicators</h1>
-      <p class="standfirst">What does a healthy democracy look like &mdash; and which parts move together? Drag the six levers and watch the thirty indicators respond. The framework and the dotted 2020 marks are International IDEA&rsquo;s real data; today&rsquo;s starting values are illustrative, anchored to the report&rsquo;s finding that six U.S. indicators now sit at 50-year lows.</p>
-    </div>
+    <p class="eyebrow">Harvard Class of 1972 &middot; Reunion Committee &middot; Monday, September 28, 10 a.m.</p>
+    <h1>Thirty Indicators</h1>
+    <p class="standfirst">What does a healthy democracy look like &mdash; and which parts move together? Drag the six levers and watch the thirty indicators respond. The framework and the dotted 2020 marks are International IDEA&rsquo;s real data; today&rsquo;s starting values are illustrative, anchored to the report&rsquo;s finding that six U.S. indicators now sit at 50-year lows.</p>
     <div class="hero-tile" aria-live="polite">
       <div class="hero-figure"><span id="heroValue">0</span><span class="of-100">/ 100</span></div>
       <div class="hero-meta">
@@ -509,7 +519,7 @@
         <div class="tooltip" id="tooltip" hidden role="status"></div>
       </div>
     </div>
-    <p class="chart-footnote">Hover or tab to any column for its name and score. The dotted mark<span class="tick-demo"></span>is the last published measured value for that indicator (2020, GSoD Indices v5.1, scaled &times;100); columns without a mark were added in IDEA&rsquo;s 2023 framework revision.</p>
+    <p class="chart-footnote">Hover or tab to any column for its name and score; <strong>click it for its 1975&ndash;2020 history</strong>. The dotted mark<span class="tick-demo"></span>is the measured 2020 value (GSoD Indices v5.1, scaled &times;100); columns without a mark were added in IDEA&rsquo;s 2023 framework revision.</p>
   </section>
 
   <section class="levers-section">
@@ -550,6 +560,14 @@
       <tbody id="tableBody"></tbody>
     </table>
   </div>
+</dialog>
+
+<dialog id="historyDialog" aria-labelledby="historyTitle">
+  <div class="dialog-head">
+    <h3 id="historyTitle">History</h3>
+    <button type="button" class="dialog-close" data-close-dialog aria-label="Close">&#10005;</button>
+  </div>
+  <div class="dialog-body" id="historyBody"></div>
 </dialog>
 
 <dialog id="aboutDialog" aria-labelledby="aboutDialogTitle">
@@ -858,6 +876,108 @@
       btn.addEventListener("click", function () { dlg.close(); });
     });
   });
+
+  /* ---------- History (US, GSoD Indices v5.1, 1975-2020, x100) ---------- */
+  var HIST = {"y0":1975,"y1":2020,"s":{"0":[78,83,83,83,83,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,75,75,81,81,80,81,89,89,90,90,89,89,90,90,92,92,77,77,76,76,79],"1":[89,89,89,89,89,89,89,89,89,89,89,89,89,89,89,91,91,91,91,91,91,91,91,91,91,89,89,94,94,94,94,95,95,95,95,93,93,94,94,94,94,93,93,93,93,93],"2":[75,75,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,100,100,100,100,100,100,100,100,100,100,92,92,92,92,92],"3":[100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100],"4":[78,77,76,76,76,76,75,75,75,75,75,75,75,75,75,75,75,76,76,76,77,77,77,77,77,77,77,77,77,77,77,77,77,77,78,78,78,78,78,78,78,78,69,65,63,62],"5":[78,78,78,78,78,88,88,88,88,88,88,88,88,88,88,88,88,88,88,88,88,88,88,88,88,83,85,85,85,83,94,94,94,94,94,94,94,94,94,94,94,94,88,86,86,86],"6":[82,84,81,84,84,84,84,84,84,84,84,84,84,84,84,88,86,88,88,88,88,88,88,88,88,88,88,86,88,90,90,90,90,90,90,90,90,90,90,90,90,89,75,74,72,74],"7":[85,85,85,85,85,85,86,86,85,85,86,85,85,85,85,85,85,85,84,84,84,84,84,84,84,86,84,84,84,84,84,84,85,85,87,86,86,86,86,86,86,85,79,79,78,80],"8":[78,78,78,78,78,84,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,79,83,90,90,90,92,92,84,84,77],"9":[79,79,79,79,79,79,80,80,80,80,80,80,80,80,80,80,80,80,80,80,80,80,80,80,80,80,80,71,71,71,71,71,71,80,80,80,80,80,80,80,80,79,70,66,66,66],"10":[91,91,91,91,91,91,88,88,88,88,88,93,93,93,93,93,93,93,93,93,93,93,93,93,93,93,86,86,86,86,86,86,86,86,86,86,86,90,90,90,90,90,83,84,84,71],"11":[62,62,62,62,62,63,68,68,68,68,67,67,67,67,67,70,68,68,69,69,69,69,69,69,69,69,64,61,59,52,54,54,55,61,63,63,63,63,64,64,62,62,64,62,62,62],"12":[82,82,82,82,82,82,82,82,81,82,82,82,81,81,81,82,82,82,82,82,83,83,82,83,82,83,83,83,83,83,83,83,83,83,83,82,83,82,79,79,79,76,76,76,76,78],"13":[61,61,61,61,61,62,62,62,61,62,61,61,61,61,61,63,66,66,66,66,66,66,66,66,66,69,68,68,68,68,68,67,67,67,69,69,69,69,69,69,69,68,68,68,64,63],"15":[60,60,60,60,63,63,63,63,63,64,66,66,67,67,67,67,67,67,67,70,70,70,70,70,70,70,71,71,71,71,71,71,74,74,75,75,75,75,75,75,75,75,75,75,75,75],"16":[52,52,52,52,52,60,59,59,59,61,61,61,61,61,62,64,64,65,66,66,66,66,66,66,66,71,71,71,71,71,72,72,72,72,75,75,75,75,75,75,75,74,72,73,72,74],"18":[78,78,78,78,78,78,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,80,80,80,79,79,79,79,79,79,79,80,80,80,84,84,84,84,82,84,84,80],"19":[76,76,76,76,76,78,73,73,73,74,74,74,76,76,79,79,79,79,79,79,79,78,78,78,78,78,78,77,78,78,79,78,78,78,79,79,79,82,81,81,82,78,67,67,70,71],"20":[76,77,77,77,77,77,77,77,77,78,78,78,78,78,78,78,78,78,80,80,80,81,81,81,81,81,81,81,81,81,81,81,81,81,82,82,82,82,79,79,79,80,71,71,69,71],"24":[38,57,57,37,37,57,57,40,40,58,58,36,36,56,56,37,37,60,60,39,39,53,53,35,35,53,53,35,35,57,57,37,37,57,57,39,39,54,54,33,33,56,56,47,47,62],"25":[79,79,79,79,79,79,77,77,77,77,77,77,77,77,77,81,81,81,86,86,86,86,86,86,86,86,81,81,81,81,81,81,81,86,86,91,91,91,91,91,91,85,80,75,75,78],"27":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}};
+
+  var historyDialog = document.getElementById("historyDialog");
+  var historyTitle = document.getElementById("historyTitle");
+  var historyBody = document.getElementById("historyBody");
+  var SVGNS = "http://www.w3.org/2000/svg";
+  function svgEl(tag, attrs) {
+    var el = document.createElementNS(SVGNS, tag);
+    for (var k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+
+  barsRoot.addEventListener("click", function (e) {
+    var bar = e.target.closest(".bar");
+    if (bar) openHistory(+bar.dataset.index);
+  });
+
+  function openHistory(i) {
+    var ind = INDICATORS[i];
+    var series = HIST.s[i];
+    historyTitle.textContent = ind[0];
+    historyBody.innerHTML = "";
+    if (!series) {
+      var p = document.createElement("p");
+      p.textContent = "No historical series exists for this indicator: it was added in IDEA's 2023 framework revision, and the public v5.1 dataset (1975–2020) predates it.";
+      historyBody.appendChild(p);
+    } else {
+      historyBody.appendChild(buildHistoryChart(series, ind));
+      var note = document.createElement("p");
+      note.className = "history-note";
+      note.textContent = "United States, " + HIST.y0 + "–" + HIST.y1 +
+        ", measured by International IDEA (GSoD Indices v5.1); 0–1 scores shown ×100. Hover for year-by-year values." +
+        (i === 24 ? " The sawtooth is real: turnout alternates between presidential and midterm years." : "");
+      historyBody.appendChild(note);
+      if (ind[4]) {
+        var fp = document.createElement("p");
+        fp.className = "history-note";
+        fp.textContent = ind[4] === 2
+          ? "▼ The 2026 report finds this indicator has since fallen to its lowest level in the dataset's history."
+          : "The 2026 report finds a statistically significant decline in this indicator since 2020.";
+        historyBody.appendChild(fp);
+      }
+    }
+    if (!historyDialog.open) historyDialog.showModal();
+  }
+
+  function buildHistoryChart(series, ind) {
+    var W = 660, H = 250, L = 30, R = 646, T = 14, B = 222;
+    var n = series.length;
+    var xAt = function (k) { return L + (R - L) * k / (n - 1); };
+    var yAt = function (v) { return B - (B - T) * v / 100; };
+    var svg = svgEl("svg", { viewBox: "0 0 " + W + " " + H, "class": "history-svg", role: "img" });
+    svg.setAttribute("aria-label", ind[0] + ", United States, " + HIST.y0 + " to " + HIST.y1 +
+      ". Ends at " + series[n - 1] + " out of 100.");
+    [0, 25, 50, 75, 100].forEach(function (v) {
+      svg.appendChild(svgEl("line", { x1: L, x2: R, y1: yAt(v), y2: yAt(v), "class": v === 0 ? "h-grid h-zero" : "h-grid" }));
+      var t = svgEl("text", { x: L - 6, y: yAt(v) + 3, "text-anchor": "end", "class": "h-axis" });
+      t.textContent = v; svg.appendChild(t);
+    });
+    [1975, 1985, 1995, 2005, 2015].forEach(function (yr) {
+      var t = svgEl("text", { x: xAt(yr - HIST.y0), y: B + 14, "text-anchor": "middle", "class": "h-axis" });
+      t.textContent = yr; svg.appendChild(t);
+    });
+    var color = "var(--dom-" + (ind[1] + 1) + ")";
+    var d = series.map(function (v, k) { return (k ? "L" : "M") + xAt(k).toFixed(1) + " " + yAt(v).toFixed(1); }).join(" ");
+    var path = svgEl("path", { d: d, "class": "h-line" });
+    path.style.stroke = color;
+    svg.appendChild(path);
+    var end = svgEl("circle", { cx: xAt(n - 1), cy: yAt(series[n - 1]), r: 3.5 });
+    end.style.fill = color;
+    svg.appendChild(end);
+    var endLab = svgEl("text", { x: R, y: Math.max(yAt(series[n - 1]) - 9, T + 9), "text-anchor": "end", "class": "h-hlabel" });
+    endLab.textContent = HIST.y1 + ": " + series[n - 1];
+    svg.appendChild(endLab);
+    var guide = svgEl("line", { y1: T, y2: B, "class": "h-guide", visibility: "hidden" });
+    var dot = svgEl("circle", { r: 3.5, visibility: "hidden" });
+    dot.style.fill = color;
+    var hlab = svgEl("text", { "class": "h-hlabel", "text-anchor": "middle", visibility: "hidden" });
+    svg.appendChild(guide); svg.appendChild(dot); svg.appendChild(hlab);
+    svg.addEventListener("mousemove", function (e) {
+      var rect = svg.getBoundingClientRect();
+      var vx = (e.clientX - rect.left) / rect.width * W;
+      var k = Math.max(0, Math.min(n - 1, Math.round((vx - L) / (R - L) * (n - 1))));
+      var x = xAt(k), y = yAt(series[k]);
+      guide.setAttribute("x1", x); guide.setAttribute("x2", x); guide.setAttribute("visibility", "visible");
+      dot.setAttribute("cx", x); dot.setAttribute("cy", y); dot.setAttribute("visibility", "visible");
+      hlab.setAttribute("x", Math.min(Math.max(x, L + 42), R - 42));
+      hlab.setAttribute("y", Math.max(y - 10, T + 10));
+      hlab.setAttribute("visibility", "visible");
+      hlab.textContent = (HIST.y0 + k) + " · " + series[k];
+      endLab.setAttribute("visibility", "hidden");
+    });
+    svg.addEventListener("mouseleave", function () {
+      guide.setAttribute("visibility", "hidden");
+      dot.setAttribute("visibility", "hidden");
+      hlab.setAttribute("visibility", "hidden");
+      endLab.setAttribute("visibility", "visible");
+    });
+    return svg;
+  }
 
   /* ---------- Table ---------- */
   var tableBody = document.getElementById("tableBody");
