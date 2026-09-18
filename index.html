@@ -483,7 +483,7 @@
     <div class="masthead-copy">
       <p class="eyebrow">Reunion Committee &middot; Discussion Prototype &middot; Meeting of Mon Sept 28, 10 a.m.</p>
       <h1>Thirty Indicators</h1>
-      <p class="standfirst">What does a healthy democracy look like &mdash; and which parts move together? Drag the six levers and watch the thirty indicators respond. The indicator set follows International IDEA&rsquo;s Global State of Democracy 2026 framework; starting values are illustrative, anchored to the report&rsquo;s finding that six U.S. indicators now sit at 50-year lows.</p>
+      <p class="standfirst">What does a healthy democracy look like &mdash; and which parts move together? Drag the six levers and watch the thirty indicators respond. The framework and the dotted 2020 marks are International IDEA&rsquo;s real data; today&rsquo;s starting values are illustrative, anchored to the report&rsquo;s finding that six U.S. indicators now sit at 50-year lows.</p>
     </div>
     <div class="hero-tile" aria-live="polite">
       <div class="hero-figure"><span id="heroValue">0</span><span class="of-100">/ 100</span></div>
@@ -509,7 +509,7 @@
         <div class="tooltip" id="tooltip" hidden role="status"></div>
       </div>
     </div>
-    <p class="chart-footnote">Hover or tab to any column for its name and score. The dotted mark<span class="tick-demo"></span>on each column is its starting value, so you can see how far a lever has moved it.</p>
+    <p class="chart-footnote">Hover or tab to any column for its name and score. The dotted mark<span class="tick-demo"></span>is the last published measured value for that indicator (2020, GSoD Indices v5.1, scaled &times;100); columns without a mark were added in IDEA&rsquo;s 2023 framework revision.</p>
   </section>
 
   <section class="levers-section">
@@ -541,7 +541,8 @@
         <tr>
           <th>Indicator</th>
           <th>Domain</th>
-          <th class="num">Start</th>
+          <th class="num">2020 measured</th>
+          <th class="num">Today (start)</th>
           <th class="num">Now</th>
           <th class="num">Change</th>
         </tr>
@@ -559,7 +560,7 @@
   <div class="dialog-body">
     <p><strong>Why it exists.</strong> A conversation starter for the reunion topic &ldquo;thirty indicators of a healthy civilization / democracy,&rdquo; prompted by NPR&rsquo;s September&nbsp;15, 2026 story, <a href="https://www.npr.org/2026/09/15/nx-s1-5969741/state-of-u-s-democracy-reaches-new-low-report-finds">&ldquo;State of U.S. democracy reaches new low, report finds.&rdquo;</a></p>
     <p><strong>The report behind it.</strong> That story covers <a href="https://www.idea.int/publications/catalogue/html/global-state-democracy-2026-democracy-age-conflict"><em>The Global State of Democracy 2026: Democracy in an Age of Conflict</em></a>, from the Stockholm-based International Institute for Democracy and Electoral Assistance, whose indices track 30 aspects of democracy across 174 countries back to 1975. Its U.S. findings: nearly half of the thirty indicators fell to their lowest levels in the dataset&rsquo;s fifty-year history, and seven declined significantly between 2020 and 2025 &mdash; access to justice, economic equality, freedom of expression, freedom of the press, effective parliament, judicial independence, and free political parties. All but the last are at record lows (marked <span style="color:var(--status-critical)">&#9660;</span> on the chart). Globally, 2025 was the eleventh straight year in which more countries declined than advanced, and rule of law was the weakest-performing category, with 71 countries scoring low.</p>
-    <p><strong>What is and isn&rsquo;t real.</strong> The indicator set and the flags above come from the report. The 0&ndash;100 starting scores and lever weights, however, are illustrative &mdash; IDEA&rsquo;s exact per-indicator scores (0&ndash;1 scale) are in its <a href="https://www.idea.int/gsod-indices/">downloadable GSoD Indices dataset</a> and can be wired in later. A natural committee exercise: argue about the weights &mdash; that argument <em>is</em> the discussion of what holds a democracy up.</p>
+    <p><strong>What is and isn&rsquo;t real.</strong> Real: the indicator framework, the &#9660; flags, the global statistics above, and the dotted marks on the chart &mdash; those are the United States&rsquo; measured scores for 2020 from IDEA&rsquo;s official GSoD Indices dataset (v5.1, the newest vintage with per-indicator values available to this page; scaled &times;100). The gap between a dotted mark and today&rsquo;s column is the reported 2020&ndash;2025 decline, sized illustratively. Illustrative: today&rsquo;s 0&ndash;100 starting scores and the lever weights. IDEA&rsquo;s v9 dataset (through 2024) is <a href="https://www.idea.int/gsod-indices/">freely downloadable</a> and can replace the 2020 marks when available. A natural committee exercise: argue about the weights &mdash; that argument <em>is</em> the discussion of what holds a democracy up.</p>
   </div>
 </dialog>
 
@@ -585,44 +586,48 @@
   ];
 
   /* Indicators adapted from International IDEA's Global State of Democracy framework.
-     [name, domain index, baseline, weights per lever (electoral, press, courts, restraint, integrity, civic), flag]
+     [name, domain index, baseline (illustrative "today"), weights per lever
+      (electoral, press, courts, restraint, integrity, civic), flag, measured2020]
      flag 2 = at its lowest level since 1975 per the GSoD 2026 report; flag 1 = statistically
-     significant decline 2020-2025 per the same report. */
+     significant decline 2020-2025 per the same report.
+     measured2020 = the US point estimate from IDEA's GSoD Indices v5.1 dataset, year 2020,
+     scaled x100 (null where the indicator was added in the 2023 framework revision and has
+     no v5.1 equivalent; "Freedom of the press" maps to v5.1 "Media Integrity"). */
   var INDICATORS = [
-    ["Credible elections",                     0, 44, [0.7, 0.1, 0.1, 0.1, 0.0, 0.0]],
-    ["Inclusive suffrage",                     0, 62, [0.8, 0.0, 0.1, 0.0, 0.0, 0.1]],
-    ["Free political parties",                 0, 48, [0.4, 0.2, 0.1, 0.3, 0.0, 0.0], 1],
-    ["Elected government holds real power",    0, 55, [0.6, 0.0, 0.2, 0.2, 0.0, 0.0]],
-    ["Effective parliament",                   0, 30, [0.2, 0.0, 0.1, 0.4, 0.1, 0.2], 2],
-    ["Local democracy",                        0, 52, [0.4, 0.0, 0.0, 0.2, 0.1, 0.3]],
+    ["Credible elections",                     0, 66, [0.7, 0.1, 0.1, 0.1, 0.0, 0.0], 0, 79],
+    ["Inclusive suffrage",                     0, 85, [0.8, 0.0, 0.1, 0.0, 0.0, 0.1], 0, 93],
+    ["Free political parties",                 0, 74, [0.4, 0.2, 0.1, 0.3, 0.0, 0.0], 1, 92],
+    ["Elected government holds real power",    0, 92, [0.6, 0.0, 0.2, 0.2, 0.0, 0.0], 0, 100],
+    ["Effective parliament",                   0, 40, [0.2, 0.0, 0.1, 0.4, 0.1, 0.2], 2, 62],
+    ["Local democracy",                        0, 78, [0.4, 0.0, 0.0, 0.2, 0.1, 0.3], 0, 86],
 
-    ["Freedom of expression",                  1, 34, [0.0, 0.6, 0.1, 0.3, 0.0, 0.0], 2],
-    ["Freedom of the press",                   1, 31, [0.0, 0.8, 0.1, 0.2, 0.0, 0.0], 2],
-    ["Freedom of association & assembly",      1, 48, [0.0, 0.2, 0.2, 0.5, 0.0, 0.1]],
-    ["Freedom of religion",                    1, 60, [0.0, 0.1, 0.3, 0.2, 0.0, 0.2]],
-    ["Freedom of movement",                    1, 58, [0.0, 0.0, 0.3, 0.5, 0.0, 0.0]],
-    ["Personal integrity & security",          1, 45, [0.0, 0.1, 0.2, 0.4, 0.0, 0.3]],
+    ["Freedom of expression",                  1, 52, [0.0, 0.6, 0.1, 0.3, 0.0, 0.0], 2, 74],
+    ["Freedom of the press",                   1, 50, [0.0, 0.8, 0.1, 0.2, 0.0, 0.0], 2, 80],
+    ["Freedom of association & assembly",      1, 68, [0.0, 0.2, 0.2, 0.5, 0.0, 0.1], 0, 77],
+    ["Freedom of religion",                    1, 60, [0.0, 0.1, 0.3, 0.2, 0.0, 0.2], 0, 66],
+    ["Freedom of movement",                    1, 65, [0.0, 0.0, 0.3, 0.5, 0.0, 0.0], 0, 71],
+    ["Personal integrity & security",          1, 55, [0.0, 0.1, 0.2, 0.4, 0.0, 0.3], 0, 62],
 
-    ["Access to justice",                      2, 33, [0.0, 0.0, 0.6, 0.1, 0.2, 0.1], 2],
-    ["Basic welfare",                          2, 50, [0.0, 0.0, 0.0, 0.1, 0.4, 0.3]],
-    ["Political equality",                     2, 40, [0.4, 0.0, 0.2, 0.0, 0.1, 0.3]],
-    ["Social group equality",                  2, 38, [0.1, 0.0, 0.3, 0.2, 0.0, 0.4]],
-    ["Gender equality",                        2, 55, [0.1, 0.0, 0.3, 0.0, 0.1, 0.3]],
-    ["Economic equality",                      2, 26, [0.0, 0.0, 0.0, 0.0, 0.4, 0.4], 2],
+    ["Access to justice",                      2, 52, [0.0, 0.0, 0.6, 0.1, 0.2, 0.1], 2, 78],
+    ["Basic welfare",                          2, 58, [0.0, 0.0, 0.0, 0.1, 0.4, 0.3], 0, 63],
+    ["Political equality",                     2, 55, [0.4, 0.0, 0.2, 0.0, 0.1, 0.3], 0, null],
+    ["Social group equality",                  2, 66, [0.1, 0.0, 0.3, 0.2, 0.0, 0.4], 0, 75],
+    ["Gender equality",                        2, 70, [0.1, 0.0, 0.3, 0.0, 0.1, 0.3], 0, 74],
+    ["Economic equality",                      2, 42, [0.0, 0.0, 0.0, 0.0, 0.4, 0.4], 2, null],
 
-    ["Judicial independence",                  3, 36, [0.0, 0.0, 0.8, 0.2, 0.0, 0.0], 2],
-    ["Absence of corruption",                  3, 36, [0.0, 0.1, 0.2, 0.0, 0.7, 0.0]],
-    ["Predictable enforcement of laws",        3, 38, [0.0, 0.0, 0.5, 0.3, 0.2, 0.0]],
-    ["Executive complies with constitution",   3, 40, [0.0, 0.0, 0.4, 0.6, 0.0, 0.0]],
-    ["Oversight of security forces",           3, 42, [0.0, 0.0, 0.2, 0.4, 0.3, 0.0]],
-    ["Equal treatment before the law",         3, 41, [0.1, 0.0, 0.5, 0.3, 0.0, 0.0]],
+    ["Judicial independence",                  3, 52, [0.0, 0.0, 0.8, 0.2, 0.0, 0.0], 2, 80],
+    ["Absence of corruption",                  3, 58, [0.0, 0.1, 0.2, 0.0, 0.7, 0.0], 0, 71],
+    ["Predictable enforcement of laws",        3, 55, [0.0, 0.0, 0.5, 0.3, 0.2, 0.0], 0, 71],
+    ["Executive complies with constitution",   3, 48, [0.0, 0.0, 0.4, 0.6, 0.0, 0.0], 0, null],
+    ["Oversight of security forces",           3, 52, [0.0, 0.0, 0.2, 0.4, 0.3, 0.0], 0, null],
+    ["Equal treatment before the law",         3, 50, [0.1, 0.0, 0.5, 0.3, 0.0, 0.0], 0, null],
 
-    ["Electoral participation",                4, 55, [0.5, 0.0, 0.0, 0.0, 0.0, 0.5]],
-    ["Civil society participation",            4, 58, [0.0, 0.2, 0.0, 0.2, 0.0, 0.6]],
-    ["Everyday civic engagement",              4, 50, [0.0, 0.1, 0.0, 0.0, 0.0, 0.8]],
-    ["Direct democracy tools",                 4, 35, [0.3, 0.0, 0.0, 0.0, 0.0, 0.5]],
-    ["Shared factual public sphere",           4, 28, [0.0, 0.5, 0.0, 0.0, 0.1, 0.4]],
-    ["Cross-party cooperation",                4, 26, [0.0, 0.0, 0.0, 0.1, 0.0, 0.9]]
+    ["Electoral participation",                4, 58, [0.5, 0.0, 0.0, 0.0, 0.0, 0.5], 0, 62],
+    ["Civil society participation",            4, 70, [0.0, 0.2, 0.0, 0.2, 0.0, 0.6], 0, 78],
+    ["Everyday civic engagement",              4, 55, [0.0, 0.1, 0.0, 0.0, 0.0, 0.8], 0, null],
+    ["Direct democracy tools",                 4, 8,  [0.3, 0.0, 0.0, 0.0, 0.0, 0.5], 0, 0],
+    ["Shared factual public sphere",           4, 30, [0.0, 0.5, 0.0, 0.0, 0.1, 0.4], 0, null],
+    ["Cross-party cooperation",                4, 25, [0.0, 0.0, 0.0, 0.1, 0.0, 0.9], 0, null]
   ];
 
   var SCALE = 0.7; /* points of indicator movement per weighted lever point */
@@ -632,9 +637,9 @@
     recovery:  [70, 70, 65, 65, 70, 65]
   };
   var STATUS = [
-    { min: 70, word: "Healthy",  color: "var(--status-good)" },
-    { min: 55, word: "Stable",   color: "var(--status-good)" },
-    { min: 45, word: "Strained", color: "var(--status-warning)" },
+    { min: 80, word: "Healthy",  color: "var(--status-good)" },
+    { min: 65, word: "Stable",   color: "var(--status-good)" },
+    { min: 50, word: "Strained", color: "var(--status-warning)" },
     { min: 35, word: "Eroding",  color: "var(--status-serious)" },
     { min: -1, word: "Critical", color: "var(--status-critical)" }
   ];
@@ -699,11 +704,13 @@
       b.dataset.index = i;
       var fill = document.createElement("div");
       fill.className = "bar-fill";
-      var tick = document.createElement("div");
-      tick.className = "base-tick";
-      tick.style.bottom = ind[2] + "%";
       b.appendChild(fill);
-      b.appendChild(tick);
+      if (ind[5] !== null) {
+        var tick = document.createElement("div");
+        tick.className = "base-tick";
+        tick.style.bottom = ind[5] + "%";
+        b.appendChild(tick);
+      }
       if (ind[4] === 2) {
         var flag = document.createElement("span");
         flag.className = "low-flag";
@@ -739,6 +746,12 @@
     var val = document.createElement("div"); val.className = "t-val";
     val.textContent = score.toFixed(0) + " / 100 · " + deltaTxt;
     tooltip.appendChild(name); tooltip.appendChild(dom); tooltip.appendChild(val);
+    if (ind[5] !== null) {
+      var measured = document.createElement("div");
+      measured.className = "t-domain";
+      measured.textContent = "Measured 2020: " + ind[5] + " (GSoD Indices v5.1)";
+      tooltip.appendChild(measured);
+    }
     if (ind[4]) {
       var flagNote = document.createElement("div");
       flagNote.className = "t-domain";
@@ -866,6 +879,9 @@
     }
     var tdDom = document.createElement("td");
     tdDom.textContent = DOMAINS[ind[1]].name;
+    var tdMeasured = document.createElement("td");
+    tdMeasured.className = "num";
+    tdMeasured.textContent = ind[5] === null ? "–" : ind[5];
     var tdBase = document.createElement("td");
     tdBase.className = "num";
     tdBase.textContent = ind[2];
@@ -873,8 +889,8 @@
     tdNow.className = "num";
     var tdDelta = document.createElement("td");
     tdDelta.className = "num";
-    tr.appendChild(tdName); tr.appendChild(tdDom); tr.appendChild(tdBase);
-    tr.appendChild(tdNow); tr.appendChild(tdDelta);
+    tr.appendChild(tdName); tr.appendChild(tdDom); tr.appendChild(tdMeasured);
+    tr.appendChild(tdBase); tr.appendChild(tdNow); tr.appendChild(tdDelta);
     tableBody.appendChild(tr);
     tableCells[i] = { now: tdNow, delta: tdDelta };
   });
