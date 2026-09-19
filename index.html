@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 </head>
 <body>
-<title>Thirty Indicators</title>
+<title>30 Indicators of a Healthy Civilization / Democracy</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
 <style>
   :root {
@@ -18,11 +18,11 @@
     --baseline: #c3c2b7;
     --ring: rgba(11, 11, 11, 0.10);
     --accent: #a51c30;
-    --dom-1: #2a78d6;
-    --dom-2: #eb6834;
-    --dom-3: #1baf7a;
-    --dom-4: #eda100;
-    --dom-5: #e87ba4;
+    --dom-1: #306eb8;
+    --dom-2: #cd653c;
+    --dom-3: #279c72;
+    --dom-4: #d29617;
+    --dom-5: #ce7898;
     --status-good: #0ca30c;
     --status-warning: #fab219;
     --status-serious: #ec835a;
@@ -30,6 +30,7 @@
     --tooltip-bg: #1e1e1c;
     --tooltip-ink: #ffffff;
     --backdrop: rgba(20, 20, 18, 0.45);
+    --bubble: #f0efec;
     color-scheme: light;
   }
   @media (prefers-color-scheme: dark) {
@@ -43,14 +44,15 @@
       --baseline: #383835;
       --ring: rgba(255, 255, 255, 0.10);
       --accent: #d97781;
-      --dom-1: #3987e5;
-      --dom-2: #d95926;
-      --dom-3: #199e70;
-      --dom-4: #c98500;
-      --dom-5: #d55181;
+      --dom-1: #4784ce;
+      --dom-2: #c46038;
+      --dom-3: #2c9470;
+      --dom-4: #bb861e;
+      --dom-5: #c25b80;
       --tooltip-bg: #f4f3ef;
       --tooltip-ink: #0b0b0b;
       --backdrop: rgba(0, 0, 0, 0.6);
+      --bubble: #262624;
       color-scheme: dark;
     }
   }
@@ -64,14 +66,15 @@
     --baseline: #383835;
     --ring: rgba(255, 255, 255, 0.10);
     --accent: #d97781;
-    --dom-1: #3987e5;
-    --dom-2: #d95926;
-    --dom-3: #199e70;
-    --dom-4: #c98500;
-    --dom-5: #d55181;
+    --dom-1: #4784ce;
+    --dom-2: #c46038;
+    --dom-3: #2c9470;
+    --dom-4: #bb861e;
+    --dom-5: #c25b80;
     --tooltip-bg: #f4f3ef;
     --tooltip-ink: #0b0b0b;
     --backdrop: rgba(0, 0, 0, 0.6);
+    --bubble: #262624;
     color-scheme: dark;
   }
 
@@ -90,48 +93,47 @@
   /* ---------- Masthead ---------- */
   header.masthead {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     align-items: center;
-    text-align: center;
-    gap: 10px;
-    padding-block: 28px 20px;
+    justify-content: space-between;
+    gap: 10px 24px;
+    padding-block: 14px 12px;
     border-bottom: 3px double var(--ink);
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
   .eyebrow {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--accent);
-    margin: 0;
+    margin: 0 0 2px;
   }
   h1 {
     font-family: "Libre Caslon Text", Georgia, "Times New Roman", serif;
     font-weight: 700;
-    font-size: clamp(34px, 5vw, 52px);
+    font-size: clamp(26px, 3.2vw, 34px);
     line-height: 1.04;
     letter-spacing: 0.005em;
     margin: 0;
     text-wrap: balance;
   }
-  .standfirst { color: var(--ink-2); margin: 0; max-width: 66ch; font-size: 15.5px; }
 
   .hero-tile {
     background: var(--surface);
     border: 1px solid var(--ring);
     border-radius: 6px;
-    padding: 12px 22px;
+    padding: 8px 16px;
     display: flex;
     align-items: center;
-    gap: 18px;
-    margin-top: 4px;
+    gap: 16px;
   }
   .hero-meta { text-align: left; }
+  .hero-spark { width: 110px; height: 36px; flex: none; }
   .hero-figure {
     font-family: "Libre Caslon Text", Georgia, serif;
     font-weight: 700;
-    font-size: 42px;
+    font-size: 34px;
     line-height: 1;
     display: flex;
     align-items: baseline;
@@ -164,23 +166,33 @@
     border-radius: 6px;
     padding: 16px 18px 12px;
   }
-  .chart-head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 8px 20px;
-    margin-bottom: 8px;
+  .timebar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-bottom: 8px; }
+  .timebar button {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    border: 0;
+    background: var(--accent);
+    color: var(--page);
+    font-size: 13px;
+    line-height: 1;
+    cursor: pointer;
+    flex: none;
   }
-  .chart-title {
+  .timebar button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .timebar input[type="range"] { flex: 1; accent-color: var(--ink-muted); margin: 0; min-width: 120px; }
+  .year-readout {
     font-family: "Libre Caslon Text", Georgia, serif;
     font-weight: 700;
-    font-size: 18px;
-    margin: 0;
+    font-size: 16px;
+    min-width: 130px;
+    text-align: right;
+    font-variant-numeric: tabular-nums lining-nums;
   }
-  .legend { display: flex; flex-wrap: wrap; gap: 5px 14px; padding: 0; margin: 0; list-style: none; }
-  .legend li { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-2); }
-  .legend .swatch { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+  .low-key { display: inline-flex; align-items: center; font-size: 12px; color: var(--ink-2); }
+  .bar.no-data { opacity: 0.3; }
+  body.time-past .low-flag { display: none; }
+  .time-locked .lever-grid, .time-locked .presets { opacity: 0.45; pointer-events: none; }
+  .time-note { font-size: 12.5px; color: var(--accent); font-weight: 600; }
 
   .chart-scroll { overflow-x: auto; }
   .chart-inner { min-width: 660px; position: relative; }
@@ -260,10 +272,11 @@
     pointer-events: none;
     transition: bottom 320ms cubic-bezier(0.25, 0.7, 0.3, 1);
   }
-  .legend .low-glyph { color: var(--status-critical); font-size: 10px; }
+  .low-glyph { color: var(--status-critical); font-size: 10px; }
   @media (prefers-reduced-motion: reduce) {
     .low-flag { transition: none; }
   }
+  body.playing .bar-fill, body.playing .low-flag { transition: none; }
   @media (prefers-reduced-motion: reduce) {
     .bar-fill { transition: none; }
   }
@@ -276,13 +289,17 @@
   }
   .group-labels span {
     flex: 1 1 0;
-    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
     font-size: 10.5px;
     font-weight: 600;
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: var(--ink-2);
   }
+  .group-labels .swatch { width: 9px; height: 9px; border-radius: 3px; flex: none; }
   .chart-footnote {
     margin: 8px 0 0;
     font-size: 12px;
@@ -445,7 +462,188 @@
   .history-svg .h-line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
   .history-svg .h-guide { stroke: var(--ink-muted); stroke-dasharray: 3 3; }
   .history-svg .h-hlabel { fill: var(--ink); font-size: 11px; font-weight: 600; }
+  .history-svg .h-mlabel { fill: var(--ink); font-size: 9.5px; font-weight: 600; }
+  .history-svg .h-rlabel { fill: var(--ink); font-size: 10px; }
+  .history-svg .h-vlabel { fill: var(--ink); font-size: 10px; font-weight: 700; }
+  .history-svg .h-vlabel-in { fill: var(--page); }
   .history-note { font-size: 12.5px; color: var(--ink-muted); margin: 8px 0 0; max-width: 76ch; }
+
+  .chat-launcher {
+    position: fixed;
+    right: 20px;
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    border-radius: 999px;
+    border: 0;
+    background: var(--accent);
+    color: var(--page);
+    cursor: pointer;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 13px 20px 13px 17px;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+  }
+  .chat-launcher:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .chat-panel {
+    position: fixed;
+    right: 20px;
+    bottom: calc(86px + env(safe-area-inset-bottom, 0px));
+    width: min(420px, calc(100vw - 40px));
+    height: min(700px, calc(100vh - 130px));
+    background: var(--surface);
+    border: 1px solid var(--ring);
+    border-radius: 12px;
+    box-shadow: 0 10px 34px rgba(0, 0, 0, 0.3);
+    z-index: 59;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .chat-panel[hidden] { display: none; }
+  .chat-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 10px 10px 14px;
+    border-bottom: 1px solid var(--grid);
+    flex: none;
+  }
+  .chat-head h3 {
+    font-family: "Libre Caslon Text", Georgia, serif;
+    font-weight: 700;
+    font-size: 16px;
+    margin: 0;
+    flex: 1;
+  }
+  .mode-row { display: flex; gap: 4px; }
+  .mode-row button {
+    font: inherit;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--ink-2);
+    background: var(--page);
+    border: 1px solid var(--ring);
+    border-radius: 999px;
+    padding: 3px 9px;
+    cursor: pointer;
+  }
+  .mode-row button[aria-pressed="true"] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--page);
+  }
+  .mode-row button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .chat-body { padding: 14px; overflow-y: auto; flex: 1; min-height: 120px; background: var(--page); }
+  .chat-foot { padding: 10px 14px 12px; border-top: 1px solid var(--grid); flex: none; background: var(--surface); }
+
+  .chat-log { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+  .chat-log:empty { margin-bottom: 0; }
+  .msg {
+    max-width: 82%;
+    padding: 9px 13px;
+    border-radius: 16px;
+    font-size: 14px;
+    line-height: 1.45;
+    white-space: pre-wrap;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.07);
+  }
+  .msg.user {
+    align-self: flex-end;
+    background: var(--accent);
+    color: var(--page);
+    border-bottom-right-radius: 5px;
+  }
+  .msg.ai {
+    align-self: flex-start;
+    background: var(--bubble);
+    color: var(--ink);
+    border-bottom-left-radius: 5px;
+  }
+  .msg.chart-msg { max-width: 100%; width: 100%; box-sizing: border-box; padding: 10px 12px 8px; cursor: pointer; }
+  .msg.chart-msg:focus-visible { outline: 2px solid var(--accent); }
+  .chart-cap { font-size: 11px; color: var(--ink-muted); margin-top: 3px; }
+  .mini-legend { display: flex; flex-wrap: wrap; gap: 3px 12px; margin-bottom: 5px; }
+  .mini-legend span { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; color: var(--ink-2); }
+  .mini-legend .swatch { width: 8px; height: 8px; border-radius: 2px; flex: none; }
+  .typing { display: inline-flex; gap: 4px; padding: 3px 2px; }
+  .typing span {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--ink-muted);
+    animation: typing-blink 1.2s infinite;
+  }
+  .typing span:nth-child(2) { animation-delay: 0.2s; }
+  .typing span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typing-blink { 0%, 60%, 100% { opacity: 0.25; } 30% { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .typing span { animation: none; } }
+  .faq-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; }
+  .faq-chips button {
+    font: inherit;
+    font-size: 12px;
+    color: var(--ink-2);
+    background: var(--surface);
+    border: 1px solid var(--ring);
+    border-radius: 999px;
+    padding: 5px 11px;
+    cursor: pointer;
+    text-align: left;
+  }
+  .faq-chips button:hover { border-color: var(--accent); color: var(--accent); }
+  .faq-chips button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .ask-row { display: flex; gap: 8px; align-items: center; }
+  .ask-row input {
+    flex: 1;
+    font: inherit;
+    font-size: 15px;
+    padding: 10px 16px;
+    border: 1px solid var(--ring);
+    border-radius: 999px;
+    background: var(--page);
+    color: var(--ink);
+    min-width: 0;
+  }
+  .ask-row input:focus-visible { outline: 2px solid var(--accent); }
+  .ask-row button {
+    width: 42px;
+    height: 42px;
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--page);
+    cursor: pointer;
+  }
+  .ask-row button:disabled { opacity: 0.5; cursor: default; }
+  .ask-row button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .ask-hint { font-size: 11.5px; color: var(--ink-muted); margin: 7px 4px 0; }
+  .gate-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 9px; }
+  .gate-btn {
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 7px 14px;
+    border-radius: 999px;
+    border: 0;
+    background: var(--accent);
+    color: var(--page);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .gate-btn.ghost {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+  }
+  .gate-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   td .delta-up { color: var(--status-good); }
   td .delta-down { color: var(--status-critical); }
@@ -481,20 +679,21 @@
     .lever-grid { grid-template-columns: repeat(3, 1fr); }
   }
   @media (min-width: 900px) and (max-height: 780px) {
-    .standfirst, .section-note, .chart-footnote, .lever-desc { display: none; }
-    header.masthead { padding-block: 14px 12px; margin-bottom: 12px; gap: 6px; }
-    h1 { font-size: 30px; }
-    .hero-tile { padding-block: 8px; margin-top: 0; }
-    .hero-figure { font-size: 32px; }
+    .section-note, .chart-footnote, .lever-desc { display: none; }
+    header.masthead { padding-block: 10px 8px; margin-bottom: 12px; }
+    h1 { font-size: 26px; }
+    .hero-tile { padding-block: 6px; }
+    .hero-figure { font-size: 28px; }
     .lever { padding-block: 8px 7px; }
   }
 </style>
 
 <div class="shell">
   <header class="masthead">
-    <p class="eyebrow">Harvard Class of 1972 &middot; Reunion Committee &middot; Monday, September 28, 10 a.m.</p>
-    <h1>Thirty Indicators</h1>
-    <p class="standfirst">What does a healthy democracy look like &mdash; and which parts move together? Drag the six levers and watch the thirty indicators respond. The framework and the dotted 2020 marks are International IDEA&rsquo;s real data; today&rsquo;s starting values are illustrative, anchored to the report&rsquo;s finding that six U.S. indicators now sit at 50-year lows.</p>
+    <div>
+      <p class="eyebrow">Harvard Class of 1972 &middot; Reunion Committee &middot; Monday, September 28, 10 a.m.</p>
+      <h1>30 Indicators of a Healthy Civilization&thinsp;/&thinsp;Democracy</h1>
+    </div>
     <div class="hero-tile" aria-live="polite">
       <div class="hero-figure"><span id="heroValue">0</span><span class="of-100">/ 100</span></div>
       <div class="hero-meta">
@@ -502,13 +701,16 @@
         <span class="hero-status"><span class="dot" id="heroDot"></span><span id="heroWord">&mdash;</span></span>
         <div class="hero-delta" id="heroDelta"></div>
       </div>
+      <svg class="hero-spark" id="heroSpark" viewBox="0 0 110 36" role="img" aria-label="Overall measured index, 1975 to 2020"><title>Mean of the 22 measured indicators, 1975&ndash;2020 (GSoD Indices v5.1)</title></svg>
     </div>
   </header>
 
   <section class="chart-card" aria-label="Chart of thirty indicators">
-    <div class="chart-head">
-      <h3 class="chart-title">The thirty indicators, scored 0&ndash;100</h3>
-      <ul class="legend" id="legend"></ul>
+    <div class="timebar">
+      <button type="button" id="playBtn" aria-label="Play history from 1975">&#9654;</button>
+      <input type="range" id="yearSlider" min="1975" max="2026" step="1" value="2026" aria-label="Year shown on the chart">
+      <span class="year-readout" id="yearReadout">Today (2026)</span>
+      <span class="low-key"><span class="low-glyph">&#9660;</span>&nbsp;at a 50-year low (2026 report)</span>
     </div>
     <div class="chart-scroll">
       <div class="chart-inner" id="chartInner">
@@ -519,12 +721,13 @@
         <div class="tooltip" id="tooltip" hidden role="status"></div>
       </div>
     </div>
-    <p class="chart-footnote">Hover or tab to any column for its name and score; <strong>click it for its 1975&ndash;2020 history</strong>. The dotted mark<span class="tick-demo"></span>is the measured 2020 value (GSoD Indices v5.1, scaled &times;100); columns without a mark were added in IDEA&rsquo;s 2023 framework revision.</p>
+    <p class="chart-footnote">Press &#9654; or drag the year slider to sweep from 1975 to today: 1975&ndash;2020 are measured values, 2021&ndash;2025 bridge to today illustratively, and muted columns have no pre-2023 data. Hover any column for detail; <strong>click it for its full 45-year line</strong>. The dotted mark<span class="tick-demo"></span>is the measured 2020 value (GSoD Indices v5.1, &times;100).</p>
   </section>
 
-  <section class="levers-section">
+  <section class="levers-section" id="leversSection">
     <div class="levers-head">
       <h2>Six levers</h2>
+      <span class="time-note" id="timeNote" hidden>Levers apply to today &mdash; return the year to 2026 to use them.</span>
       <div class="presets" id="presets" role="group" aria-label="Preset scenarios">
         <button type="button" id="presetToday" data-preset="today" aria-pressed="true">Today (Sept 2026)</button>
         <button type="button" id="presetBackslide" data-preset="backslide" aria-pressed="false">Continued backsliding</button>
@@ -535,7 +738,7 @@
         <button type="button" id="openAbout" data-open-dialog="aboutDialog">About &amp; sources</button>
       </div>
     </div>
-    <p class="section-note">Each lever bundles the choices a society makes in one arena; every indicator listens to two or three of them, weighted by how strongly that arena shapes it. All levers start at 50, meaning &ldquo;where we are today.&rdquo;</p>
+    <p class="section-note">Each lever bundles the choices a society makes in one arena; every indicator listens to two or three of them, weighted by how strongly that arena shapes it. Each lever starts where that arena stands today &mdash; unevenly, as the report describes &mdash; and the tick under the slider marks that starting point.</p>
     <div class="lever-grid" id="leverGrid"></div>
   </section>
 </div>
@@ -562,6 +765,43 @@
   </div>
 </dialog>
 
+<button type="button" class="chat-launcher" id="chatLauncher" hidden>
+  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 3C6.9 3 3 6.5 3 10.8c0 2.4 1.2 4.5 3.2 5.9-.1.9-.5 2.2-1.5 3.3-.2.2 0 .6.3.5 1.9-.3 3.4-1.1 4.4-1.8.8.2 1.7.3 2.6.3 5.1 0 9-3.5 9-7.9S17.1 3 12 3z"/></svg>
+  <span>Ask a question</span>
+</button>
+
+<section class="chat-panel" id="chatPanel" hidden role="region" aria-label="Ask Claude">
+  <div class="chat-head">
+    <h3>Ask Claude</h3>
+    <div class="mode-row" id="modeRow" role="group" aria-label="Answer style">
+      <button type="button" data-mode="scholar" aria-pressed="false">Scholar</button>
+      <button type="button" data-mode="witty" aria-pressed="true">Witty</button>
+      <button type="button" data-mode="unhinged" aria-pressed="false">Unhinged</button>
+    </div>
+    <button type="button" class="dialog-close" id="chatClose" aria-label="Close chat">&#10005;</button>
+  </div>
+  <div class="chat-body">
+    <div class="chat-log" id="chatLog"></div>
+    <div class="faq-chips" id="faqChips">
+      <button type="button">How did we do under Trump vs. Biden?</button>
+      <button type="button">Which indicators fell furthest since 2020? Show me.</button>
+      <button type="button">What was our strongest era since 1975?</button>
+      <button type="button">What would a realistic recovery look like? Show me.</button>
+      <button type="button">Which of these numbers are actually measured?</button>
+      <button type="button">Why is effective parliament so low?</button>
+    </div>
+  </div>
+  <div class="chat-foot">
+    <form class="ask-row" id="askForm">
+      <input id="askInput" type="text" placeholder="Ask about what you see&hellip;" autocomplete="off">
+      <button type="submit" id="askSend" aria-label="Send">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M3 20.5v-6l10-2.5L3 9.5v-6L21.5 12 3 20.5z"/></svg>
+      </button>
+    </form>
+    <p class="ask-hint">Claude moves the chart to answer. First use asks permission; runs on your Claude account. Questions (not your name) may be logged for the committee.</p>
+  </div>
+</section>
+
 <dialog id="historyDialog" aria-labelledby="historyTitle">
   <div class="dialog-head">
     <h3 id="historyTitle">History</h3>
@@ -578,6 +818,7 @@
   <div class="dialog-body">
     <p><strong>Why it exists.</strong> A conversation starter for the reunion topic &ldquo;thirty indicators of a healthy civilization / democracy,&rdquo; prompted by NPR&rsquo;s September&nbsp;15, 2026 story, <a href="https://www.npr.org/2026/09/15/nx-s1-5969741/state-of-u-s-democracy-reaches-new-low-report-finds">&ldquo;State of U.S. democracy reaches new low, report finds.&rdquo;</a></p>
     <p><strong>The report behind it.</strong> That story covers <a href="https://www.idea.int/publications/catalogue/html/global-state-democracy-2026-democracy-age-conflict"><em>The Global State of Democracy 2026: Democracy in an Age of Conflict</em></a>, from the Stockholm-based International Institute for Democracy and Electoral Assistance, whose indices track 30 aspects of democracy across 174 countries back to 1975. Its U.S. findings: nearly half of the thirty indicators fell to their lowest levels in the dataset&rsquo;s fifty-year history, and seven declined significantly between 2020 and 2025 &mdash; access to justice, economic equality, freedom of expression, freedom of the press, effective parliament, judicial independence, and free political parties. All but the last are at record lows (marked <span style="color:var(--status-critical)">&#9660;</span> on the chart). Globally, 2025 was the eleventh straight year in which more countries declined than advanced, and rule of law was the weakest-performing category, with 71 countries scoring low.</p>
+    <p><strong>Credits &amp; permissions.</strong> Data: International IDEA, <em>The Global State of Democracy Indices</em> v5.1 (1975&ndash;2020), &copy; International Institute for Democracy and Electoral Assistance, used with attribution; findings from <em>The Global State of Democracy 2026: Democracy in an Age of Conflict</em> (International IDEA, 15 September 2026). Reporting credit: NPR, &ldquo;State of U.S. democracy reaches new low, report finds&rdquo; (15 September 2026). Typefaces: Libre Caslon Text and Public Sans (SIL Open Font License). Chat answers are generated by Anthropic&rsquo;s Claude. This page is a non-commercial discussion aid prepared by and for the Harvard Class of 1972 reunion committee; it is not affiliated with, nor endorsed by, International IDEA, NPR, Anthropic, or Harvard University.</p>
     <p><strong>What is and isn&rsquo;t real.</strong> Real: the indicator framework, the &#9660; flags, the global statistics above, and the dotted marks on the chart &mdash; those are the United States&rsquo; measured scores for 2020 from IDEA&rsquo;s official GSoD Indices dataset (v5.1, the newest vintage with per-indicator values available to this page; scaled &times;100). The gap between a dotted mark and today&rsquo;s column is the reported 2020&ndash;2025 decline, sized illustratively. Illustrative: today&rsquo;s 0&ndash;100 starting scores and the lever weights. IDEA&rsquo;s v9 dataset (through 2024) is <a href="https://www.idea.int/gsod-indices/">freely downloadable</a> and can replace the 2020 marks when available. A natural committee exercise: argue about the weights &mdash; that argument <em>is</em> the discussion of what holds a democracy up.</p>
   </div>
 </dialog>
@@ -649,10 +890,15 @@
   ];
 
   var SCALE = 0.7; /* points of indicator movement per weighted lever point */
+  /* Where each arena stands today (0-100, illustrative, anchored to the report:
+     press freedom and judicial independence at record lows, executive restraint
+     weakest, election administration comparatively intact). Indicators respond
+     to a lever's distance from ITS OWN today mark, not from 50. */
+  var LEVER_TODAY = [55, 32, 38, 30, 42, 40];
   var PRESETS = {
-    today:     [50, 50, 50, 50, 50, 50],
-    backslide: [35, 25, 30, 25, 30, 35],
-    recovery:  [70, 70, 65, 65, 70, 65]
+    today:     LEVER_TODAY.slice(),
+    backslide: [40, 18, 22, 15, 28, 25],
+    recovery:  [75, 65, 68, 65, 70, 65]
   };
   var STATUS = [
     { min: 80, word: "Healthy",  color: "var(--status-good)" },
@@ -664,6 +910,8 @@
 
   var leverValues = PRESETS.today.slice();
   var baselineMean = mean(INDICATORS.map(function (d) { return d[2]; }));
+  var YEAR_MIN = 1975, YEAR_TODAY = 2026;
+  var currentYear = YEAR_TODAY;
 
   function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
   function mean(arr) { return arr.reduce(function (a, b) { return a + b; }, 0) / arr.length; }
@@ -671,29 +919,24 @@
   function scoreOf(ind) {
     var delta = 0;
     for (var j = 0; j < LEVERS.length; j++) {
-      delta += ind[3][j] * (leverValues[j] - 50) * SCALE;
+      delta += ind[3][j] * (leverValues[j] - LEVER_TODAY[j]) * SCALE;
     }
     return clamp(ind[2] + delta, 2, 98);
   }
 
-  /* ---------- Build legend ---------- */
-  var legend = document.getElementById("legend");
-  DOMAINS.forEach(function (dom) {
-    var li = document.createElement("li");
-    var sw = document.createElement("span");
-    sw.className = "swatch";
-    sw.style.background = "var(--dom-" + dom.key.slice(1) + ")";
-    li.appendChild(sw);
-    li.appendChild(document.createTextNode(dom.full));
-    legend.appendChild(li);
-  });
-  var lowLi = document.createElement("li");
-  var lowGlyph = document.createElement("span");
-  lowGlyph.className = "low-glyph";
-  lowGlyph.textContent = "▼";
-  lowLi.appendChild(lowGlyph);
-  lowLi.appendChild(document.createTextNode("At a 50-year low (GSoD 2026 report)"));
-  legend.appendChild(lowLi);
+  /* The value a column shows for the current year: lever-driven today,
+     measured 1975-2020, and a linear bridge from the 2020 measurement to
+     today's illustrative baseline for 2021-2025. Null = no data that year. */
+  function displayedValue(i) {
+    var ind = INDICATORS[i];
+    if (currentYear === YEAR_TODAY) return scoreOf(ind);
+    var s = HIST.s[i];
+    if (!s) return null;
+    if (currentYear <= HIST.y1) return s[currentYear - HIST.y0];
+    var t = (currentYear - HIST.y1) / (YEAR_TODAY - HIST.y1);
+    var last = s[s.length - 1];
+    return Math.round(last + (ind[2] - last) * t);
+  }
 
   /* ---------- Build gridlines ---------- */
   var plot = document.getElementById("plot");
@@ -742,9 +985,13 @@
   });
 
   var groupLabels = document.getElementById("groupLabels");
-  DOMAINS.forEach(function (dom) {
+  DOMAINS.forEach(function (dom, gi) {
     var s = document.createElement("span");
-    s.textContent = dom.name;
+    var sw = document.createElement("span");
+    sw.className = "swatch";
+    sw.style.background = "var(--dom-" + (gi + 1) + ")";
+    s.appendChild(sw);
+    s.appendChild(document.createTextNode(dom.name));
     groupLabels.appendChild(s);
   });
 
@@ -754,23 +1001,31 @@
   function showTip(barEl) {
     var i = +barEl.dataset.index;
     var ind = INDICATORS[i];
-    var score = scoreOf(ind);
-    var d = score - ind[2];
-    var deltaTxt = Math.abs(d) < 0.5 ? "unchanged" :
-      (d > 0 ? "+" : "−") + Math.abs(d).toFixed(0) + " from start";
+    var score = displayedValue(i);
+    var isToday = currentYear === YEAR_TODAY;
     tooltip.innerHTML = "";
     var name = document.createElement("div"); name.className = "t-name"; name.textContent = ind[0];
     var dom = document.createElement("div"); dom.className = "t-domain"; dom.textContent = DOMAINS[ind[1]].full;
     var val = document.createElement("div"); val.className = "t-val";
-    val.textContent = score.toFixed(0) + " / 100 · " + deltaTxt;
+    if (score === null) {
+      val.textContent = "No data for " + currentYear + " (added in the 2023 framework)";
+    } else if (isToday) {
+      var d = score - ind[2];
+      var deltaTxt = Math.abs(d) < 0.5 ? "unchanged" :
+        (d > 0 ? "+" : "−") + Math.abs(d).toFixed(0) + " from start";
+      val.textContent = score.toFixed(0) + " / 100 · " + deltaTxt;
+    } else {
+      val.textContent = currentYear + ": " + score.toFixed(0) + " / 100 " +
+        (currentYear <= HIST.y1 ? "(measured)" : "(estimated)");
+    }
     tooltip.appendChild(name); tooltip.appendChild(dom); tooltip.appendChild(val);
-    if (ind[5] !== null) {
+    if (isToday && ind[5] !== null) {
       var measured = document.createElement("div");
       measured.className = "t-domain";
       measured.textContent = "Measured 2020: " + ind[5] + " (GSoD Indices v5.1)";
       tooltip.appendChild(measured);
     }
-    if (ind[4]) {
+    if (isToday && ind[4]) {
       var flagNote = document.createElement("div");
       flagNote.className = "t-domain";
       flagNote.textContent = ind[4] === 2
@@ -784,7 +1039,7 @@
     var tipW = tooltip.offsetWidth;
     var x = barRect.left - innerRect.left + barRect.width / 2 - tipW / 2;
     x = clamp(x, 0, innerRect.width - tipW);
-    var fillH = (score / 100) * barEl.offsetHeight;
+    var fillH = ((score === null ? 0 : score) / 100) * barEl.offsetHeight;
     var y = barRect.bottom - innerRect.top - fillH - tooltip.offsetHeight - 8;
     tooltip.style.left = x + "px";
     tooltip.style.top = Math.max(y, 0) + "px";
@@ -806,6 +1061,7 @@
   /* ---------- Levers ---------- */
   var leverGrid = document.getElementById("leverGrid");
   var leverInputs = [];
+  var leverValEls = [];
   LEVERS.forEach(function (lv, j) {
     var card = document.createElement("div");
     card.className = "lever";
@@ -828,6 +1084,14 @@
     input.value = leverValues[j];
     input.id = "lever-" + lv.id;
     input.setAttribute("aria-describedby", desc.id);
+    var marks = document.createElement("datalist");
+    marks.id = "lever-" + lv.id + "-today";
+    var mark = document.createElement("option");
+    mark.value = LEVER_TODAY[j];
+    mark.label = "today";
+    marks.appendChild(mark);
+    input.setAttribute("list", marks.id);
+    card.appendChild(marks);
     var ends = document.createElement("div");
     ends.className = "lever-ends";
     var lo = document.createElement("span"); lo.textContent = "Weaker";
@@ -836,10 +1100,11 @@
     card.appendChild(top); card.appendChild(desc); card.appendChild(input); card.appendChild(ends);
     leverGrid.appendChild(card);
     leverInputs[j] = input;
+    leverValEls[j] = valEl;
     input.addEventListener("input", function () {
       leverValues[j] = +input.value;
       clearPresetHighlight();
-      render();
+      scheduleRender();
     });
   });
 
@@ -866,6 +1131,7 @@
     btn.addEventListener("click", function () {
       var dlg = document.getElementById(btn.dataset.openDialog);
       if (dlg && !dlg.open) dlg.showModal();
+      if (dlg && dlg.id === "tableDialog" && tableDirty) updateTable();
     });
   });
   document.querySelectorAll("dialog").forEach(function (dlg) {
@@ -879,6 +1145,44 @@
 
   /* ---------- History (US, GSoD Indices v5.1, 1975-2020, x100) ---------- */
   var HIST = {"y0":1975,"y1":2020,"s":{"0":[78,83,83,83,83,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,75,75,81,81,80,81,89,89,90,90,89,89,90,90,92,92,77,77,76,76,79],"1":[89,89,89,89,89,89,89,89,89,89,89,89,89,89,89,91,91,91,91,91,91,91,91,91,91,89,89,94,94,94,94,95,95,95,95,93,93,94,94,94,94,93,93,93,93,93],"2":[75,75,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,94,100,100,100,100,100,100,100,100,100,100,92,92,92,92,92],"3":[100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100],"4":[78,77,76,76,76,76,75,75,75,75,75,75,75,75,75,75,75,76,76,76,77,77,77,77,77,77,77,77,77,77,77,77,77,77,78,78,78,78,78,78,78,78,69,65,63,62],"5":[78,78,78,78,78,88,88,88,88,88,88,88,88,88,88,88,88,88,88,88,88,88,88,88,88,83,85,85,85,83,94,94,94,94,94,94,94,94,94,94,94,94,88,86,86,86],"6":[82,84,81,84,84,84,84,84,84,84,84,84,84,84,84,88,86,88,88,88,88,88,88,88,88,88,88,86,88,90,90,90,90,90,90,90,90,90,90,90,90,89,75,74,72,74],"7":[85,85,85,85,85,85,86,86,85,85,86,85,85,85,85,85,85,85,84,84,84,84,84,84,84,86,84,84,84,84,84,84,85,85,87,86,86,86,86,86,86,85,79,79,78,80],"8":[78,78,78,78,78,84,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,79,83,90,90,90,92,92,84,84,77],"9":[79,79,79,79,79,79,80,80,80,80,80,80,80,80,80,80,80,80,80,80,80,80,80,80,80,80,80,71,71,71,71,71,71,80,80,80,80,80,80,80,80,79,70,66,66,66],"10":[91,91,91,91,91,91,88,88,88,88,88,93,93,93,93,93,93,93,93,93,93,93,93,93,93,93,86,86,86,86,86,86,86,86,86,86,86,90,90,90,90,90,83,84,84,71],"11":[62,62,62,62,62,63,68,68,68,68,67,67,67,67,67,70,68,68,69,69,69,69,69,69,69,69,64,61,59,52,54,54,55,61,63,63,63,63,64,64,62,62,64,62,62,62],"12":[82,82,82,82,82,82,82,82,81,82,82,82,81,81,81,82,82,82,82,82,83,83,82,83,82,83,83,83,83,83,83,83,83,83,83,82,83,82,79,79,79,76,76,76,76,78],"13":[61,61,61,61,61,62,62,62,61,62,61,61,61,61,61,63,66,66,66,66,66,66,66,66,66,69,68,68,68,68,68,67,67,67,69,69,69,69,69,69,69,68,68,68,64,63],"15":[60,60,60,60,63,63,63,63,63,64,66,66,67,67,67,67,67,67,67,70,70,70,70,70,70,70,71,71,71,71,71,71,74,74,75,75,75,75,75,75,75,75,75,75,75,75],"16":[52,52,52,52,52,60,59,59,59,61,61,61,61,61,62,64,64,65,66,66,66,66,66,66,66,71,71,71,71,71,72,72,72,72,75,75,75,75,75,75,75,74,72,73,72,74],"18":[78,78,78,78,78,78,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,80,80,80,79,79,79,79,79,79,79,80,80,80,84,84,84,84,82,84,84,80],"19":[76,76,76,76,76,78,73,73,73,74,74,74,76,76,79,79,79,79,79,79,79,78,78,78,78,78,78,77,78,78,79,78,78,78,79,79,79,82,81,81,82,78,67,67,70,71],"20":[76,77,77,77,77,77,77,77,77,78,78,78,78,78,78,78,78,78,80,80,80,81,81,81,81,81,81,81,81,81,81,81,81,81,82,82,82,82,79,79,79,80,71,71,69,71],"24":[38,57,57,37,37,57,57,40,40,58,58,36,36,56,56,37,37,60,60,39,39,53,53,35,35,53,53,35,35,57,57,37,37,57,57,39,39,54,54,33,33,56,56,47,47,62],"25":[79,79,79,79,79,79,77,77,77,77,77,77,77,77,77,81,81,81,86,86,86,86,86,86,86,86,81,81,81,81,81,81,81,86,86,91,91,91,91,91,91,85,80,75,75,78],"27":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}};
+
+  /* Measured overall index: per-year mean of the 22 indicators with v5.1 series. */
+  var OVERALL = (function () {
+    var keys = Object.keys(HIST.s);
+    var n = HIST.s[keys[0]].length;
+    var out = [];
+    for (var k = 0; k < n; k++) {
+      var sum = 0;
+      keys.forEach(function (key) { sum += HIST.s[key][k]; });
+      out.push(Math.round(sum / keys.length));
+    }
+    return out;
+  })();
+  function getSeries(idx) { return idx === -1 ? OVERALL : HIST.s[idx]; }
+  function getIndName(idx) { return idx === -1 ? "Overall health index" : INDICATORS[idx][0]; }
+  function getColor(idx) { return idx === -1 ? "var(--accent)" : "var(--dom-" + (INDICATORS[idx][1] + 1) + ")"; }
+
+  var sparkMarker = null, sparkX, sparkY;
+  /* Called at the end of the script: needs SVGNS, assigned further down. */
+  function buildSpark() {
+    var el = document.getElementById("heroSpark");
+    if (!el) return;
+    var n = OVERALL.length;
+    var lo = Math.min.apply(null, OVERALL) - 4, hi = Math.max.apply(null, OVERALL) + 4;
+    sparkX = function (yr) { return 4 + (yr - HIST.y0) / (n - 1) * 100; };
+    sparkY = function (v) { return 31 - (v - lo) / (hi - lo) * 26; };
+    var d = OVERALL.map(function (v, k) {
+      return (k ? "L" : "M") + sparkX(HIST.y0 + k).toFixed(1) + " " + sparkY(v).toFixed(1);
+    }).join(" ");
+    var p = svgEl("path", { d: d });
+    p.style.fill = "none";
+    p.style.stroke = "var(--accent)";
+    p.style.strokeWidth = "1.5";
+    el.appendChild(p);
+    sparkMarker = svgEl("circle", { r: 3 });
+    sparkMarker.style.fill = "var(--ink)";
+    el.appendChild(sparkMarker);
+  }
 
   var historyDialog = document.getElementById("historyDialog");
   var historyTitle = document.getElementById("historyTitle");
@@ -896,23 +1200,24 @@
   });
 
   function openHistory(i) {
-    var ind = INDICATORS[i];
-    var series = HIST.s[i];
-    historyTitle.textContent = ind[0];
+    var ind = i === -1 ? null : INDICATORS[i];
+    var series = getSeries(i);
+    historyTitle.textContent = getIndName(i);
     historyBody.innerHTML = "";
     if (!series) {
       var p = document.createElement("p");
       p.textContent = "No historical series exists for this indicator: it was added in IDEA's 2023 framework revision, and the public v5.1 dataset (1975–2020) predates it.";
       historyBody.appendChild(p);
     } else {
-      historyBody.appendChild(buildHistoryChart(series, ind));
+      historyBody.appendChild(buildHistoryChart(series, i));
       var note = document.createElement("p");
       note.className = "history-note";
       note.textContent = "United States, " + HIST.y0 + "–" + HIST.y1 +
         ", measured by International IDEA (GSoD Indices v5.1); 0–1 scores shown ×100. Hover for year-by-year values." +
-        (i === 24 ? " The sawtooth is real: turnout alternates between presidential and midterm years." : "");
+        (i === 24 ? " The sawtooth is real: turnout alternates between presidential and midterm years." : "") +
+        (i === -1 ? " This is the mean of the 22 indicators with measured series." : "");
       historyBody.appendChild(note);
-      if (ind[4]) {
+      if (ind && ind[4]) {
         var fp = document.createElement("p");
         fp.className = "history-note";
         fp.textContent = ind[4] === 2
@@ -924,24 +1229,41 @@
     if (!historyDialog.open) historyDialog.showModal();
   }
 
-  function buildHistoryChart(series, ind) {
-    var W = 660, H = 250, L = 30, R = 646, T = 14, B = 222;
+  /* Zoom a line chart's y-axis to the data so trends stay legible; the axis
+     labels keep the real 0-100 values honest. */
+  function yRangeOf(seriesList) {
+    var vMin = 100, vMax = 0;
+    seriesList.forEach(function (s) {
+      s.forEach(function (v) { if (v < vMin) vMin = v; if (v > vMax) vMax = v; });
+    });
+    var lo = Math.max(0, Math.floor((vMin - 6) / 10) * 10);
+    var hi = Math.min(100, Math.ceil((vMax + 6) / 10) * 10);
+    if (hi - lo < 20) { lo = Math.max(0, lo - 10); hi = Math.min(100, hi + 10); }
+    var mid = Math.round((lo + hi) / 2 / 5) * 5;
+    return { lo: lo, hi: hi, ticks: mid > lo && mid < hi ? [lo, mid, hi] : [lo, hi] };
+  }
+
+  function buildHistoryChart(series, idx, dims) {
+    var W = dims ? dims.W : 660, H = dims ? dims.H : 250, L = dims ? dims.L : 30,
+        R = dims ? dims.R : 646, T = dims ? dims.T : 14, B = dims ? dims.B : 222;
+    var yearTicks = dims ? dims.years : [1975, 1985, 1995, 2005, 2015];
     var n = series.length;
     var xAt = function (k) { return L + (R - L) * k / (n - 1); };
-    var yAt = function (v) { return B - (B - T) * v / 100; };
+    var range = yRangeOf([series]);
+    var yAt = function (v) { return B - (B - T) * (v - range.lo) / (range.hi - range.lo); };
     var svg = svgEl("svg", { viewBox: "0 0 " + W + " " + H, "class": "history-svg", role: "img" });
-    svg.setAttribute("aria-label", ind[0] + ", United States, " + HIST.y0 + " to " + HIST.y1 +
+    svg.setAttribute("aria-label", getIndName(idx) + ", United States, " + HIST.y0 + " to " + HIST.y1 +
       ". Ends at " + series[n - 1] + " out of 100.");
-    [0, 25, 50, 75, 100].forEach(function (v) {
+    range.ticks.forEach(function (v) {
       svg.appendChild(svgEl("line", { x1: L, x2: R, y1: yAt(v), y2: yAt(v), "class": v === 0 ? "h-grid h-zero" : "h-grid" }));
       var t = svgEl("text", { x: L - 6, y: yAt(v) + 3, "text-anchor": "end", "class": "h-axis" });
       t.textContent = v; svg.appendChild(t);
     });
-    [1975, 1985, 1995, 2005, 2015].forEach(function (yr) {
+    yearTicks.forEach(function (yr) {
       var t = svgEl("text", { x: xAt(yr - HIST.y0), y: B + 14, "text-anchor": "middle", "class": "h-axis" });
       t.textContent = yr; svg.appendChild(t);
     });
-    var color = "var(--dom-" + (ind[1] + 1) + ")";
+    var color = getColor(idx);
     var d = series.map(function (v, k) { return (k ? "L" : "M") + xAt(k).toFixed(1) + " " + yAt(v).toFixed(1); }).join(" ");
     var path = svgEl("path", { d: d, "class": "h-line" });
     path.style.stroke = color;
@@ -1022,47 +1344,653 @@
   var heroDelta = document.getElementById("heroDelta");
 
   function render() {
-    var scores = INDICATORS.map(scoreOf);
+    var isToday = currentYear === YEAR_TODAY;
+    var displayed = INDICATORS.map(function (_, i) { return displayedValue(i); });
+    document.body.classList.toggle("time-past", !isToday);
+    leversSection.classList.toggle("time-locked", !isToday);
+    timeNote.hidden = isToday;
+    yearReadout.textContent = isToday ? "Today (2026)" :
+      currentYear + (currentYear <= HIST.y1 ? " · measured" : " · estimated");
+
     INDICATORS.forEach(function (ind, i) {
       var bar = barEls[i];
-      bar.querySelector(".bar-fill").style.height = scores[i] + "%";
+      var v = displayed[i];
+      var noData = v === null;
+      bar.classList.toggle("no-data", noData);
+      bar.querySelector(".bar-fill").style.height = (noData ? 0 : v) + "%";
       var flagEl = bar.querySelector(".low-flag");
-      if (flagEl) flagEl.style.bottom = "calc(" + scores[i] + "% + 4px)";
-      var d = scores[i] - ind[2];
-      var deltaTxt = Math.abs(d) < 0.5 ? "" :
-        ", " + (d > 0 ? "up " : "down ") + Math.abs(d).toFixed(0) + " from its start of " + ind[2];
-      var flagTxt = ind[4] === 2 ? ". The report puts it at its lowest level since 1975" :
-        ind[4] === 1 ? ". The report finds a significant decline since 2020" : "";
-      bar.setAttribute("aria-label",
-        ind[0] + " (" + DOMAINS[ind[1]].full + "): " + scores[i].toFixed(0) + " out of 100" + deltaTxt + flagTxt);
-      var cells = tableCells[i];
-      cells.now.textContent = scores[i].toFixed(0);
-      if (Math.abs(d) < 0.5) {
-        cells.delta.textContent = "–";
+      if (flagEl && !noData) flagEl.style.bottom = "calc(" + v + "% + 4px)";
+      if (noData) {
+        bar.setAttribute("aria-label",
+          ind[0] + " (" + DOMAINS[ind[1]].full + "): no data for " + currentYear +
+          "; the indicator was added in the 2023 framework");
+      } else if (isToday) {
+        var d = v - ind[2];
+        var deltaTxt = Math.abs(d) < 0.5 ? "" :
+          ", " + (d > 0 ? "up " : "down ") + Math.abs(d).toFixed(0) + " from its start of " + ind[2];
+        var flagTxt = ind[4] === 2 ? ". The report puts it at its lowest level since 1975" :
+          ind[4] === 1 ? ". The report finds a significant decline since 2020" : "";
+        bar.setAttribute("aria-label",
+          ind[0] + " (" + DOMAINS[ind[1]].full + "): " + v.toFixed(0) + " out of 100" + deltaTxt + flagTxt);
       } else {
-        cells.delta.innerHTML = "";
-        var span = document.createElement("span");
-        span.className = d > 0 ? "delta-up" : "delta-down";
-        span.textContent = (d > 0 ? "▲ +" : "▼ −") + Math.abs(d).toFixed(0);
-        cells.delta.appendChild(span);
+        bar.setAttribute("aria-label",
+          ind[0] + " (" + DOMAINS[ind[1]].full + "), " + currentYear + ": " + v.toFixed(0) +
+          " out of 100" + (currentYear <= HIST.y1 ? ", measured" : ", estimated"));
       }
     });
 
-    var m = mean(scores);
+    var vals = displayed.filter(function (v) { return v !== null; });
+    var m = mean(vals);
     heroValue.textContent = m.toFixed(0);
     var st = STATUS.find(function (s) { return m >= s.min; });
     heroWord.textContent = st.word;
     heroDot.style.background = st.color;
-    var d = m - baselineMean;
-    heroDelta.textContent = Math.abs(d) < 0.5
-      ? "At the reported starting point"
-      : (d > 0 ? "▲ +" : "▼ −") + Math.abs(d).toFixed(1) + " vs. today's starting point";
+    if (isToday) {
+      var d3 = m - baselineMean;
+      heroDelta.textContent = Math.abs(d3) < 0.5
+        ? "At the reported starting point"
+        : (d3 > 0 ? "▲ +" : "▼ −") + Math.abs(d3).toFixed(1) + " vs. today's starting point";
+    } else {
+      heroDelta.textContent = currentYear <= HIST.y1
+        ? "Measured, " + currentYear + " (GSoD Indices v5.1)"
+        : currentYear + " · bridging 2020 data to today";
+    }
 
     LEVERS.forEach(function (lv, j) {
-      document.getElementById("lever-" + lv.id + "-value").textContent = leverValues[j];
+      leverValEls[j].textContent = leverValues[j];
+    });
+
+    if (sparkMarker) {
+      var sy = Math.min(currentYear, HIST.y1);
+      sparkMarker.setAttribute("cx", sparkX(sy));
+      sparkMarker.setAttribute("cy", sparkY(OVERALL[sy - HIST.y0]));
+    }
+
+    lastDisplayed = displayed;
+    lastIsToday = isToday;
+    if (tableDialogEl.open) updateTable();
+    else tableDirty = true;
+  }
+
+  /* The table lives in a dialog that is closed almost all the time, so its 30
+     rows refresh only when visible; renders from continuous input coalesce to
+     one per animation frame. */
+  var tableDirty = true, lastDisplayed = null, lastIsToday = true;
+  var tableDialogEl = document.getElementById("tableDialog");
+
+  function updateTable() {
+    tableDirty = false;
+    if (!lastDisplayed) return;
+    INDICATORS.forEach(function (ind, i) {
+      var v = lastDisplayed[i];
+      var cells = tableCells[i];
+      var noData = v === null;
+      cells.now.textContent = noData ? "–" : v.toFixed(0);
+      if (!lastIsToday || noData || Math.abs(v - ind[2]) < 0.5) {
+        cells.delta.textContent = "–";
+      } else {
+        var d2 = v - ind[2];
+        cells.delta.innerHTML = "";
+        var span = document.createElement("span");
+        span.className = d2 > 0 ? "delta-up" : "delta-down";
+        span.textContent = (d2 > 0 ? "▲ +" : "▼ −") + Math.abs(d2).toFixed(0);
+        cells.delta.appendChild(span);
+      }
     });
   }
 
+  var renderQueued = false;
+  function scheduleRender() {
+    if (renderQueued) return;
+    renderQueued = true;
+    requestAnimationFrame(function () {
+      renderQueued = false;
+      render();
+    });
+  }
+
+  /* ---------- Year slider & playback ---------- */
+  var leversSection = document.getElementById("leversSection");
+  var timeNote = document.getElementById("timeNote");
+  var yearSlider = document.getElementById("yearSlider");
+  var yearReadout = document.getElementById("yearReadout");
+  var playBtn = document.getElementById("playBtn");
+  var playTimer = null;
+
+  function setYear(y, fromSlider) {
+    currentYear = y;
+    if (!fromSlider) yearSlider.value = y;
+    scheduleRender();
+  }
+  function stopPlay() {
+    if (playTimer !== null) { clearInterval(playTimer); playTimer = null; }
+    document.body.classList.remove("playing");
+    playBtn.innerHTML = "&#9654;";
+    playBtn.setAttribute("aria-label", "Play history from 1975");
+  }
+  playBtn.addEventListener("click", function () {
+    if (playTimer !== null) { stopPlay(); return; }
+    if (currentYear >= YEAR_TODAY) setYear(YEAR_MIN);
+    document.body.classList.add("playing");
+    playBtn.innerHTML = "&#10074;&#10074;";
+    playBtn.setAttribute("aria-label", "Pause");
+    playTimer = setInterval(function () {
+      if (currentYear >= YEAR_TODAY) { stopPlay(); return; }
+      setYear(currentYear + 1);
+    }, 200);
+  });
+  var sliderSettle = null;
+  yearSlider.addEventListener("input", function () {
+    stopPlay();
+    document.body.classList.add("playing");
+    clearTimeout(sliderSettle);
+    sliderSettle = setTimeout(function () { document.body.classList.remove("playing"); }, 250);
+    setYear(+yearSlider.value, true);
+  });
+
+  /* ---------- Ask Claude (artifact "sample" capability) ---------- */
+  var chatLauncher = document.getElementById("chatLauncher");
+  var chatPanel = document.getElementById("chatPanel");
+  var chatClose = document.getElementById("chatClose");
+  var modeRow = document.getElementById("modeRow");
+  var chatLog = document.getElementById("chatLog");
+  var askForm = document.getElementById("askForm");
+  var askInput = document.getElementById("askInput");
+  var askSend = document.getElementById("askSend");
+  var sampleNS = null;
+  var chatHistory = [];
+  var chatMode = "witty";
+
+  var MODES = {
+    scholar: "a measured seminar leader: precise, dry, factual.",
+    witty: "a witty reunion emcee: sharp, warm, one genuine zinger per answer, never at the expense of the facts.",
+    unhinged: "a gloriously unhinged pundit doing standup: absurd metaphors, theatrical despair, an ALL-CAPS burst allowed — but every number still correct."
+  };
+
+  var sampleState = "pending";
+  var dbNS = null;
+  if (window.claude && typeof window.claude.use === "function") {
+    chatLauncher.hidden = false;
+    setTimeout(function () {
+      Promise.resolve(window.claude.use("sample")).then(function (ns) {
+        sampleNS = ns;
+        sampleState = ns ? "ready" : "unavailable";
+        if (ns) hideGate();
+      }, function () { sampleState = "unavailable"; });
+      Promise.resolve(window.claude.use("db")).then(function (ns) { dbNS = ns; }, function () {});
+    }, 0);
+  }
+
+  /* Anonymous question log (shared db; writes silently refused for viewers
+     without write access). Disclosed in the chat hint. */
+  function logQuestion(q) {
+    if (!dbNS) return;
+    try {
+      var id = "q" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+      var res = dbNS.doc("questions/" + id).set({ q: q, mode: chatMode, at: new Date().toISOString() });
+      if (res && res.catch) res.catch(function () {});
+    } catch (e) {}
+  }
+
+  /* Per-viewer chat persistence in browser storage: best effort only. */
+  var transcript = [];
+  var replaying = false;
+  function record(entry) {
+    if (replaying) return;
+    transcript.push(entry);
+    try {
+      localStorage.setItem("ti_chat_v1", JSON.stringify({
+        turns: chatHistory.slice(-12),
+        log: transcript.slice(-40),
+        mode: chatMode
+      }));
+    } catch (e) {}
+  }
+  function restoreChat() {
+    var d = null;
+    try { d = JSON.parse(localStorage.getItem("ti_chat_v1") || "null"); } catch (e) {}
+    if (!d) return;
+    if (Array.isArray(d.turns)) chatHistory = d.turns;
+    if (d.mode && MODES[d.mode]) {
+      chatMode = d.mode;
+      modeRow.querySelectorAll("button").forEach(function (b) {
+        b.setAttribute("aria-pressed", b.dataset.mode === chatMode ? "true" : "false");
+      });
+    }
+    replaying = true;
+    try {
+      (Array.isArray(d.log) ? d.log : []).forEach(function (m) {
+        if (m.t === "user" || m.t === "ai") {
+          addMsg(m.t, String(m.x || ""));
+        } else if (m.t === "chart" && (m.i === -1 || (INDICATORS[m.i] && HIST.s[m.i]))) {
+          addChartMsg(m.i);
+        } else if (m.t === "multi" && Array.isArray(m.i)) {
+          var ok = m.i.filter(function (i) { return i === -1 || (INDICATORS[i] && HIST.s[i]); }).slice(0, 3);
+          if (ok.length) addMultiMsg(ok);
+        } else if (m.t === "delta" && Array.isArray(m.e)) {
+          addDeltaMsg(m.e, String(m.c || ""));
+        }
+      });
+      transcript = Array.isArray(d.log) ? d.log : [];
+    } catch (e) {}
+    replaying = false;
+  }
+
+  var gateDiv = null;
+  function showGate() {
+    if (gateDiv) { gateDiv.scrollIntoView({ block: "nearest" }); return; }
+    gateDiv = document.createElement("div");
+    gateDiv.className = "msg ai";
+    var p = document.createElement("div");
+    p.textContent = "To ask questions here you need a free Claude account. Sign in, then reload this page — the rest of the page works either way.";
+    gateDiv.appendChild(p);
+    var actions = document.createElement("div");
+    actions.className = "gate-actions";
+    var login = document.createElement("a");
+    login.className = "gate-btn";
+    login.href = "https://claude.ai/login";
+    login.target = "_blank";
+    login.rel = "noopener";
+    login.textContent = "Sign in to Claude";
+    var reload = document.createElement("button");
+    reload.type = "button";
+    reload.className = "gate-btn ghost";
+    reload.textContent = "I signed in — reload";
+    reload.addEventListener("click", function () { location.reload(); });
+    actions.appendChild(login);
+    actions.appendChild(reload);
+    gateDiv.appendChild(actions);
+    chatLog.appendChild(gateDiv);
+    gateDiv.scrollIntoView({ block: "nearest" });
+  }
+  function hideGate() {
+    if (gateDiv && gateDiv.parentNode) gateDiv.parentNode.removeChild(gateDiv);
+    gateDiv = null;
+  }
+
+  chatLauncher.addEventListener("click", function () {
+    chatPanel.hidden = !chatPanel.hidden;
+    if (!chatPanel.hidden) {
+      if (sampleState === "unavailable") showGate();
+      askInput.focus();
+    }
+  });
+  chatClose.addEventListener("click", function () { chatPanel.hidden = true; });
+  modeRow.addEventListener("click", function (e) {
+    var btn = e.target.closest("button[data-mode]");
+    if (!btn) return;
+    chatMode = btn.dataset.mode;
+    modeRow.querySelectorAll("button").forEach(function (b) {
+      b.setAttribute("aria-pressed", b === btn ? "true" : "false");
+    });
+    try {
+      var saved = JSON.parse(localStorage.getItem("ti_chat_v1") || "{}");
+      saved.mode = chatMode;
+      localStorage.setItem("ti_chat_v1", JSON.stringify(saved));
+    } catch (e) {}
+    askInput.focus();
+  });
+
+  function pageContext() {
+    var isToday = currentYear === YEAR_TODAY;
+    var lines = INDICATORS.map(function (ind, i) {
+      var v = displayedValue(i);
+      return "- " + ind[0] + " (" + DOMAINS[ind[1]].full + "): " +
+        (v === null ? "no data this year" : "now " + v.toFixed(0)) +
+        ", today-start " + ind[2] +
+        (ind[5] !== null ? ", measured 2020: " + ind[5] : ", no pre-2023 data") +
+        (ind[4] === 2 ? ", AT 50-YEAR LOW per 2026 report" : ind[4] === 1 ? ", significant decline 2020-25 per report" : "");
+    });
+    return "This is 'Thirty Indicators', an interactive page for a Harvard Class of 1972 reunion discussion of democratic health, based on International IDEA's 'Global State of Democracy 2026: Democracy in an Age of Conflict'. " +
+      "The chart shows 30 indicators scored 0-100. Real data: the 1975-2020 history and the dotted 2020 marks (US values from the GSoD Indices v5.1 dataset, x100), the report's decline flags, and the framework itself. Illustrative: today's starting scores and the lever weights - say so when it matters. " +
+      "Report findings: the US declined significantly 2020-2025 on seven indicators (access to justice, economic equality, freedom of expression, freedom of the press, effective parliament, judicial independence, free political parties); all but the last now at their lowest since 1975. Globally, 2025 was the 11th straight year more countries declined than advanced; rule of law is the weakest category (71 countries low).\n" +
+      "Presidential terms, for era questions against the yearly data: Ford 1974-77, Carter 1977-81, Reagan 1981-89, G.H.W. Bush 1989-93, Clinton 1993-2001, G.W. Bush 2001-09, Obama 2009-17, Trump 2017-21, Biden 2021-25, Trump 2025-. Measured yearly data ends in 2020; for 2021-2025 rely on the report findings above and say so.\n" +
+      "Overall measured index (mean of the 22 measured indicators; chartable via show_history 'overall'): 1975 " + OVERALL[0] + ", 1985 " + OVERALL[10] + ", 1995 " + OVERALL[20] + ", 2005 " + OVERALL[30] + ", 2015 " + OVERALL[40] + ", 2020 " + OVERALL[OVERALL.length - 1] + ". The hero index on the page averages all 30 including illustrative values, so the two are not directly comparable.\n" +
+      "Current view: year " + (isToday ? "today (2026)" : currentYear) +
+      "; overall index " + heroValue.textContent + " (" + heroWord.textContent + ")" +
+      "; levers (0-100; each has its own illustrative 'today' anchor): " +
+      LEVERS.map(function (lv, j) { return lv.id + "=" + leverValues[j] + " (today " + LEVER_TODAY[j] + ")"; }).join(", ") + ".\n" +
+      "Indicators:\n" + lines.join("\n");
+  }
+
+  var askTools = [
+    {
+      name: "set_year",
+      description: "Change the year shown on the chart. 1975-2020 shows measured history, 2021-2025 an estimate, 2026 today. Use when showing the viewer a period would help.",
+      inputSchema: { type: "object", properties: { year: { type: "integer", minimum: 1975, maximum: 2026 } }, required: ["year"] },
+      execute: function (inp) {
+        stopPlay();
+        currentYear = clamp(Math.round(inp.year), YEAR_MIN, YEAR_TODAY);
+        yearSlider.value = currentYear;
+        render();
+        return { shown: currentYear === YEAR_TODAY ? "today (2026)" : currentYear, overallIndex: heroValue.textContent };
+      }
+    },
+    {
+      name: "set_levers",
+      description: "Move one or more of the six levers (0-100; each lever has its own 'today' anchor, given in the context) to show the viewer a scenario. Switches the chart to today. Keys: electoral, press, courts, restraint, integrity, civic.",
+      inputSchema: { type: "object", properties: {
+        electoral: { type: "integer" }, press: { type: "integer" }, courts: { type: "integer" },
+        restraint: { type: "integer" }, integrity: { type: "integer" }, civic: { type: "integer" } } },
+      execute: function (inp) {
+        stopPlay();
+        currentYear = YEAR_TODAY;
+        yearSlider.value = YEAR_TODAY;
+        LEVERS.forEach(function (lv, j) {
+          if (typeof inp[lv.id] === "number" && isFinite(inp[lv.id])) {
+            leverValues[j] = clamp(Math.round(inp[lv.id]), 0, 100);
+            leverInputs[j].value = leverValues[j];
+          }
+        });
+        clearPresetHighlight();
+        render();
+        return {
+          levers: LEVERS.map(function (lv, j) { return lv.id + "=" + leverValues[j]; }).join(","),
+          overallIndex: heroValue.textContent,
+          status: heroWord.textContent
+        };
+      }
+    },
+    {
+      name: "get_history",
+      description: "Return the measured US yearly scores (1975-2020, 0-100, GSoD Indices v5.1) for one indicator, or all 22 measured indicators when no name is given. Use this to compute era or presidency comparisons from real data.",
+      inputSchema: { type: "object", properties: { indicator: { type: "string", description: "Indicator name (partial match ok); omit for all" } } },
+      execute: function (inp) {
+        var q = inp && inp.indicator ? String(inp.indicator).toLowerCase() : null;
+        var series = {};
+        INDICATORS.forEach(function (ind, i) {
+          if (!HIST.s[i]) return;
+          if (q && ind[0].toLowerCase().indexOf(q) === -1) return;
+          series[ind[0]] = HIST.s[i];
+        });
+        if (!q || /overall|composite|average|total|index/.test(q)) {
+          series["Overall health index (mean of 22 measured)"] = OVERALL;
+        }
+        return { firstYear: HIST.y0, lastYear: HIST.y1, note: "one value per year, in order", series: series };
+      }
+    },
+    {
+      name: "show_history",
+      description: "Insert a 1975-2020 line chart into the chat: one indicator, or up to three overlaid for comparison. Prefer this over describing a trajectory in words.",
+      inputSchema: { type: "object", properties: {
+        indicator: { type: "string", description: "One indicator name, partial match ok" },
+        indicators: { type: "array", items: { type: "string" }, maxItems: 3, description: "Up to three indicator names to overlay" } } },
+      execute: function (inp) {
+        var names = inp && inp.indicators && inp.indicators.length ? inp.indicators : [inp && inp.indicator];
+        var idxs = [];
+        names.slice(0, 3).forEach(function (nm) {
+          var q = String(nm || "").toLowerCase();
+          if (!q) return;
+          for (var i = 0; i < INDICATORS.length; i++) {
+            if (INDICATORS[i][0].toLowerCase().indexOf(q) !== -1 && HIST.s[i]) {
+              if (idxs.indexOf(i) === -1) idxs.push(i);
+              return;
+            }
+          }
+          if (/overall|composite|average|total|health index/.test(q) && idxs.indexOf(-1) === -1) idxs.push(-1);
+        });
+        if (!idxs.length) throw new Error("No measured indicator matched " + JSON.stringify(names) + " (the eight indicators added in 2023 have no 1975-2020 series)");
+        if (idxs.length === 1) addChartMsg(idxs[0]);
+        else addMultiMsg(idxs);
+        return { shownInChat: idxs.map(function (i) { return INDICATORS[i][0]; }).join(", ") };
+      }
+    },
+    {
+      name: "show_changes",
+      description: "Insert a ranked bar chart of how much each indicator changed between two points, biggest movers first. THE tool for 'which fell/rose most' questions. Years 1975-2020 are measured; to='today' compares the 2020 measurement with today's illustrative starting values.",
+      inputSchema: { type: "object", properties: {
+        from: { type: "integer", description: "Start year, 1975-2020; default 2020" },
+        to: { type: "string", description: "End: a year up to 2020, or 'today' (default)" },
+        top: { type: "integer", description: "How many movers to show, default 10" } } },
+      execute: function (inp) {
+        var from = inp && inp.from ? clamp(Math.round(inp.from), HIST.y0, HIST.y1) : HIST.y1;
+        var toRaw = inp && inp.to != null ? String(inp.to).toLowerCase() : "today";
+        var toIsToday = toRaw === "today" || toRaw === "now" || toRaw === "2026";
+        var toYear = toIsToday ? null : clamp(parseInt(toRaw, 10) || HIST.y1, HIST.y0, HIST.y1);
+        var top = inp && inp.top ? clamp(Math.round(inp.top), 3, 15) : 10;
+        var entries = [];
+        INDICATORS.forEach(function (ind, i) {
+          var s = HIST.s[i];
+          if (!s) return;
+          var a = s[from - HIST.y0];
+          var b = toIsToday ? ind[2] : s[toYear - HIST.y0];
+          entries.push({ name: ind[0], delta: Math.round(b - a) });
+        });
+        entries.sort(function (x, y) { return Math.abs(y.delta) - Math.abs(x.delta); });
+        entries = entries.slice(0, top);
+        entries.sort(function (x, y) { return x.delta - y.delta; });
+        addDeltaMsg(entries, "Change " + from + " → " + (toIsToday ? "today" : toYear) +
+          (toIsToday ? " · 2020 measured → illustrative start" : " · measured, GSoD v5.1"));
+        return { shown: entries.length, biggestDrop: entries[0].name + " (" + entries[0].delta + ")" };
+      }
+    }
+  ];
+
+  var pendingAiDiv = null;
+
+  function addChartMsg(idx) {
+    var div = document.createElement("div");
+    div.className = "msg ai chart-msg";
+    div.setAttribute("role", "button");
+    div.tabIndex = 0;
+    var svg = buildHistoryChart(getSeries(idx), idx,
+      { W: 372, H: 180, L: 26, R: 364, T: 12, B: 152, years: [1975, 1995, 2015] });
+    div.appendChild(svg);
+    var cap = document.createElement("div");
+    cap.className = "chart-cap";
+    cap.textContent = getIndName(idx) + " · US, 1975–2020 measured" +
+      (idx === -1 ? " · mean of 22 indicators" : "") + " · tap to enlarge";
+    div.appendChild(cap);
+    function enlarge() { openHistory(idx); }
+    div.addEventListener("click", enlarge);
+    div.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); enlarge(); } });
+    if (pendingAiDiv && pendingAiDiv.parentNode === chatLog) chatLog.insertBefore(div, pendingAiDiv);
+    else chatLog.appendChild(div);
+    div.scrollIntoView({ block: "nearest" });
+    record({ t: "chart", i: idx });
+  }
+
+  function addBubble(svg, capText, legendEl) {
+    var div = document.createElement("div");
+    div.className = "msg ai chart-msg";
+    div.style.cursor = "default";
+    if (legendEl) div.appendChild(legendEl);
+    div.appendChild(svg);
+    var cap = document.createElement("div");
+    cap.className = "chart-cap";
+    cap.textContent = capText;
+    div.appendChild(cap);
+    if (pendingAiDiv && pendingAiDiv.parentNode === chatLog) chatLog.insertBefore(div, pendingAiDiv);
+    else chatLog.appendChild(div);
+    div.scrollIntoView({ block: "nearest" });
+  }
+
+  function addMultiMsg(idxs) {
+    var legend = document.createElement("div");
+    legend.className = "mini-legend";
+    idxs.forEach(function (idx, k) {
+      var key = document.createElement("span");
+      var sw = document.createElement("span");
+      sw.className = "swatch";
+      sw.style.background = "var(--dom-" + (k + 1) + ")";
+      key.appendChild(sw);
+      key.appendChild(document.createTextNode(getIndName(idx)));
+      legend.appendChild(key);
+    });
+    addBubble(buildMultiHistory(idxs), "US, 1975–2020 measured (GSoD v5.1)", legend);
+    record({ t: "multi", i: idxs });
+  }
+
+  function addDeltaMsg(entries, capText) {
+    addBubble(buildDeltaChart(entries), capText);
+    record({ t: "delta", e: entries, c: capText });
+  }
+
+  function buildMultiHistory(idxs) {
+    var W = 372, H = 190, L = 26, R = 342, T = 10, B = 162;
+    var n = getSeries(idxs[0]).length;
+    var xAt = function (k) { return L + (R - L) * k / (n - 1); };
+    var range = yRangeOf(idxs.map(getSeries));
+    var yAt = function (v) { return B - (B - T) * (v - range.lo) / (range.hi - range.lo); };
+    var svg = svgEl("svg", { viewBox: "0 0 " + W + " " + H, "class": "history-svg", role: "img" });
+    svg.setAttribute("aria-label", "Comparison, 1975 to 2020: " +
+      idxs.map(function (i) { return getIndName(i) + " ends at " + getSeries(i)[n - 1]; }).join("; "));
+    range.ticks.forEach(function (v) {
+      svg.appendChild(svgEl("line", { x1: L, x2: R, y1: yAt(v), y2: yAt(v), "class": v === 0 ? "h-grid h-zero" : "h-grid" }));
+      var t = svgEl("text", { x: L - 6, y: yAt(v) + 3, "text-anchor": "end", "class": "h-axis" });
+      t.textContent = v; svg.appendChild(t);
+    });
+    [1975, 1995, 2015].forEach(function (yr) {
+      var t = svgEl("text", { x: xAt(yr - HIST.y0), y: B + 14, "text-anchor": "middle", "class": "h-axis" });
+      t.textContent = yr; svg.appendChild(t);
+    });
+    var ends = idxs.map(function (idx, k) {
+      var s = getSeries(idx);
+      var color = "var(--dom-" + (k + 1) + ")";
+      var d = s.map(function (v, j) { return (j ? "L" : "M") + xAt(j).toFixed(1) + " " + yAt(v).toFixed(1); }).join(" ");
+      var path = svgEl("path", { d: d, "class": "h-line" });
+      path.style.stroke = color;
+      svg.appendChild(path);
+      return { y: yAt(s[n - 1]), label: String(s[n - 1]) };
+    });
+    ends.sort(function (a, b) { return a.y - b.y; });
+    for (var k = 1; k < ends.length; k++) {
+      if (ends[k].y - ends[k - 1].y < 12) ends[k].y = ends[k - 1].y + 12;
+    }
+    ends.forEach(function (e) {
+      var t = svgEl("text", { x: R + 4, y: e.y + 3, "class": "h-mlabel" });
+      t.textContent = e.label;
+      svg.appendChild(t);
+    });
+    return svg;
+  }
+
+  function buildDeltaChart(entries) {
+    var rowH = 22, T = 6, W = 372, labelW = 150;
+    var H = T + entries.length * rowH + 8;
+    var plotW = W - labelW - 40;
+    var maxPos = 0, maxNeg = 0;
+    entries.forEach(function (e) {
+      if (e.delta > maxPos) maxPos = e.delta;
+      if (-e.delta > maxNeg) maxNeg = -e.delta;
+    });
+    var total = (maxPos + maxNeg) || 1;
+    var scale = plotW / total;
+    var xZero = labelW + maxNeg * scale;
+    var svg = svgEl("svg", { viewBox: "0 0 " + W + " " + H, "class": "history-svg", role: "img" });
+    svg.setAttribute("aria-label", "Ranked change per indicator: " +
+      entries.map(function (e) { return e.name + " " + e.delta; }).join(", "));
+    svg.appendChild(svgEl("line", { x1: xZero, x2: xZero, y1: T, y2: H - 4, "class": "h-grid h-zero" }));
+    entries.forEach(function (e, i) {
+      var y = T + i * rowH;
+      var name = e.name.length > 24 ? e.name.slice(0, 23) + "…" : e.name;
+      var nt = svgEl("text", { x: labelW - 6, y: y + rowH / 2 + 3.5, "text-anchor": "end", "class": "h-rlabel" });
+      nt.textContent = name;
+      svg.appendChild(nt);
+      var w = Math.max(Math.abs(e.delta) * scale, 1.5);
+      var bx = e.delta < 0 ? xZero - w : xZero;
+      var bar = svgEl("rect", { x: bx, y: y + 4, width: w, height: rowH - 9, rx: 2 });
+      bar.style.fill = e.delta < 0 ? "var(--status-critical)" : "var(--status-good)";
+      svg.appendChild(bar);
+      var inside = w >= 34;
+      var vt = svgEl("text", {
+        x: e.delta < 0 ? (inside ? bx + 5 : xZero + 5)
+                       : (inside ? bx + w - 5 : bx + w + 5),
+        y: y + rowH / 2 + 3.5,
+        "text-anchor": e.delta < 0 ? "start" : (inside ? "end" : "start"),
+        "class": inside ? "h-vlabel h-vlabel-in" : "h-vlabel"
+      });
+      vt.textContent = (e.delta > 0 ? "+" : "−") + Math.abs(e.delta);
+      svg.appendChild(vt);
+    });
+    return svg;
+  }
+
+  function addMsg(cls, text) {
+    var div = document.createElement("div");
+    div.className = "msg " + cls;
+    div.textContent = text;
+    chatLog.appendChild(div);
+    div.scrollIntoView({ block: "nearest" });
+    return div;
+  }
+
+  document.getElementById("faqChips").addEventListener("click", function (e) {
+    var chip = e.target.closest("button");
+    if (!chip) return;
+    askInput.value = chip.textContent;
+    if (askForm.requestSubmit) askForm.requestSubmit();
+    else askForm.dispatchEvent(new Event("submit", { cancelable: true }));
+  });
+
+  askForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (!sampleNS) {
+      if (sampleState === "pending") {
+        addMsg("ai", "Still connecting to Claude — give it a second and try again.");
+      } else {
+        showGate();
+      }
+      return;
+    }
+    var q = askInput.value.trim();
+    if (!q || askSend.disabled) return;
+    askInput.value = "";
+    addMsg("user", q);
+    record({ t: "user", x: q });
+    logQuestion(q);
+    var aiDiv = addMsg("ai", "");
+    var typing = document.createElement("span");
+    typing.className = "typing";
+    typing.innerHTML = "<span></span><span></span><span></span>";
+    aiDiv.appendChild(typing);
+    pendingAiDiv = aiDiv;
+    askSend.disabled = true;
+    chatHistory.push({ role: "user", content: q });
+    var turns = chatHistory.slice(0, -1).slice(-8).concat([{
+      role: "user",
+      content: "CONTEXT (live page state, not typed by the viewer):\n" + pageContext() +
+        "\n\nViewer question: " + q +
+        "\n\nAudience: the Harvard Class of 1972 at their reunion. They graduated in June 1972 — Watergate broke months later, and this dataset begins three years after their Commencement — so they lived every year of it as voting adults, and they are in their mid-70s now. When it sharpens an answer, anchor one fact to their timeline ('the year you turned 40', 'your 25th reunion year'); at most one such anchor per answer. Never flatter them, and never assume their politics — the room spans the spectrum; be personal about the timeline, strictly neutral about the numbers." +
+        "\nVoice: you are " + MODES[chatMode] +
+        "\nHard rules: SHOW, don't tell — answer with a chart whenever possible: show_changes for 'which moved most' (ranked bars), show_history with up to three indicators to compare trajectories, set_year for a moment in time, set_levers for a scenario. Then write AT MOST two short sentences: what the viewer now sees, and the takeaway. Three sentences only for era comparisons with numbers. Plain text; no markdown, no lists, no preamble."
+    }]);
+    sampleNS(turns, {
+      cache: false,
+      tools: askTools,
+      onText: (function () {
+        var scrollQueued = false;
+        return function (ev) {
+          aiDiv.textContent = ev.text;
+          if (!scrollQueued) {
+            scrollQueued = true;
+            requestAnimationFrame(function () {
+              scrollQueued = false;
+              aiDiv.scrollIntoView({ block: "nearest" });
+            });
+          }
+        };
+      })()
+    }).then(function (res) {
+      aiDiv.textContent = res.text;
+      chatHistory.push({ role: "assistant", content: res.text });
+      record({ t: "ai", x: res.text });
+    }, function (err) {
+      chatHistory.pop();
+      aiDiv.textContent =
+        err && err.code === "rate_limited" ? "Rate limited — give it a moment and try again." :
+        err && err.code === "cancelled" ? "Cancelled." :
+        err && err.text ? err.text :
+        "That didn't go through — try again.";
+    }).then(function () {
+      pendingAiDiv = null;
+      askSend.disabled = false;
+      askInput.focus();
+    });
+  });
+
+  buildSpark();
+  restoreChat();
   render();
 })();
 </script>
