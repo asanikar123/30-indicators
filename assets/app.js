@@ -187,17 +187,35 @@
   function hideTip() { tooltip.hidden = true; }
   /* Instant styled tooltip for the marks (dotted 2020, red previous-low, ▼ flag) */
   function showMarkTip(mark) {
-    tooltip.innerHTML = "";
-    var name = document.createElement("div");
-    name.className = "t-name";
-    name.textContent = mark.dataset.tipTitle || "";
-    tooltip.appendChild(name);
-    if (mark.dataset.tipBody) {
-      var body = document.createElement("div");
-      body.className = "t-domain";
-      body.textContent = mark.dataset.tipBody;
-      tooltip.appendChild(body);
+    /* Marks that sit within a few pixels of each other (on ▼ columns the dotted
+       2020 line and the red previous-low line can coincide exactly) share one
+       combined tooltip listing every clustered mark. */
+    var marks = [mark];
+    var bar = mark.closest(".bar");
+    if (bar) {
+      var myRect = mark.getBoundingClientRect();
+      var myC = (myRect.top + myRect.bottom) / 2;
+      bar.querySelectorAll(".base-tick, .lowest-tick, .low-flag").forEach(function (m) {
+        if (m === mark) return;
+        var r = m.getBoundingClientRect();
+        if (Math.abs((r.top + r.bottom) / 2 - myC) <= 14) marks.push(m);
+      });
+      marks.sort(function (a, b) { return a.getBoundingClientRect().top - b.getBoundingClientRect().top; });
     }
+    tooltip.innerHTML = "";
+    marks.forEach(function (m, k) {
+      var name = document.createElement("div");
+      name.className = "t-name";
+      if (k > 0) name.style.marginTop = "5px";
+      name.textContent = m.dataset.tipTitle || "";
+      tooltip.appendChild(name);
+      if ((marks.length === 1 || m === mark) && m.dataset.tipBody) {
+        var body = document.createElement("div");
+        body.className = "t-domain";
+        body.textContent = m.dataset.tipBody;
+        tooltip.appendChild(body);
+      }
+    });
     tooltip.hidden = false;
     var mRect = mark.getBoundingClientRect();
     var innerRect = chartInner.getBoundingClientRect();
@@ -1149,7 +1167,7 @@
         (ind[4] === 2 ? ", AT 50-YEAR LOW per 2026 report" : ind[4] === 1 ? ", significant decline 2020-25 per report" : "");
     });
     return "This is 'Thirty Indicators', an interactive page for a Harvard–Radcliffe Class of 1972 reunion discussion of democratic health, based on International IDEA's 'Global State of Democracy 2026: Democracy in an Age of Conflict'. " +
-      "The chart shows 30 indicators scored 0-100. Real data: the 1975-2020 history, the dotted 2020 marks, and — on the report-flagged columns only — a short red line at that indicator's previous 1975-2020 low, which the report says it has now fallen below — all US values from the GSoD Indices v5.1 dataset, x100 — plus the report's decline flags and the framework itself. Illustrative: today's starting scores and the lever weights - say so when it matters. " +
+      "The chart shows 30 indicators scored 0-100. Real data: the 1975-2020 history, the dotted 2020 marks, and a short solid line at each measured indicator's lowest 1975-2020 value (red on report-flagged columns, whose indicators the report says have now fallen below that old floor; gray elsewhere as historical context) — all US values from the GSoD Indices v5.1 dataset, x100 — plus the report's decline flags and the framework itself. Illustrative: today's starting scores and the lever weights - say so when it matters. " +
       "Report findings: the US declined significantly 2020-2025 on seven indicators (access to justice, economic equality, freedom of expression, freedom of the press, effective parliament, judicial independence, free political parties); all but the last now at their lowest since 1975. Globally, 2025 was the 11th straight year more countries declined than advanced; rule of law is the weakest category (71 countries low).\n" +
       "Presidential terms, for era questions against the yearly data: Ford 1974-77, Carter 1977-81, Reagan 1981-89, G.H.W. Bush 1989-93, Clinton 1993-2001, G.W. Bush 2001-09, Obama 2009-17, Trump 2017-21, Biden 2021-25, Trump 2025-. Measured yearly data ends in 2020; for 2021-2025 rely on the report findings above and say so.\n" +
       "Overall measured index (mean of the 22 measured indicators; chartable via show_history 'overall'): 1975 " + OVERALL[0] + ", 1985 " + OVERALL[10] + ", 1995 " + OVERALL[20] + ", 2005 " + OVERALL[30] + ", 2015 " + OVERALL[40] + ", 2020 " + OVERALL[OVERALL.length - 1] + ". The hero index on the page averages all 30 including illustrative values, so the two are not directly comparable.\n" +
@@ -1579,18 +1597,26 @@
   clearTimelineMarks();
   drawTimelineMarks(MIDTERM_YEARS, true);
   drawTimelineMarks(ELECTION_YEARS, false);
-  /* The previous-low mark: only on columns the 2026 report flags (▼) as being at a
-     NEW 50-year low — the red line shows the old 1975-2020 floor they fell below.
-     Must run after HIST is defined. */
+  /* The lowest-point mark, on every measured column: where that indicator's
+     1975-2020 measured minimum sits. Red on columns the 2026 report flags (▼)
+     as having fallen below that old floor; neutral gray elsewhere, where it is
+     historical context rather than a claim about today. Runs after HIST. */
   INDICATORS.forEach(function (ind, i) {
     var s = HIST.s[i];
-    if (!s || !barEls[i] || ind[4] !== 2) return;
+    if (!s || !barEls[i]) return;
     var lowVal = Math.min.apply(null, s);
+    var lowYear = HIST.y0 + s.indexOf(lowVal);
     var lowTick = document.createElement("div");
-    lowTick.className = "lowest-tick";
+    if (ind[4] === 2) {
+      lowTick.className = "lowest-tick";
+      lowTick.dataset.tipTitle = "Red line · previous 50-year low: " + lowVal + " (in " + lowYear + ")";
+      lowTick.dataset.tipBody = "The 2026 report says this indicator now sits below it (▼).";
+    } else {
+      lowTick.className = "lowest-tick muted";
+      lowTick.dataset.tipTitle = "Gray line · lowest measured 1975–2020: " + lowVal + " (in " + lowYear + ")";
+      lowTick.dataset.tipBody = "Historical context from the GSoD v5.1 series — not a claim about today.";
+    }
     lowTick.style.bottom = lowVal + "%";
-    lowTick.dataset.tipTitle = "Red line · previous 50-year low: " + lowVal + " (in " + (HIST.y0 + s.indexOf(lowVal)) + ")";
-    lowTick.dataset.tipBody = "The 2026 report says this indicator now sits below it (▼).";
     barEls[i].appendChild(lowTick);
   });
   restoreChat();

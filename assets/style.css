@@ -477,6 +477,7 @@
     pointer-events: auto;
     cursor: help;
   }
+  .lowest-tick.muted { border-top-color: var(--ink-muted); opacity: 0.55; }
   .low-flag {
     position: absolute;
     left: 50%;

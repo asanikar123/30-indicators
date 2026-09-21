@@ -27,7 +27,8 @@ const REPO = '/home/user/30-indicators';
     bars: document.querySelectorAll('.bar').length,
     fills: [...document.querySelectorAll('.bar-fill')].filter(f => f.offsetHeight > 0).length,
     dotted: document.querySelectorAll('.base-tick').length,
-    red: document.querySelectorAll('.lowest-tick').length,
+    red: document.querySelectorAll('.lowest-tick:not(.muted)').length,
+    gray: document.querySelectorAll('.lowest-tick.muted').length,
     pres: document.querySelectorAll('.spark-mark:not(.spark-mark-mid)').length,
     mid: document.querySelectorAll('.spark-mark-mid').length,
     dots: document.querySelectorAll('.spark-mark-dot').length,
@@ -37,7 +38,7 @@ const REPO = '/home/user/30-indicators';
     fontCss: !!document.querySelector('link[href="assets/style.css"]')
   }));
   T('render: 30 bars, 24 with fill', s.bars === 30 && s.fills >= 22, s.bars + '/' + s.fills);
-  T('marks: 22 dotted, 5 red, 13+12 timeline, 12 dots', s.dotted === 22 && s.red === 5 && s.pres === 13 && s.mid === 12 && s.dots === 12, [s.dotted, s.red, s.pres, s.mid, s.dots].join(','));
+  T('marks: 22 dotted, 5 red + 17 gray lows, 13+12 timeline, 12 dots', s.dotted === 22 && s.red === 5 && s.gray === 17 && s.pres === 13 && s.mid === 12 && s.dots === 12, [s.dotted, s.red, s.gray, s.pres, s.mid, s.dots].join(','));
   T('hero index 56', s.hero === '56');
   T('masthead Harvard–Radcliffe, no committee/date', s.mast === 'Harvard–Radcliffe Class of 1972', s.mast);
   T('chat launcher hidden on static build (Vince fix)', s.launcherVisible === false);
@@ -61,8 +62,19 @@ const REPO = '/home/user/30-indicators';
   T('tooltip: none above fill, shows on fill', !tipAbove && tipFill);
   async function markTip(sel) { const bb = await p.locator(sel).first().boundingBox(); await p.mouse.move(bb.x + bb.width / 2, bb.y + 1); await p.waitForTimeout(120); return p.evaluate(() => document.getElementById('tooltip').hidden ? '' : document.querySelector('#tooltip .t-name').textContent); }
   T('mark tip: dotted', /measured 2020/.test(await markTip('.base-tick')));
-  T('mark tip: red line', /previous 50-year low/.test(await markTip('.lowest-tick')));
+  T('mark tip: red line', /previous 50-year low/.test(await markTip('.lowest-tick:not(.muted)')));
+  T('mark tip: gray low line', /lowest measured 1975/.test(await markTip('.lowest-tick.muted')));
   T('mark tip: flag', /NEW 50-year low/.test(await markTip('.low-flag')));
+  // clustered marks (Effective parliament: dotted 2020 and red low coincide at 62)
+  const clusterLines = await p.evaluate(() => {
+    const bar = document.querySelector('.bar[data-index="4"]');
+    const t = bar.querySelector('.base-tick').getBoundingClientRect();
+    return { x: t.left + t.width / 2, y: t.top + 1 };
+  });
+  await p.mouse.move(10, 500); await p.waitForTimeout(100);
+  await p.mouse.move(clusterLines.x, clusterLines.y); await p.waitForTimeout(150);
+  const cl = await p.evaluate(() => [...document.querySelectorAll('#tooltip .t-name')].map(n => n.textContent).join(' | '));
+  T('clustered marks share one tooltip', /previous 50-year low: 62/.test(cl) && /measured 2020: 62/.test(cl), cl);
 
   // click bar -> docked history panel
   await p.locator('.bar').first().click();
