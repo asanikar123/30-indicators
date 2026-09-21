@@ -476,17 +476,21 @@ window.TI_WORKER_URL = "";
   .base-tick {
     position: absolute;
     left: 0; right: 0;
-    height: 0;
+    height: 8px;
+    margin-bottom: -4px; /* keep the drawn line on the value, hit zone straddling it */
     border-top: 2px dotted var(--ink-muted);
-    pointer-events: none;
+    pointer-events: auto;
+    cursor: help;
   }
   .lowest-tick {
     position: absolute;
     left: 15%; right: 15%;
-    height: 0;
+    height: 8px;
+    margin-bottom: -4px;
     border-top: 2px solid var(--status-critical);
     opacity: 0.7;
-    pointer-events: none;
+    pointer-events: auto;
+    cursor: help;
   }
   .low-flag {
     position: absolute;
@@ -495,7 +499,8 @@ window.TI_WORKER_URL = "";
     color: var(--status-critical);
     font-size: 9px;
     line-height: 1;
-    pointer-events: none;
+    pointer-events: auto;
+    cursor: help;
     transition: bottom 320ms cubic-bezier(0.25, 0.7, 0.3, 1);
   }
   .low-glyph { color: var(--status-critical); font-size: 10px; }
@@ -1334,12 +1339,15 @@ window.TI_WORKER_URL = "";
         var tick = document.createElement("div");
         tick.className = "base-tick";
         tick.style.bottom = ind[5] + "%";
+        tick.title = "Dotted line — measured 2020 value: " + ind[5] +
+          " (GSoD Indices v5.1, the last year with real data)";
         b.appendChild(tick);
       }
       if (ind[4] === 2) {
         var flag = document.createElement("span");
         flag.className = "low-flag";
         flag.textContent = "▼";
+        flag.title = "▼ — the 2026 report puts this indicator at its lowest level since 1975";
         b.appendChild(flag);
       }
       group.appendChild(b);
@@ -2784,9 +2792,12 @@ window.TI_WORKER_URL = "";
   INDICATORS.forEach(function (ind, i) {
     var s = HIST.s[i];
     if (!s || !barEls[i]) return;
+    var lowVal = Math.min.apply(null, s);
     var lowTick = document.createElement("div");
     lowTick.className = "lowest-tick";
-    lowTick.style.bottom = Math.min.apply(null, s) + "%";
+    lowTick.style.bottom = lowVal + "%";
+    lowTick.title = "Red line — 50-year low: lowest measured value since 1975 was " +
+      lowVal + ", in " + (HIST.y0 + s.indexOf(lowVal));
     barEls[i].appendChild(lowTick);
   });
   restoreChat();
