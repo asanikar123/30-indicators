@@ -1167,7 +1167,7 @@
         (ind[4] === 2 ? ", AT 50-YEAR LOW per 2026 report" : ind[4] === 1 ? ", significant decline 2020-25 per report" : "");
     });
     return "This is 'Thirty Indicators', an interactive page for a Harvard–Radcliffe Class of 1972 reunion discussion of democratic health, based on International IDEA's 'Global State of Democracy 2026: Democracy in an Age of Conflict'. " +
-      "The chart shows 30 indicators scored 0-100. Real data: the 1975-2020 history, the dotted 2020 marks, and a short solid line at each measured indicator's lowest 1975-2020 value (red on report-flagged columns, whose indicators the report says have now fallen below that old floor; gray elsewhere as historical context) — all US values from the GSoD Indices v5.1 dataset, x100 — plus the report's decline flags and the framework itself. Illustrative: today's starting scores and the lever weights - say so when it matters. " +
+      "The chart shows 30 indicators scored 0-100. Real data: the 1975-2020 history, the dotted 2020 marks, and short solid lines marking measured lows (red on report-flagged columns: the old floor the report says they fell below; gray where some past year dipped below today's score) — all US values from the GSoD Indices v5.1 dataset, x100 — plus the report's decline flags and the framework itself. Illustrative: today's starting scores and the lever weights - say so when it matters. " +
       "Report findings: the US declined significantly 2020-2025 on seven indicators (access to justice, economic equality, freedom of expression, freedom of the press, effective parliament, judicial independence, free political parties); all but the last now at their lowest since 1975. Globally, 2025 was the 11th straight year more countries declined than advanced; rule of law is the weakest category (71 countries low).\n" +
       "Presidential terms, for era questions against the yearly data: Ford 1974-77, Carter 1977-81, Reagan 1981-89, G.H.W. Bush 1989-93, Clinton 1993-2001, G.W. Bush 2001-09, Obama 2009-17, Trump 2017-21, Biden 2021-25, Trump 2025-. Measured yearly data ends in 2020; for 2021-2025 rely on the report findings above and say so.\n" +
       "Overall measured index (mean of the 22 measured indicators; chartable via show_history 'overall'): 1975 " + OVERALL[0] + ", 1985 " + OVERALL[10] + ", 1995 " + OVERALL[20] + ", 2005 " + OVERALL[30] + ", 2015 " + OVERALL[40] + ", 2020 " + OVERALL[OVERALL.length - 1] + ". The hero index on the page averages all 30 including illustrative values, so the two are not directly comparable.\n" +
@@ -1612,9 +1612,14 @@
       lowTick.dataset.tipTitle = "Red line · previous 50-year low: " + lowVal + " (in " + lowYear + ")";
       lowTick.dataset.tipBody = "The 2026 report says this indicator now sits below it (▼).";
     } else {
+      /* Unflagged columns: show the historical low only where history genuinely
+         dipped below today's bar. When today already sits at or below every
+         measured year, the bar itself is the lowest point to date — a floating
+         "low" line above it would contradict the chart. */
+      if (lowVal >= ind[2]) return;
       lowTick.className = "lowest-tick muted";
-      lowTick.dataset.tipTitle = "Gray line · lowest measured 1975–2020: " + lowVal + " (in " + lowYear + ")";
-      lowTick.dataset.tipBody = "Historical context from the GSoD v5.1 series — not a claim about today.";
+      lowTick.dataset.tipTitle = "Gray line · lowest measured year, 1975–2020: " + lowVal + " (in " + lowYear + ")";
+      lowTick.dataset.tipBody = "Historical context from the GSoD v5.1 series.";
     }
     lowTick.style.bottom = lowVal + "%";
     barEls[i].appendChild(lowTick);

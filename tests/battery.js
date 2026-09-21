@@ -38,7 +38,7 @@ const REPO = '/home/user/30-indicators';
     fontCss: !!document.querySelector('link[href="assets/style.css"]')
   }));
   T('render: 30 bars, 24 with fill', s.bars === 30 && s.fills >= 22, s.bars + '/' + s.fills);
-  T('marks: 22 dotted, 5 red + 17 gray lows, 13+12 timeline, 12 dots', s.dotted === 22 && s.red === 5 && s.gray === 17 && s.pres === 13 && s.mid === 12 && s.dots === 12, [s.dotted, s.red, s.gray, s.pres, s.mid, s.dots].join(','));
+  T('marks: 22 dotted, 5 red + 5 gray lows (gray only where history < today), 13+12 timeline, 12 dots', s.dotted === 22 && s.red === 5 && s.gray === 5 && s.pres === 13 && s.mid === 12 && s.dots === 12, [s.dotted, s.red, s.gray, s.pres, s.mid, s.dots].join(','));
   T('hero index 56', s.hero === '56');
   T('masthead Harvard–Radcliffe, no committee/date', s.mast === 'Harvard–Radcliffe Class of 1972', s.mast);
   T('chat launcher hidden on static build (Vince fix)', s.launcherVisible === false);
@@ -63,7 +63,7 @@ const REPO = '/home/user/30-indicators';
   async function markTip(sel) { const bb = await p.locator(sel).first().boundingBox(); await p.mouse.move(bb.x + bb.width / 2, bb.y + 1); await p.waitForTimeout(120); return p.evaluate(() => document.getElementById('tooltip').hidden ? '' : document.querySelector('#tooltip .t-name').textContent); }
   T('mark tip: dotted', /measured 2020/.test(await markTip('.base-tick')));
   T('mark tip: red line', /previous 50-year low/.test(await markTip('.lowest-tick:not(.muted)')));
-  T('mark tip: gray low line', /lowest measured 1975/.test(await markTip('.lowest-tick.muted')));
+  T('mark tip: gray low line', /lowest measured year/.test(await markTip('.lowest-tick.muted')));
   T('mark tip: flag', /NEW 50-year low/.test(await markTip('.low-flag')));
   // clustered marks (Effective parliament: dotted 2020 and red low coincide at 62)
   const clusterLines = await p.evaluate(() => {
