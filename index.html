@@ -1433,12 +1433,28 @@ window.TI_WORKER_URL = "";
     tooltip.style.top = Math.max(y, 0) + "px";
   }
   function hideTip() { tooltip.hidden = true; }
-  barsRoot.addEventListener("mouseover", function (e) {
+  /* Tooltip only while the pointer is over the filled part of the column
+     (plus a small grace zone), not the empty space above it. */
+  var tipBar = null;
+  barsRoot.addEventListener("mousemove", function (e) {
     var bar = e.target.closest(".bar");
-    if (bar) showTip(bar);
+    var want = null;
+    if (bar) {
+      var rect = bar.getBoundingClientRect();
+      var fill = bar.querySelector(".bar-fill");
+      var fillH = fill ? fill.offsetHeight : 0;
+      if (e.clientY >= rect.bottom - fillH - 14) want = bar;
+    }
+    if (want !== tipBar) {
+      tipBar = want;
+      if (want) showTip(want); else hideTip();
+    }
   });
   barsRoot.addEventListener("mouseout", function (e) {
-    if (!e.relatedTarget || !e.relatedTarget.closest || !e.relatedTarget.closest(".bar")) hideTip();
+    if (!e.relatedTarget || !e.relatedTarget.closest || !e.relatedTarget.closest(".bar")) {
+      tipBar = null;
+      hideTip();
+    }
   });
   barsRoot.addEventListener("focusin", function (e) {
     var bar = e.target.closest(".bar");
