@@ -38,8 +38,17 @@ const REPO = '/home/user/30-indicators';
     fontCss: !!document.querySelector('link[href="assets/style.css"]')
   }));
   T('render: 30 bars, 24 with fill', s.bars === 30 && s.fills >= 22, s.bars + '/' + s.fills);
-  T('marks: 22 dotted, 5 red + 5 gray lows (gray only where history < today), 13+12 timeline, 12 dots', s.dotted === 22 && s.red === 5 && s.gray === 5 && s.pres === 13 && s.mid === 12 && s.dots === 12, [s.dotted, s.red, s.gray, s.pres, s.mid, s.dots].join(','));
-  T('hero index 56', s.hero === '56');
+  const expected = await p.evaluate(() => {
+    const D = window.TI_DATA; let gray = 0, overall = 0;
+    D.INDICATORS.forEach((ind, i) => {
+      overall += ind[2];
+      const hs = D.HIST.s[i];
+      if (hs && ind[4] !== 2 && Math.min(...hs) < ind[2]) gray++;
+    });
+    return { gray, overall: String(Math.round(overall / 30)) };
+  });
+  T('marks: 22 dotted, 5 red + data-derived gray lows, 13+12 timeline, 12 dots', s.dotted === 22 && s.red === 5 && s.gray === expected.gray && s.pres === 13 && s.mid === 12 && s.dots === 12, [s.dotted, s.red, s.gray + '/' + expected.gray, s.pres, s.mid, s.dots].join(','));
+  T('hero index equals mean of calibrated baselines', s.hero === expected.overall, s.hero + ' vs ' + expected.overall);
   T('masthead Harvard–Radcliffe, no committee/date', s.mast === 'Harvard–Radcliffe Class of 1972', s.mast);
   T('chat launcher hidden on static build (Vince fix)', s.launcherVisible === false);
 
@@ -50,7 +59,7 @@ const REPO = '/home/user/30-indicators';
   const segAfter = await p.locator('#presets').boundingBox();
   let s2 = await p.evaluate(() => ({ hero: document.getElementById('heroValue').textContent, cap: document.getElementById('scenarioCap').textContent }));
   T('scenario click: buttons pixel-stable', segBefore.x === segAfter.x && segBefore.y === segAfter.y);
-  T('scenario: hero drops + caption swaps', +s2.hero < 56 && /erosion/.test(s2.cap), s2.hero + ' / ' + s2.cap);
+  T('scenario: hero drops + caption swaps', +s2.hero < +expected.overall && /erosion/.test(s2.cap), s2.hero + ' / ' + s2.cap);
   await p.click('#presetToday'); await p.waitForTimeout(300);
 
   // tooltip zones + mark tips
@@ -60,7 +69,7 @@ const REPO = '/home/user/30-indicators';
   await p.mouse.move(z.x, z.fill); await p.waitForTimeout(120);
   const tipFill = await p.evaluate(() => !document.getElementById('tooltip').hidden);
   T('tooltip: none above fill, shows on fill', !tipAbove && tipFill);
-  async function markTip(sel) { const bb = await p.locator(sel).first().boundingBox(); await p.mouse.move(bb.x + bb.width / 2, bb.y + 1); await p.waitForTimeout(120); return p.evaluate(() => document.getElementById('tooltip').hidden ? '' : document.querySelector('#tooltip .t-name').textContent); }
+  async function markTip(sel) { const bb = await p.locator(sel).first().boundingBox(); await p.mouse.move(bb.x + bb.width / 2, bb.y + 1); await p.waitForTimeout(120); return p.evaluate(() => document.getElementById('tooltip').hidden ? '' : [...document.querySelectorAll('#tooltip .t-name')].map(n => n.textContent).join(' | ')); }
   T('mark tip: dotted', /measured 2020/.test(await markTip('.base-tick')));
   T('mark tip: red line', /previous 50-year low/.test(await markTip('.lowest-tick:not(.muted)')));
   T('mark tip: gray low line', /lowest measured year/.test(await markTip('.lowest-tick.muted')));

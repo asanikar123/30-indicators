@@ -32,40 +32,40 @@
      scaled x100 (null where the indicator was added in the 2023 framework revision and has
      no v5.1 equivalent; "Freedom of the press" maps to v5.1 "Media Integrity"). */
   var INDICATORS = [
-    ["Credible elections",                     0, 66, [0.7, 0.1, 0.1, 0.1, 0.0, 0.0], 0, 79],
-    ["Inclusive suffrage",                     0, 85, [0.8, 0.0, 0.1, 0.0, 0.0, 0.1], 0, 93],
-    ["Free political parties",                 0, 74, [0.4, 0.2, 0.1, 0.3, 0.0, 0.0], 1, 92],
-    ["Elected government holds real power",    0, 92, [0.6, 0.0, 0.2, 0.2, 0.0, 0.0], 0, 100],
-    ["Effective parliament",                   0, 40, [0.2, 0.0, 0.1, 0.4, 0.1, 0.2], 2, 62],
-    ["Local democracy",                        0, 78, [0.4, 0.0, 0.0, 0.2, 0.1, 0.3], 0, 86],
+    ["Credible elections",                     0, 79, [0.7, 0.1, 0.1, 0.1, 0.0, 0.0], 0, 79],
+    ["Inclusive suffrage",                     0, 93, [0.8, 0.0, 0.1, 0.0, 0.0, 0.1], 0, 93],
+    ["Free political parties",                 0, 86, [0.4, 0.2, 0.1, 0.3, 0.0, 0.0], 1, 92],
+    ["Elected government holds real power",    0, 100, [0.6, 0.0, 0.2, 0.2, 0.0, 0.0], 0, 100],
+    ["Effective parliament",                   0, 60, [0.2, 0.0, 0.1, 0.4, 0.1, 0.2], 2, 62],
+    ["Local democracy",                        0, 86, [0.4, 0.0, 0.0, 0.2, 0.1, 0.3], 0, 86],
 
-    ["Freedom of expression",                  1, 52, [0.0, 0.6, 0.1, 0.3, 0.0, 0.0], 2, 74],
-    ["Freedom of the press",                   1, 50, [0.0, 0.8, 0.1, 0.2, 0.0, 0.0], 2, 80],
-    ["Freedom of association & assembly",      1, 68, [0.0, 0.2, 0.2, 0.5, 0.0, 0.1], 0, 77],
-    ["Freedom of religion",                    1, 60, [0.0, 0.1, 0.3, 0.2, 0.0, 0.2], 0, 66],
-    ["Freedom of movement",                    1, 65, [0.0, 0.0, 0.3, 0.5, 0.0, 0.0], 0, 71],
-    ["Personal integrity & security",          1, 55, [0.0, 0.1, 0.2, 0.4, 0.0, 0.3], 0, 62],
+    ["Freedom of expression",                  1, 70, [0.0, 0.6, 0.1, 0.3, 0.0, 0.0], 2, 74],
+    ["Freedom of the press",                   1, 76, [0.0, 0.8, 0.1, 0.2, 0.0, 0.0], 2, 80],
+    ["Freedom of association & assembly",      1, 77, [0.0, 0.2, 0.2, 0.5, 0.0, 0.1], 0, 77],
+    ["Freedom of religion",                    1, 66, [0.0, 0.1, 0.3, 0.2, 0.0, 0.2], 0, 66],
+    ["Freedom of movement",                    1, 71, [0.0, 0.0, 0.3, 0.5, 0.0, 0.0], 0, 71],
+    ["Personal integrity & security",          1, 62, [0.0, 0.1, 0.2, 0.4, 0.0, 0.3], 0, 62],
 
-    ["Access to justice",                      2, 52, [0.0, 0.0, 0.6, 0.1, 0.2, 0.1], 2, 78],
-    ["Basic welfare",                          2, 58, [0.0, 0.0, 0.0, 0.1, 0.4, 0.3], 0, 75],
-    ["Political equality",                     2, 55, [0.4, 0.0, 0.2, 0.0, 0.1, 0.3], 0, null],
-    ["Social group equality",                  2, 66, [0.1, 0.0, 0.3, 0.2, 0.0, 0.4], 0, 63],
-    ["Gender equality",                        2, 70, [0.1, 0.0, 0.3, 0.0, 0.1, 0.3], 0, 74],
-    ["Economic equality",                      2, 42, [0.0, 0.0, 0.0, 0.0, 0.4, 0.4], 2, null],
+    ["Access to justice",                      2, 74, [0.0, 0.0, 0.6, 0.1, 0.2, 0.1], 2, 78],
+    ["Basic welfare",                          2, 75, [0.0, 0.0, 0.0, 0.1, 0.4, 0.3], 0, 75],
+    ["Political equality",                     2, 62, [0.4, 0.0, 0.2, 0.0, 0.1, 0.3], 0, null],
+    ["Social group equality",                  2, 63, [0.1, 0.0, 0.3, 0.2, 0.0, 0.4], 0, 63],
+    ["Gender equality",                        2, 74, [0.1, 0.0, 0.3, 0.0, 0.1, 0.3], 0, 74],
+    ["Economic equality",                      2, 47, [0.0, 0.0, 0.0, 0.0, 0.4, 0.4], 2, null],
 
-    ["Judicial independence",                  3, 52, [0.0, 0.0, 0.8, 0.2, 0.0, 0.0], 2, 80],
-    ["Absence of corruption",                  3, 58, [0.0, 0.1, 0.2, 0.0, 0.7, 0.0], 0, 71],
-    ["Predictable enforcement of laws",        3, 55, [0.0, 0.0, 0.5, 0.3, 0.2, 0.0], 0, 71],
-    ["Executive complies with constitution",   3, 48, [0.0, 0.0, 0.4, 0.6, 0.0, 0.0], 0, null],
-    ["Oversight of security forces",           3, 52, [0.0, 0.0, 0.2, 0.4, 0.3, 0.0], 0, null],
-    ["Equal treatment before the law",         3, 50, [0.1, 0.0, 0.5, 0.3, 0.0, 0.0], 0, null],
+    ["Judicial independence",                  3, 76, [0.0, 0.0, 0.8, 0.2, 0.0, 0.0], 2, 80],
+    ["Absence of corruption",                  3, 71, [0.0, 0.1, 0.2, 0.0, 0.7, 0.0], 0, 71],
+    ["Predictable enforcement of laws",        3, 71, [0.0, 0.0, 0.5, 0.3, 0.2, 0.0], 0, 71],
+    ["Executive complies with constitution",   3, 63, [0.0, 0.0, 0.4, 0.6, 0.0, 0.0], 0, null],
+    ["Oversight of security forces",           3, 65, [0.0, 0.0, 0.2, 0.4, 0.3, 0.0], 0, null],
+    ["Equal treatment before the law",         3, 60, [0.1, 0.0, 0.5, 0.3, 0.0, 0.0], 0, null],
 
-    ["Electoral participation",                4, 58, [0.5, 0.0, 0.0, 0.0, 0.0, 0.5], 0, 62],
-    ["Civil society participation",            4, 70, [0.0, 0.2, 0.0, 0.2, 0.0, 0.6], 0, 78],
-    ["Everyday civic engagement",              4, 55, [0.0, 0.1, 0.0, 0.0, 0.0, 0.8], 0, null],
-    ["Direct democracy tools",                 4, 8,  [0.3, 0.0, 0.0, 0.0, 0.0, 0.5], 0, 0],
-    ["Shared factual public sphere",           4, 30, [0.0, 0.5, 0.0, 0.0, 0.1, 0.4], 0, null],
-    ["Cross-party cooperation",                4, 25, [0.0, 0.0, 0.0, 0.1, 0.0, 0.9], 0, null]
+    ["Electoral participation",                4, 62, [0.5, 0.0, 0.0, 0.0, 0.0, 0.5], 0, 62],
+    ["Civil society participation",            4, 78, [0.0, 0.2, 0.0, 0.2, 0.0, 0.6], 0, 78],
+    ["Everyday civic engagement",              4, 62, [0.0, 0.1, 0.0, 0.0, 0.0, 0.8], 0, null],
+    ["Direct democracy tools",                 4, 0,  [0.3, 0.0, 0.0, 0.0, 0.0, 0.5], 0, 0],
+    ["Shared factual public sphere",           4, 45, [0.0, 0.5, 0.0, 0.0, 0.1, 0.4], 0, null],
+    ["Cross-party cooperation",                4, 38, [0.0, 0.0, 0.0, 0.1, 0.0, 0.9], 0, null]
   ];
 
   var SCALE = 0.7; /* points of indicator movement per weighted lever point */
@@ -73,11 +73,11 @@
      press freedom and judicial independence at record lows, executive restraint
      weakest, election administration comparatively intact). Indicators respond
      to a lever's distance from ITS OWN today mark, not from 50. */
-  var LEVER_TODAY = [55, 32, 38, 30, 42, 40];
+  var LEVER_TODAY = [75, 69, 71, 70, 67, 57];
   var PRESETS = {
     today:     LEVER_TODAY.slice(),
-    backslide: [40, 18, 22, 15, 28, 25],
-    recovery:  [75, 65, 68, 65, 70, 65]
+    backslide: [60, 54, 56, 55, 52, 42],
+    recovery:  [90, 84, 86, 85, 82, 72]
   };
   var STATUS = [
     { min: 80, word: "Healthy",  color: "var(--status-good)" },
