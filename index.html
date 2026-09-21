@@ -1339,15 +1339,16 @@ window.TI_WORKER_URL = "";
         var tick = document.createElement("div");
         tick.className = "base-tick";
         tick.style.bottom = ind[5] + "%";
-        tick.title = "Dotted line — measured 2020 value: " + ind[5] +
-          " (GSoD Indices v5.1, the last year with real data)";
+        tick.dataset.tipTitle = "Dotted line · measured 2020: " + ind[5];
+        tick.dataset.tipBody = "The last year with real data (GSoD Indices v5.1).";
         b.appendChild(tick);
       }
       if (ind[4] === 2) {
         var flag = document.createElement("span");
         flag.className = "low-flag";
         flag.textContent = "▼";
-        flag.title = "▼ — 2026 report: at a NEW 50-year low, below its previous 1975–2020 floor (the red line)";
+        flag.dataset.tipTitle = "▼ At a NEW 50-year low";
+        flag.dataset.tipBody = "The 2026 report puts this indicator below its previous 1975–2020 floor (the red line).";
         b.appendChild(flag);
       }
       group.appendChild(b);
@@ -1433,10 +1434,37 @@ window.TI_WORKER_URL = "";
     tooltip.style.top = Math.max(y, 0) + "px";
   }
   function hideTip() { tooltip.hidden = true; }
+  /* Instant styled tooltip for the marks (dotted 2020, red previous-low, ▼ flag) */
+  function showMarkTip(mark) {
+    tooltip.innerHTML = "";
+    var name = document.createElement("div");
+    name.className = "t-name";
+    name.textContent = mark.dataset.tipTitle || "";
+    tooltip.appendChild(name);
+    if (mark.dataset.tipBody) {
+      var body = document.createElement("div");
+      body.className = "t-domain";
+      body.textContent = mark.dataset.tipBody;
+      tooltip.appendChild(body);
+    }
+    tooltip.hidden = false;
+    var mRect = mark.getBoundingClientRect();
+    var innerRect = chartInner.getBoundingClientRect();
+    var tipW = tooltip.offsetWidth;
+    var x = clamp(mRect.left - innerRect.left + mRect.width / 2 - tipW / 2, 0, innerRect.width - tipW);
+    var y = mRect.top - innerRect.top - tooltip.offsetHeight - 6;
+    tooltip.style.left = x + "px";
+    tooltip.style.top = Math.max(y, 0) + "px";
+  }
   /* Tooltip only while the pointer is over the filled part of the column
      (plus a small grace zone), not the empty space above it. */
   var tipBar = null;
   barsRoot.addEventListener("mousemove", function (e) {
+    var mark = e.target.closest(".base-tick, .lowest-tick, .low-flag");
+    if (mark) {
+      if (tipBar !== mark) { tipBar = mark; showMarkTip(mark); }
+      return;
+    }
     var bar = e.target.closest(".bar");
     var want = null;
     if (bar) {
@@ -2814,8 +2842,8 @@ window.TI_WORKER_URL = "";
     var lowTick = document.createElement("div");
     lowTick.className = "lowest-tick";
     lowTick.style.bottom = lowVal + "%";
-    lowTick.title = "Red line — the previous 50-year low: " + lowVal + " (in " +
-      (HIST.y0 + s.indexOf(lowVal)) + "). The 2026 report says this indicator now sits below it (▼).";
+    lowTick.dataset.tipTitle = "Red line · previous 50-year low: " + lowVal + " (in " + (HIST.y0 + s.indexOf(lowVal)) + ")";
+    lowTick.dataset.tipBody = "The 2026 report says this indicator now sits below it (▼).";
     barEls[i].appendChild(lowTick);
   });
   restoreChat();
