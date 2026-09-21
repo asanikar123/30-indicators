@@ -1089,7 +1089,7 @@ window.TI_WORKER_URL = "";
     <button type="button" class="dialog-close" data-close-dialog aria-label="Close">&#10005;</button>
   </div>
   <div class="dialog-body">
-    <p><strong>The chart.</strong> Thirty indicators of democratic health, scored 0&ndash;100. Press &#9654; or drag the year slider: 1975&ndash;2020 replay measured U.S. values (GSoD Indices v5.1, &times;100), 2021&ndash;2025 bridge to today illustratively, and muted columns have no pre-2023 data. The dotted mark on a column is its measured 2020 value, the short red line its lowest measured value since 1975; <span style="color:var(--status-critical)">&#9660;</span> marks an indicator the 2026 report puts at a 50-year low. Hover any column for detail; click it for its full 45-year line.</p>
+    <p><strong>The chart.</strong> Thirty indicators of democratic health, scored 0&ndash;100. Press &#9654; or drag the year slider: 1975&ndash;2020 replay measured U.S. values (GSoD Indices v5.1, &times;100), 2021&ndash;2025 bridge to today illustratively, and muted columns have no pre-2023 data. The dotted mark on a column is its measured 2020 value. On columns marked <span style="color:var(--status-critical)">&#9660;</span> the short red line is the previous 1975&ndash;2020 low &mdash; the 2026 report says those indicators have now fallen below it; <span style="color:var(--status-critical)">&#9660;</span> marks an indicator the 2026 report puts at a 50-year low. Hover any column for detail; click it for its full 45-year line.</p>
     <p><strong>The levers.</strong> Each bundles the choices a society makes in one arena (0 = weaker, 100 = stronger); every indicator listens to two or three of them, weighted by how strongly that arena shapes it. Each lever starts where that arena stands today &mdash; unevenly, as the report describes &mdash; and the tick under the slider marks that starting point.</p>
     <ul class="help-levers">
       <li><strong>Electoral integrity &amp; access</strong> &mdash; election administration, voting access, fair competition between parties.</li>
@@ -1347,7 +1347,7 @@ window.TI_WORKER_URL = "";
         var flag = document.createElement("span");
         flag.className = "low-flag";
         flag.textContent = "▼";
-        flag.title = "▼ — the 2026 report puts this indicator at its lowest level since 1975";
+        flag.title = "▼ — 2026 report: at a NEW 50-year low, below its previous 1975–2020 floor (the red line)";
         b.appendChild(flag);
       }
       group.appendChild(b);
@@ -1409,15 +1409,15 @@ window.TI_WORKER_URL = "";
       var lowVal = Math.min.apply(null, lows);
       var lowNote = document.createElement("div");
       lowNote.className = "t-domain";
-      lowNote.textContent = "Lowest since 1975: " + lowVal +
-        " (in " + (HIST.y0 + lows.indexOf(lowVal)) + ", red line)";
+      lowNote.textContent = (ind[4] === 2 ? "Previous low (red line): " : "Lowest measured 1975–2020: ") +
+        lowVal + " (in " + (HIST.y0 + lows.indexOf(lowVal)) + ")";
       tooltip.appendChild(lowNote);
     }
     if (isToday && ind[4]) {
       var flagNote = document.createElement("div");
       flagNote.className = "t-domain";
       flagNote.textContent = ind[4] === 2
-        ? "▼ Report: at its lowest level since 1975"
+        ? "▼ Report: at a NEW 50-year low, below its previous floor (red line)"
         : "Report: significant decline, 2020–2025";
       tooltip.appendChild(flagNote);
     }
@@ -2356,7 +2356,7 @@ window.TI_WORKER_URL = "";
         (ind[4] === 2 ? ", AT 50-YEAR LOW per 2026 report" : ind[4] === 1 ? ", significant decline 2020-25 per report" : "");
     });
     return "This is 'Thirty Indicators', an interactive page for a Harvard–Radcliffe Class of 1972 reunion discussion of democratic health, based on International IDEA's 'Global State of Democracy 2026: Democracy in an Age of Conflict'. " +
-      "The chart shows 30 indicators scored 0-100. Real data: the 1975-2020 history, the dotted 2020 marks, and the short red lines on each measured column (that indicator's lowest value since 1975) — all US values from the GSoD Indices v5.1 dataset, x100 — plus the report's decline flags and the framework itself. Illustrative: today's starting scores and the lever weights - say so when it matters. " +
+      "The chart shows 30 indicators scored 0-100. Real data: the 1975-2020 history, the dotted 2020 marks, and — on the report-flagged columns only — a short red line at that indicator's previous 1975-2020 low, which the report says it has now fallen below — all US values from the GSoD Indices v5.1 dataset, x100 — plus the report's decline flags and the framework itself. Illustrative: today's starting scores and the lever weights - say so when it matters. " +
       "Report findings: the US declined significantly 2020-2025 on seven indicators (access to justice, economic equality, freedom of expression, freedom of the press, effective parliament, judicial independence, free political parties); all but the last now at their lowest since 1975. Globally, 2025 was the 11th straight year more countries declined than advanced; rule of law is the weakest category (71 countries low).\n" +
       "Presidential terms, for era questions against the yearly data: Ford 1974-77, Carter 1977-81, Reagan 1981-89, G.H.W. Bush 1989-93, Clinton 1993-2001, G.W. Bush 2001-09, Obama 2009-17, Trump 2017-21, Biden 2021-25, Trump 2025-. Measured yearly data ends in 2020; for 2021-2025 rely on the report findings above and say so.\n" +
       "Overall measured index (mean of the 22 measured indicators; chartable via show_history 'overall'): 1975 " + OVERALL[0] + ", 1985 " + OVERALL[10] + ", 1995 " + OVERALL[20] + ", 2005 " + OVERALL[30] + ", 2015 " + OVERALL[40] + ", 2020 " + OVERALL[OVERALL.length - 1] + ". The hero index on the page averages all 30 including illustrative values, so the two are not directly comparable.\n" +
@@ -2788,16 +2788,18 @@ window.TI_WORKER_URL = "";
   clearTimelineMarks();
   drawTimelineMarks(MIDTERM_YEARS, true);
   drawTimelineMarks(ELECTION_YEARS, false);
-  /* 50-year-low mark on every measured column (must run after HIST is defined) */
+  /* The previous-low mark: only on columns the 2026 report flags (▼) as being at a
+     NEW 50-year low — the red line shows the old 1975-2020 floor they fell below.
+     Must run after HIST is defined. */
   INDICATORS.forEach(function (ind, i) {
     var s = HIST.s[i];
-    if (!s || !barEls[i]) return;
+    if (!s || !barEls[i] || ind[4] !== 2) return;
     var lowVal = Math.min.apply(null, s);
     var lowTick = document.createElement("div");
     lowTick.className = "lowest-tick";
     lowTick.style.bottom = lowVal + "%";
-    lowTick.title = "Red line — 50-year low: lowest measured value since 1975 was " +
-      lowVal + ", in " + (HIST.y0 + s.indexOf(lowVal));
+    lowTick.title = "Red line — the previous 50-year low: " + lowVal + " (in " +
+      (HIST.y0 + s.indexOf(lowVal)) + "). The 2026 report says this indicator now sits below it (▼).";
     barEls[i].appendChild(lowTick);
   });
   restoreChat();
