@@ -9,8 +9,13 @@ const REPO = '/home/user/30-indicators';
   let app = fs.readFileSync('/tmp/claude-0/ti-test/assets/app.js', 'utf8');
   app = app.replace(/\}\)\(\);\s*$/, 'window.__test = { addChartMsg: addChartMsg, addMsg: addMsg, setTimelineMarks: setTimelineMarks };\n})();\n');
   fs.writeFileSync('/tmp/claude-0/ti-test/assets/app.js', app);
-  fs.writeFileSync('/tmp/claude-0/ti-test/index.html',
-    fs.readFileSync(REPO + '/index.html', 'utf8').replace('window.TI_WORKER_URL = "";', 'window.TI_WORKER_URL = "http://127.0.0.1:8787";'));
+  const idxSrc = fs.readFileSync(REPO + '/index.html', 'utf8');
+  const setUrl = (src, url) => src.replace(/window\.TI_WORKER_URL = "[^"]*";/, 'window.TI_WORKER_URL = "' + url + '";');
+  fs.writeFileSync('/tmp/claude-0/ti-test/index.html', setUrl(idxSrc, 'http://127.0.0.1:8787'));
+  // a "plain" build with the chat disabled, for the static-surface checks
+  fs.mkdirSync('/tmp/claude-0/ti-plain/assets', { recursive: true });
+  for (const f of ['style.css', 'data.js', 'app.js']) fs.copyFileSync(REPO + '/assets/' + f, '/tmp/claude-0/ti-plain/assets/' + f);
+  fs.writeFileSync('/tmp/claude-0/ti-plain/index.html', setUrl(idxSrc, ''));
 
   const results = [];
   const T = (name, ok, detail) => { results.push((ok ? 'PASS' : 'FAIL') + '  ' + name + (detail ? '  [' + detail + ']' : '')); };
@@ -20,8 +25,8 @@ const REPO = '/home/user/30-indicators';
   const p = await b.newPage({ viewport: { width: 1440, height: 860 } });
   p.on('pageerror', e => errs.push(String(e).slice(0, 200)));
 
-  // ---- plain repo build (worker URL empty) ----
-  await p.goto('file://' + REPO + '/index.html');
+  // ---- plain build (worker URL blanked) ----
+  await p.goto('file:///tmp/claude-0/ti-plain/index.html');
   await p.waitForTimeout(1000);
   let s = await p.evaluate(() => ({
     bars: document.querySelectorAll('.bar').length,
@@ -172,7 +177,7 @@ const REPO = '/home/user/30-indicators';
   // ---- mobile ----
   const m = await b.newPage({ viewport: { width: 390, height: 844 }, isMobile: true });
   const merrs = []; m.on('pageerror', e => merrs.push(String(e)));
-  await m.goto('file://' + REPO + '/index.html'); await m.waitForTimeout(900);
+  await m.goto('file:///tmp/claude-0/ti-plain/index.html'); await m.waitForTimeout(900);
   let mm = await m.evaluate(() => {
     const spans = [...document.querySelectorAll('.year-ruler span')].filter(x => getComputedStyle(x).display !== 'none');
     let overlap = false; let prev = null;
