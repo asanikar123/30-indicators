@@ -13,6 +13,13 @@
  *   3. Note the worker URL (https://<name>.<account>.workers.dev) and put it
  *      in index.html as window.TI_WORKER_URL.
  *   4. console.anthropic.com → Billing → set a monthly spend limit.
+ *
+ * Optional — answer cache (saves money on repeated questions):
+ *   5. dash.cloudflare.com → Storage & Databases → KV → Create namespace
+ *      (any name, e.g. "ti-chat-cache").
+ *   6. Worker → Settings → Bindings → Add → KV namespace → variable name
+ *      exactly CACHE → pick the namespace → Deploy.
+ *   Without the binding the worker runs exactly as before (no caching).
  */
 
 const ALLOWED_ORIGINS = [
@@ -29,7 +36,7 @@ const RATE_LIMIT = { windowMs: 300_000, maxRequests: 25 }; // per IP, per isolat
 const bucket = new Map();
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const origin = request.headers.get("Origin") || "";
     const okOrigin = ALLOWED_ORIGINS.includes(origin);
     const cors = {
@@ -69,6 +76,25 @@ export default {
       tools: Array.isArray(body.tools) ? body.tools.slice(0, 8) : undefined,
       fallbacks: "default",
     };
+    const payloadJson = JSON.stringify(payload);
+
+    // Answer cache (optional): identical requests — chiefly the shortlisted FAQ
+    // chips, which every visitor sends verbatim — replay a stored answer at zero
+    // API cost. Requires a KV namespace bound as CACHE; without the binding this
+    // block is a no-op. Follow-ups carry per-viewer history so they never hit.
+    const CACHE_TTL_SECONDS = 7 * 24 * 3600;
+    let cacheKey = null;
+    if (env.CACHE) {
+      const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(payloadJson));
+      cacheKey = "v1:" + [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2, "0")).join("");
+      const hit = await env.CACHE.get(cacheKey);
+      if (hit) {
+        return new Response(hit, {
+          status: 200,
+          headers: { ...cors, "content-type": "text/event-stream", "x-ti-cache": "hit" },
+        });
+      }
+    }
 
     const upstream = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
@@ -78,12 +104,30 @@ export default {
         "anthropic-beta": "server-side-fallback-2026-07-01",
         "content-type": "application/json",
       },
-      body: JSON.stringify(payload),
+      body: payloadJson,
     });
 
-    return new Response(upstream.body, {
-      status: upstream.status,
-      headers: { ...cors, "content-type": upstream.headers.get("content-type") || "text/event-stream" },
+    if (!cacheKey || upstream.status !== 200 || !upstream.body) {
+      return new Response(upstream.body, {
+        status: upstream.status,
+        headers: { ...cors, "content-type": upstream.headers.get("content-type") || "text/event-stream" },
+      });
+    }
+
+    // Stream to the visitor while buffering a copy; store only complete streams.
+    const [toClient, toBuffer] = upstream.body.tee();
+    ctx.waitUntil((async () => {
+      try {
+        const text = await new Response(toBuffer).text();
+        if (text.includes("message_stop")) {
+          await env.CACHE.put(cacheKey, text, { expirationTtl: CACHE_TTL_SECONDS });
+        }
+      } catch (e) { /* caching is best-effort */ }
+    })());
+
+    return new Response(toClient, {
+      status: 200,
+      headers: { ...cors, "content-type": upstream.headers.get("content-type") || "text/event-stream", "x-ti-cache": "miss" },
     });
   },
 };
