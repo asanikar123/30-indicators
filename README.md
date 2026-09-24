@@ -59,7 +59,7 @@ cloudflare-worker/      key-holding proxy for the public chat (setup in file)
 data/                   archived GSoDI v5.1 dataset + provenance (README)
 tests/                  verify-data.js (CSV ↔ page data diff, 22/22 exact)
                         verify-answers.js (canned FAQ figures vs the data)
-                        battery.js (38-check headless end-to-end suite)
+                        battery.js (39-check headless end-to-end suite)
 .github/workflows/      push to main → GitHub Pages deploy
 ```
 
@@ -80,7 +80,10 @@ The same page supports two chat transports; everything else about the chat
    worker holds the Anthropic API key in Cloudflare's secret store,
    origin-locks and rate-limits requests, and pins the model server-side;
    the key never appears in this repository, the page, or any browser.
-   With the URL empty, the chat UI stays hidden.
+   With the URL empty, the chat UI stays hidden. Optionally (with a
+   repo-scoped GITHUB_TOKEN secret in the worker) each typed question and
+   its answer is filed as a JSON document under `data/questions/` on this
+   repository's `questions` branch, for review and promotion into the FAQ.
 
 ## Development
 

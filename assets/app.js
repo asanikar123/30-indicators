@@ -982,6 +982,21 @@
     } catch (e) {}
   }
 
+  /* Public-site question inbox: after a live exchange completes, send the
+     typed question and the answer it got to the worker's /log route, which
+     files them on the repo's "questions" branch for review. Best effort,
+     fire-and-forget; canned chip replays never come through here. */
+  function logExchange(q, a) {
+    if (dbNS || !window.TI_WORKER_URL) return;
+    try {
+      fetch(String(window.TI_WORKER_URL).replace(/\/+$/, "") + "/log", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ q: q, a: a, mode: chatMode })
+      }).catch(function () {});
+    } catch (e) {}
+  }
+
   /* Per-viewer chat persistence in browser storage: best effort only. */
   var transcript = [];
   var replaying = false;
@@ -1615,8 +1630,10 @@
       aiDiv.textContent = res.text;
       chatHistory.push({ role: "assistant", content: res.text });
       record({ t: "ai", x: res.text });
+      logExchange(q, res.text);
     }, function (err) {
       chatHistory.pop();
+      logExchange(q, null);
       aiDiv.textContent =
         err && err.code === "rate_limited" ? "Rate limited — give it a moment and try again." :
         err && err.code === "cancelled" ? "Cancelled." :
