@@ -5,7 +5,7 @@ const REPO = '/home/user/30-indicators';
 (async () => {
   // test copy with worker URL pointed at mock + test hook exposed
   fs.mkdirSync('/tmp/claude-0/ti-test/assets', { recursive: true });
-  for (const f of ['style.css', 'data.js', 'app.js']) fs.copyFileSync(REPO + '/assets/' + f, '/tmp/claude-0/ti-test/assets/' + f);
+  for (const f of ['style.css', 'data.js', 'answers.js', 'app.js']) fs.copyFileSync(REPO + '/assets/' + f, '/tmp/claude-0/ti-test/assets/' + f);
   let app = fs.readFileSync('/tmp/claude-0/ti-test/assets/app.js', 'utf8');
   app = app.replace(/\}\)\(\);\s*$/, 'window.__test = { addChartMsg: addChartMsg, addMsg: addMsg, setTimelineMarks: setTimelineMarks };\n})();\n');
   fs.writeFileSync('/tmp/claude-0/ti-test/assets/app.js', app);
@@ -14,7 +14,7 @@ const REPO = '/home/user/30-indicators';
   fs.writeFileSync('/tmp/claude-0/ti-test/index.html', setUrl(idxSrc, 'http://127.0.0.1:8787'));
   // a "plain" build with the chat disabled, for the static-surface checks
   fs.mkdirSync('/tmp/claude-0/ti-plain/assets', { recursive: true });
-  for (const f of ['style.css', 'data.js', 'app.js']) fs.copyFileSync(REPO + '/assets/' + f, '/tmp/claude-0/ti-plain/assets/' + f);
+  for (const f of ['style.css', 'data.js', 'answers.js', 'app.js']) fs.copyFileSync(REPO + '/assets/' + f, '/tmp/claude-0/ti-plain/assets/' + f);
   fs.writeFileSync('/tmp/claude-0/ti-plain/index.html', setUrl(idxSrc, ''));
 
   const results = [];
@@ -149,6 +149,21 @@ const REPO = '/home/user/30-indicators';
   T('worker build: launcher visible, no gate', await p.evaluate(() => !document.getElementById('chatLauncher').hidden));
   await p.click('#chatLauncher');
   T('worker build: no sign-in gate', await p.evaluate(() => !document.querySelector('.gate-screen:not([hidden])')));
+  // canned FAQ chip (default voice is witty): replays locally, zero API calls
+  await p.click('#faqChips button:has-text("fell furthest since 2020")');
+  await p.waitForTimeout(400);
+  const canned = await p.evaluate(() => {
+    const entry = window.TI_ANSWERS.find(a => /fell furthest/.test(a.q));
+    const want = entry.modes.witty[entry.modes.witty.length - 1].say;
+    return {
+      text: [...document.querySelectorAll('.msg.ai:not(.chart-msg)')].pop()?.textContent,
+      want,
+      deltaChart: [...document.querySelectorAll('.chart-cap')].some(c => /Change 2020/.test(c.textContent))
+    };
+  });
+  T('canned chip: zero API calls', calls === 0, String(calls));
+  T('canned chip: reviewed text shown verbatim', canned.text === canned.want, (canned.text || '').slice(0, 60));
+  T('canned chip: delta chart drawn from live data', canned.deltaChart);
   await p.fill('#askInput', 'show 1992'); await p.click('#askSend');
   await p.waitForTimeout(2200);
   let chat = await p.evaluate(() => ({ yr: +document.getElementById('yearSlider').value, msg: [...document.querySelectorAll('.msg.ai')].pop()?.textContent }));
@@ -172,6 +187,29 @@ const REPO = '/home/user/30-indicators';
     userMsg: [...document.querySelectorAll('.msg.user')].some(m => /show 1992/.test(m.textContent))
   }));
   T('chat restores after reload: chart with era+marks and user turn', restored.charts >= 1 && restored.marks === 2 && restored.userMsg, JSON.stringify(restored));
+  T('canned answer restored after reload', await p.evaluate(() => {
+    const entry = window.TI_ANSWERS.find(a => /fell furthest/.test(a.q));
+    const want = entry.modes.witty[entry.modes.witty.length - 1].say;
+    return [...document.querySelectorAll('.msg.ai')].some(m => m.textContent === want);
+  }));
+  // canned recovery chip drives the page: levers move, hero matches the data-derived value
+  const callsBefore = calls;
+  await p.click('#faqChips button:has-text("realistic recovery")');
+  await p.waitForTimeout(400);
+  const rec = await p.evaluate(() => {
+    const D = window.TI_DATA;
+    const scores = D.INDICATORS.map(ind => {
+      let d = 0;
+      for (let j = 0; j < D.LEVERS.length; j++) d += ind[3][j] * (D.PRESETS.recovery[j] - D.LEVER_TODAY[j]) * D.SCALE;
+      return Math.min(98, Math.max(2, ind[2] + d));
+    });
+    return {
+      want: (scores.reduce((a, b) => a + b) / 30).toFixed(0),
+      hero: document.getElementById('heroValue').textContent
+    };
+  });
+  T('canned recovery chip: levers applied, hero = data-derived ' + rec.want, rec.hero === rec.want, rec.hero);
+  T('canned chips never hit the API', calls === callsBefore, calls + ' vs ' + callsBefore);
   srv.close();
 
   // ---- mobile ----

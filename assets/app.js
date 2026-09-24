@@ -1521,10 +1521,48 @@
     return div;
   }
 
+  /* Canned FAQ answers (assets/answers.js): a matching chip in a covered voice
+     replays the reviewed answer locally — instant, zero API cost. The steps run
+     the chat's own tools, so charts and lever moves come from live TI_DATA;
+     only the prose is stored. Voices without an entry (unhinged) go live. */
+  function cannedSteps(q) {
+    var list = window.TI_ANSWERS;
+    if (!list) return null;
+    for (var k = 0; k < list.length; k++) {
+      if (list[k].q === q) return (list[k].modes || {})[chatMode] || null;
+    }
+    return null;
+  }
+  function replayCanned(q, steps) {
+    addMsg("user", q);
+    record({ t: "user", x: q });
+    chatHistory.push({ role: "user", content: q });
+    var text = "";
+    for (var k = 0; k < steps.length; k++) {
+      var st = steps[k];
+      if (st.say) { text = st.say; continue; }
+      for (var t = 0; t < askTools.length; t++) {
+        if (askTools[t].name === st.call) {
+          try { askTools[t].execute(st.input || {}); } catch (e) {}
+          break;
+        }
+      }
+    }
+    addMsg("ai", text);
+    record({ t: "ai", x: text });
+    chatHistory.push({ role: "assistant", content: text });
+  }
+
   document.getElementById("faqChips").addEventListener("click", function (e) {
     var chip = e.target.closest("button");
     if (!chip) return;
-    askInput.value = chip.textContent;
+    var q = chip.textContent.trim();
+    var steps = cannedSteps(q);
+    if (steps && !askSend.disabled) {
+      replayCanned(q, steps);
+      return;
+    }
+    askInput.value = q;
     if (askForm.requestSubmit) askForm.requestSubmit();
     else askForm.dispatchEvent(new Event("submit", { cancelable: true }));
   });

@@ -13,6 +13,14 @@ does; this file is about how to work on it safely.
 - `assets/data.js` — ALL data as `window.TI_DATA`. Edit here for any content
   change (scores, names, weights, presets, election years). Never put data
   in app.js.
+- `assets/answers.js` — canned FAQ-chip answers as `window.TI_ANSWERS`
+  (scholar + witty voices; unhinged deliberately goes live). Steps run the
+  chat's own tools so charts/levers come from TI_DATA; only the prose is
+  stored. Every figure in the prose is checked by
+  `node tests/verify-answers.js` — run it after editing answers or data,
+  and add a check when a new answer states a new figure. A chip whose text
+  has no entry (or whose voice has none) falls through to the live AI, so
+  new chips in index.html need a matching entry here.
 - `assets/app.js` — one IIFE, all behavior. Sections in order: tooltip/chart
   build, levers, dialogs, HIST-derived rendering (sparkline, marks), chat
   (artifact `claude.use("sample")` backend and the worker-API backend with a
@@ -51,13 +59,15 @@ does; this file is about how to work on it safely.
 
 ```
 node tests/verify-data.js                      # data integrity
-NODE_PATH=$(npm root -g) node tests/battery.js # 32-check e2e suite
+node tests/verify-answers.js                   # canned FAQ prose vs the data
+NODE_PATH=$(npm root -g) node tests/battery.js # 38-check e2e suite
 ```
 
 The battery covers rendering/marks, scenario-button pixel-stability,
 tooltip zones, clustered mark tooltips, history panel, playback, dialogs,
-the worker chat against a mock SSE server, chat persistence, and the 390px
-layout. Keep expectations data-derived (they read `TI_DATA`), not
+the worker chat against a mock SSE server, canned FAQ replay (zero API
+calls, verbatim text, data-derived charts/levers), chat persistence, and
+the 390px layout. Keep expectations data-derived (they read `TI_DATA`), not
 hardcoded. A publish with console errors or a failing battery is not done.
 
 ## Conventions
