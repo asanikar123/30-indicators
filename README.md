@@ -1,4 +1,4 @@
-# 30 Indicators of a Healthy Civilization / Democracy
+# 30 Indicators of a Healthy Democracy
 
 An interactive discussion aid built for the Harvard–Radcliffe Class of 1972,
 prompted by NPR's September 15, 2026 story, ["State of U.S. democracy reaches
@@ -26,7 +26,9 @@ Democracy in an Age of Conflict*.
   counterfactuals.
 - An **"Ask a question" chat** (Scholar / Witty / Unhinged modes) that
   answers with charts, zooms to eras, marks election years, and can drive
-  the page. It runs in two ways — see *Chat backends* below.
+  the page. The FAQ chips replay reviewed answers from `assets/answers.js`
+  instantly at no API cost (Unhinged chips and all typed questions go to
+  the live AI). It runs in two ways — see *Chat backends* below.
 
 ## How the 2026 scores are set (calibration rule)
 
@@ -50,11 +52,14 @@ index.html              markup + the one config knob (TI_WORKER_URL)
 assets/style.css        all styling
 assets/data.js          ALL data: framework, calibrated today-scores, lever
                         anchors, presets, measured 1975–2020 series (TI_DATA)
+assets/answers.js       reviewed canned answers for the FAQ chips (replayed
+                        instantly, zero API cost; charts drawn live from data)
 assets/app.js           all behavior; contains no data
 cloudflare-worker/      key-holding proxy for the public chat (setup in file)
 data/                   archived GSoDI v5.1 dataset + provenance (README)
 tests/                  verify-data.js (CSV ↔ page data diff, 22/22 exact)
-                        battery.js (32-check headless end-to-end suite)
+                        verify-answers.js (canned FAQ figures vs the data)
+                        battery.js (38-check headless end-to-end suite)
 .github/workflows/      push to main → GitHub Pages deploy
 ```
 
