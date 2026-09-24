@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Inbox self-test</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 640px; margin: 8vh auto; padding: 0 16px; background: #faf9f7; color: #222; }
+  #verdict { font-size: 1.35rem; line-height: 1.5; padding: 20px; border-radius: 10px; background: #fff; border: 1px solid #ddd; }
+  .ok { border-color: #2e7d32; } .bad { border-color: #b3261e; }
+  code { background: #eee; padding: 1px 5px; border-radius: 4px; }
+  p.small { color: #666; font-size: .9rem; }
+</style>
+</head>
+<body>
+<h1>Question-inbox self-test</h1>
+<div id="verdict">Testing the worker&rsquo;s /log route&hellip;</div>
+<p class="small">This page sends the same request the chat sends after an answer.
+A successful test files a real test entry in the
+<a href="https://github.com/asanikar123/30-indicators/tree/questions/data/questions">questions inbox</a>.
+Safe to run any number of times; delete this page after setup is confirmed.</p>
+<script>
+(function () {
+  var WORKER = "https://thirty-indicators-chat.asanikar123.workers.dev"; // keep in sync with index.html
+  var v = document.getElementById("verdict");
+  function show(cls, html) { v.className = cls; v.innerHTML = html; }
+  fetch(WORKER + "/log", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ q: "SELF-TEST from debug.html - safe to ignore", a: "(no answer - connectivity test)", mode: "debug" })
+  }).then(function (res) {
+    if (res.status === 204) {
+      show("ok", "&#9989; <strong>The worker accepted the log (204).</strong> The new code IS deployed. " +
+        "Now check the <a href=\"https://github.com/asanikar123/30-indicators/tree/questions/data/questions\">inbox folder</a>: " +
+        "if a SELF-TEST file appears within ~30 seconds, everything works. " +
+        "If nothing appears, the worker's <code>GITHUB_TOKEN</code> secret is missing, misspelled, or lacks " +
+        "Contents read&#8209;write on the repo &mdash; fix it in Cloudflare &rarr; worker &rarr; Settings &rarr; Variables.");
+    } else if (res.status === 400) {
+      show("bad", "&#10060; <strong>The live worker is running the OLD code (400).</strong> The updated " +
+        "<code>worker.js</code> was never deployed. In Cloudflare &rarr; thirty-indicators-chat &rarr; Edit code, replace the " +
+        "whole file with <a href=\"https://raw.githubusercontent.com/asanikar123/30-indicators/main/cloudflare-worker/worker.js\">this file</a> and Deploy, then reload this page.");
+    } else {
+      show("bad", "&#10060; Unexpected status <strong>" + res.status + "</strong>. Send this number to Claude.");
+    }
+  }).catch(function (e) {
+    show("bad", "&#10060; Could not reach the worker at all: <code>" + String(e).slice(0, 120) +
+      "</code>. Check the worker exists and is deployed.");
+  });
+})();
+</script>
+</body>
+</html>
