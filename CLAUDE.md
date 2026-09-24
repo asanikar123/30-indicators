@@ -28,7 +28,14 @@ does; this file is about how to work on it safely.
 - `assets/style.css` — tokens on `:root` with dark-mode overrides; custom
   range-slider styling; `@media (max-width: 899px)` is the mobile layout.
 - `cloudflare-worker/worker.js` — standalone key-holding proxy; the API key
-  lives only in the worker's secret store, never in this repo.
+  lives only in the worker's secret store, never in this repo. Also serves
+  `/log`: each typed question + answer from the public site is committed as
+  a JSON file to `data/questions/` on the `questions` branch (needs the
+  GITHUB_TOKEN secret — fine-grained, contents-write, this repo only — in
+  the worker's secret store; a safe no-op without it). The `questions`
+  branch is an inbox: never merge it to main, and don't open PRs from it.
+  Repo merges do NOT redeploy the worker — it's pasted into the Cloudflare
+  dashboard manually.
 
 ## Two deploy surfaces, one source
 
@@ -60,7 +67,7 @@ does; this file is about how to work on it safely.
 ```
 node tests/verify-data.js                      # data integrity
 node tests/verify-answers.js                   # canned FAQ prose vs the data
-NODE_PATH=$(npm root -g) node tests/battery.js # 38-check e2e suite
+NODE_PATH=$(npm root -g) node tests/battery.js # 39-check e2e suite
 ```
 
 The battery covers rendering/marks, scenario-button pixel-stability,

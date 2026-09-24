@@ -20,6 +20,15 @@
  *   6. Worker → Settings → Bindings → Add → KV namespace → variable name
  *      exactly CACHE → pick the namespace → Deploy.
  *   Without the binding the worker runs exactly as before (no caching).
+ *
+ * Optional — question inbox (saves each typed question + answer to GitHub):
+ *   7. github.com → Settings → Developer settings → Fine-grained personal
+ *      access tokens → Generate: Repository access = ONLY the indicators
+ *      repo; Permissions = Contents: Read and write; nothing else.
+ *   8. Worker → Settings → Variables → add secret GITHUB_TOKEN.
+ *   Questions land as JSON files under data/questions/ on the repo's
+ *   "questions" branch (never main, so the site does not redeploy per
+ *   question). Without the secret, /log is accepted and discarded.
  */
 
 const ALLOWED_ORIGINS = [
@@ -32,6 +41,11 @@ const MODEL = "claude-opus-5";
 const MAX_TOKENS = 3000;
 const MAX_BODY_BYTES = 200_000;
 const RATE_LIMIT = { windowMs: 300_000, maxRequests: 25 }; // per IP, per isolate
+
+const GITHUB_REPO = "asanikar123/30-indicators";
+const QUESTIONS_BRANCH = "questions"; // never main: a commit there would redeploy the site
+const MAX_Q_CHARS = 600;
+const MAX_A_CHARS = 6000;
 
 const bucket = new Map();
 
@@ -64,6 +78,45 @@ export default {
     if (raw.length > MAX_BODY_BYTES) return new Response("Too large", { status: 413, headers: cors });
     let body;
     try { body = JSON.parse(raw); } catch { return new Response("Bad JSON", { status: 400, headers: cors }); }
+
+    // Question inbox: the page posts each typed question + the answer it got.
+    // Committed as one JSON file each to the repo's "questions" branch for
+    // review; a no-op (still 204) when the GITHUB_TOKEN secret is absent.
+    if (new URL(request.url).pathname === "/log") {
+      if (env.GITHUB_TOKEN && typeof body.q === "string" && body.q.trim()) {
+        const doc = {
+          q: body.q.trim().slice(0, MAX_Q_CHARS),
+          a: typeof body.a === "string" ? body.a.slice(0, MAX_A_CHARS) : null,
+          mode: typeof body.mode === "string" ? body.mode.slice(0, 20) : null,
+          at: new Date().toISOString(),
+        };
+        const name = doc.at.replace(/[:.]/g, "-") + "-" + Math.random().toString(36).slice(2, 7);
+        const ghBody = JSON.stringify({
+          message: "Question from the page",
+          branch: QUESTIONS_BRANCH,
+          content: btoa(unescape(encodeURIComponent(JSON.stringify(doc, null, 2) + "\n"))),
+        });
+        ctx.waitUntil((async () => {
+          try {
+            const put = () => fetch(
+              "https://api.github.com/repos/" + GITHUB_REPO + "/contents/data/questions/" + name + ".json", {
+                method: "PUT",
+                headers: {
+                  "authorization": "Bearer " + env.GITHUB_TOKEN,
+                  "accept": "application/vnd.github+json",
+                  "user-agent": "thirty-indicators-worker",
+                  "content-type": "application/json",
+                },
+                body: ghBody,
+              });
+            const res = await put();
+            if (res.status === 409) await put(); // rare ref race: retry once
+          } catch (e) { /* logging is best-effort */ }
+        })());
+      }
+      return new Response(null, { status: 204, headers: cors });
+    }
+
     if (!Array.isArray(body.messages) || body.messages.length === 0) {
       return new Response("Bad request", { status: 400, headers: cors });
     }

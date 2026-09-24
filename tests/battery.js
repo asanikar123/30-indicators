@@ -124,10 +124,16 @@ const REPO = '/home/user/30-indicators';
   // ---- worker-shim E2E on test copy with mock ----
   const http = require('http');
   let calls = 0;
+  const logs = [];
   const sse = (res, evs) => { res.writeHead(200, { 'content-type': 'text/event-stream', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'content-type' }); for (const e of evs) res.write('data: ' + JSON.stringify(e) + '\n\n'); res.end(); };
   const srv = http.createServer((req, res) => {
     if (req.method === 'OPTIONS') { res.writeHead(204, { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'POST, OPTIONS', 'Access-Control-Allow-Headers': 'content-type' }); return res.end(); }
     let body = ''; req.on('data', c => body += c); req.on('end', () => {
+      if (req.url === '/log') {
+        try { logs.push(JSON.parse(body)); } catch (e) {}
+        res.writeHead(204, { 'Access-Control-Allow-Origin': '*' });
+        return res.end();
+      }
       calls++;
       if (calls === 1) sse(res, [
         { type: 'content_block_start', index: 0, content_block: { type: 'tool_use', id: 't1', name: 'set_year', input: {} } },
@@ -161,7 +167,7 @@ const REPO = '/home/user/30-indicators';
       deltaChart: [...document.querySelectorAll('.chart-cap')].some(c => /Change 2020/.test(c.textContent))
     };
   });
-  T('canned chip: zero API calls', calls === 0, String(calls));
+  T('canned chip: zero API calls, nothing logged', calls === 0 && logs.length === 0, calls + '/' + logs.length);
   T('canned chip: reviewed text shown verbatim', canned.text === canned.want, (canned.text || '').slice(0, 60));
   T('canned chip: delta chart drawn from live data', canned.deltaChart);
   await p.fill('#askInput', 'show 1992'); await p.click('#askSend');
@@ -169,6 +175,7 @@ const REPO = '/home/user/30-indicators';
   let chat = await p.evaluate(() => ({ yr: +document.getElementById('yearSlider').value, msg: [...document.querySelectorAll('.msg.ai')].pop()?.textContent }));
   T('worker chat: tool round moved year to 1992', chat.yr === 1992, String(chat.yr));
   T('worker chat: streamed final text', /Now showing 1992/.test(chat.msg || ''), chat.msg);
+  T('typed exchange filed to /log with question + answer', logs.length === 1 && logs[0].q === 'show 1992' && /Now showing 1992/.test(logs[0].a || ''), JSON.stringify(logs[0] || null));
   // chips collapsed to a row after conversation
   T('chips collapse to one row after chat', await p.evaluate(() => document.getElementById('faqChips').getBoundingClientRect().height < 60));
   // fullscreen + era chart with marks via hook
@@ -209,7 +216,7 @@ const REPO = '/home/user/30-indicators';
     };
   });
   T('canned recovery chip: levers applied, hero = data-derived ' + rec.want, rec.hero === rec.want, rec.hero);
-  T('canned chips never hit the API', calls === callsBefore, calls + ' vs ' + callsBefore);
+  T('canned chips never hit the API or the log', calls === callsBefore && logs.length === 1, calls + ' vs ' + callsBefore + ', logs ' + logs.length);
   srv.close();
 
   // ---- mobile ----
