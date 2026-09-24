@@ -1,4 +1,4 @@
-# 30 Indicators of a Healthy Civilization / Democracy
+# 30 Indicators of a Healthy Democracy
 
 An interactive discussion aid built for the Harvard–Radcliffe Class of 1972,
 prompted by NPR's September 15, 2026 story, ["State of U.S. democracy reaches
