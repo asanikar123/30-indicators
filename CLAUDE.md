@@ -27,6 +27,11 @@ does; this file is about how to work on it safely.
   client-side tool loop), AI tool definitions, prompt text.
 - `assets/style.css` — tokens on `:root` with dark-mode overrides; custom
   range-slider styling; `@media (max-width: 899px)` is the mobile layout.
+- `questions.html` — standalone, unlinked review page for the question
+  inbox (reads the `questions` branch via the public GitHub API; search,
+  voice filters, duplicate grouping, localStorage shortlist with a
+  copy-for-Claude action). Test entries (mode "debug" / SELF-TEST) are
+  hidden by default. Has its own inline styles mirroring the site tokens.
 - `cloudflare-worker/worker.js` — standalone key-holding proxy; the API key
   lives only in the worker's secret store, never in this repo. Also serves
   `/log`: each typed question + answer from the public site is committed as
@@ -67,7 +72,7 @@ does; this file is about how to work on it safely.
 ```
 node tests/verify-data.js                      # data integrity
 node tests/verify-answers.js                   # canned FAQ prose vs the data
-NODE_PATH=$(npm root -g) node tests/battery.js # 39-check e2e suite
+NODE_PATH=$(npm root -g) node tests/battery.js # 44-check e2e suite
 ```
 
 The battery covers rendering/marks, scenario-button pixel-stability,

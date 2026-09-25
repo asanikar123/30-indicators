@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="description" content="Review the questions asked in the Thirty Indicators chat.">
+<title>Audience Questions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink-2: #52514e;
+    --ink-muted: #898781; --grid: #e1e0d9; --ring: rgba(11,11,11,.10);
+    --accent: #a51c30; --bubble: #f0efec; --dom-1: #306eb8; --dom-4: #d29617;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page: #0d0d0d; --surface: #1a1a19; --ink: #fff; --ink-2: #c3c2b7;
+      --ink-muted: #898781; --grid: #2c2c2a; --ring: rgba(255,255,255,.10);
+      --accent: #d97781; --bubble: #262624; --dom-1: #4784ce; --dom-4: #bb861e;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page: #0d0d0d; --surface: #1a1a19; --ink: #fff; --ink-2: #c3c2b7;
+    --ink-muted: #898781; --grid: #2c2c2a; --ring: rgba(255,255,255,.10);
+    --accent: #d97781; --bubble: #262624; --dom-1: #4784ce; --dom-4: #bb861e;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--page); color: var(--ink);
+    font-family: "Public Sans", system-ui, sans-serif; font-size: 15px; line-height: 1.55;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 28px 16px 120px; }
+  header { text-align: center; border-bottom: 3px double var(--grid); padding-bottom: 18px; margin-bottom: 18px; }
+  .eyebrow { font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-muted); }
+  h1 { font-family: "Libre Caslon Text", Georgia, serif; font-size: 1.9rem; margin: .25rem 0 .3rem; }
+  .sub { color: var(--ink-2); font-size: .92rem; margin: 0; }
+  .sub a { color: var(--accent); }
+
+  .stats { text-align: center; color: var(--ink-2); font-size: .92rem; margin: 14px 0 18px; min-height: 1.4em; }
+  .stats strong { color: var(--ink); font-weight: 700; }
+
+  .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 18px; }
+  .search { flex: 1 1 240px; position: relative; }
+  .search input {
+    width: 100%; padding: 9px 12px; border: 1px solid var(--grid); border-radius: 999px;
+    background: var(--surface); color: var(--ink); font: inherit; outline-offset: 2px;
+  }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chips button {
+    font: inherit; font-size: .85rem; font-weight: 600; padding: 6px 13px; cursor: pointer;
+    border: 1px solid var(--grid); border-radius: 999px; background: var(--surface); color: var(--ink-2);
+  }
+  .chips button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .aux { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; font-size: .85rem; color: var(--ink-2); }
+  .aux label { display: inline-flex; gap: 5px; align-items: center; cursor: pointer; }
+  .aux select, .aux button {
+    font: inherit; font-size: .85rem; padding: 5px 10px; border: 1px solid var(--grid);
+    border-radius: 8px; background: var(--surface); color: var(--ink-2); cursor: pointer;
+  }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--grid); border-radius: 12px;
+    padding: 14px 16px; margin-bottom: 12px; box-shadow: 0 1px 2px var(--ring);
+  }
+  .card-top { display: flex; gap: 10px; align-items: flex-start; }
+  .card-top input[type="checkbox"] { margin-top: 5px; accent-color: var(--accent); width: 16px; height: 16px; flex: none; cursor: pointer; }
+  .q { font-family: "Libre Caslon Text", Georgia, serif; font-size: 1.08rem; font-weight: 700; margin: 0; flex: 1; }
+  .meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 6px 0 0 26px; font-size: .8rem; color: var(--ink-muted); }
+  .badge { border: 1px solid var(--grid); border-radius: 999px; padding: 1px 9px; font-weight: 600; }
+  .badge.scholar { color: var(--dom-1); border-color: var(--dom-1); }
+  .badge.witty { color: var(--accent); border-color: var(--accent); }
+  .badge.unhinged { color: var(--dom-4); border-color: var(--dom-4); }
+  .badge.times { background: var(--bubble); border-color: transparent; color: var(--ink-2); }
+  .meta a { color: var(--ink-muted); }
+  .a {
+    margin: 10px 0 0 26px; padding: 10px 12px; background: var(--bubble); border-radius: 10px;
+    color: var(--ink-2); font-size: .92rem; white-space: pre-wrap;
+    display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .a.open { display: block; -webkit-line-clamp: unset; }
+  .a.none { font-style: italic; }
+  .more { margin: 6px 0 0 26px; }
+  .more button { font: inherit; font-size: .82rem; color: var(--accent); background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; }
+
+  .notice { text-align: center; color: var(--ink-2); padding: 40px 10px; }
+  .notice a { color: var(--accent); }
+
+  .tray {
+    position: fixed; left: 0; right: 0; bottom: 0; background: var(--surface);
+    border-top: 1px solid var(--grid); box-shadow: 0 -3px 14px var(--ring); padding: 10px 16px;
+    display: flex; gap: 12px; align-items: center; justify-content: center; flex-wrap: wrap;
+  }
+  .tray[hidden] { display: none; }
+  .tray button {
+    font: inherit; font-weight: 600; padding: 8px 16px; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--accent); background: var(--accent); color: #fff;
+  }
+  .tray button.ghost { background: none; color: var(--accent); }
+  .tray .n { color: var(--ink-2); font-size: .9rem; }
+  @media (max-width: 520px) { .q { font-size: 1rem; } .a, .meta, .more { margin-left: 0; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Harvard&ndash;Radcliffe Class of 1972</div>
+    <h1>Audience Questions</h1>
+    <p class="sub">Everything typed into the <a href="index.html">Thirty Indicators</a> chat, with the answer each viewer received.
+      Reads live from the <a href="https://github.com/asanikar123/30-indicators/tree/questions/data/questions">question inbox</a>.</p>
+  </header>
+
+  <div class="stats" id="stats">Loading questions&hellip;</div>
+
+  <div class="toolbar">
+    <div class="search"><input id="search" type="search" placeholder="Search questions and answers&hellip;" aria-label="Search"></div>
+    <div class="chips" id="modeChips">
+      <button type="button" data-mode="" aria-pressed="true">All</button>
+      <button type="button" data-mode="scholar" aria-pressed="false">Scholar</button>
+      <button type="button" data-mode="witty" aria-pressed="false">Witty</button>
+      <button type="button" data-mode="unhinged" aria-pressed="false">Unhinged</button>
+    </div>
+    <div class="aux">
+      <select id="sort" aria-label="Sort order">
+        <option value="new">Newest first</option>
+        <option value="old">Oldest first</option>
+        <option value="asked">Most asked</option>
+      </select>
+      <label><input type="checkbox" id="showTests"> show test entries</label>
+      <button type="button" id="refresh">Refresh</button>
+    </div>
+  </div>
+
+  <div id="list"></div>
+</div>
+
+<div class="tray" id="tray" hidden>
+  <span class="n" id="trayCount"></span>
+  <button type="button" id="copyList">Copy shortlist for Claude</button>
+  <button type="button" class="ghost" id="clearList">Clear</button>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var REPO = "asanikar123/30-indicators";
+  var API = "https://api.github.com/repos/" + REPO + "/contents/data/questions?ref=questions";
+
+  var entries = [];      // {q, a, mode, at, url}
+  var groups = [];       // {key, q, items[], latest, n}
+  var mode = "", term = "", sort = "new", showTests = false;
+  var open = {};         // expanded answers, by group key
+  var picked = {};       // shortlist, by group key (persisted)
+  try { (JSON.parse(localStorage.getItem("ti_shortlist_v1") || "[]")).forEach(function (k) { picked[k] = true; }); } catch (e) {}
+
+  var listEl = document.getElementById("list");
+  var statsEl = document.getElementById("stats");
+
+  function isTest(e) {
+    return e.mode === "debug" || /^SELF-TEST/i.test(e.q || "");
+  }
+  function keyOf(q) { return String(q || "").trim().toLowerCase().replace(/\s+/g, " "); }
+
+  function regroup() {
+    var map = {};
+    groups = [];
+    entries.forEach(function (e) {
+      var k = keyOf(e.q);
+      if (!map[k]) { map[k] = { key: k, q: e.q, items: [], latest: "", n: 0 }; groups.push(map[k]); }
+      map[k].items.push(e);
+      map[k].n++;
+      if (e.at > map[k].latest) { map[k].latest = e.at; map[k].q = e.q; }
+    });
+    groups.forEach(function (g) { g.items.sort(function (a, b) { return b.at < a.at ? -1 : 1; }); });
+  }
+
+  function relTime(iso) {
+    var s = (Date.now() - new Date(iso).getTime()) / 1000;
+    if (!isFinite(s)) return "";
+    if (s < 90) return "just now";
+    if (s < 5400) return Math.round(s / 60) + " min ago";
+    if (s < 129600) return Math.round(s / 3600) + " h ago";
+    return Math.round(s / 86400) + " d ago";
+  }
+
+  function visibleGroups() {
+    var t = term.toLowerCase();
+    var out = groups.filter(function (g) {
+      var items = g.items.filter(function (e) { return showTests || !isTest(e); });
+      if (!items.length) return false;
+      if (mode && !items.some(function (e) { return e.mode === mode; })) return false;
+      if (t && g.q.toLowerCase().indexOf(t) === -1 &&
+          !items.some(function (e) { return (e.a || "").toLowerCase().indexOf(t) !== -1; })) return false;
+      return true;
+    });
+    out.sort(sort === "old" ? function (a, b) { return a.latest < b.latest ? -1 : 1; }
+      : sort === "asked" ? function (a, b) { return b.n - a.n || (b.latest > a.latest ? 1 : -1); }
+      : function (a, b) { return b.latest > a.latest ? 1 : -1; });
+    return out;
+  }
+
+  function renderStats() {
+    var real = entries.filter(function (e) { return !isTest(e); });
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var byMode = { scholar: 0, witty: 0, unhinged: 0 };
+    var todayN = 0;
+    real.forEach(function (e) {
+      if (byMode[e.mode] != null) byMode[e.mode]++;
+      if (new Date(e.at) >= today) todayN++;
+    });
+    var uniq = {};
+    real.forEach(function (e) { uniq[keyOf(e.q)] = 1; });
+    statsEl.innerHTML = "";
+    var b = function (t) { var s = document.createElement("strong"); s.textContent = t; return s; };
+    statsEl.appendChild(b(real.length));
+    statsEl.appendChild(document.createTextNode(" question" + (real.length === 1 ? "" : "s") + " · "));
+    statsEl.appendChild(b(Object.keys(uniq).length));
+    statsEl.appendChild(document.createTextNode(" unique · "));
+    statsEl.appendChild(b(todayN));
+    statsEl.appendChild(document.createTextNode(" today · " +
+      byMode.scholar + " scholar / " + byMode.witty + " witty / " + byMode.unhinged + " unhinged"));
+  }
+
+  function render() {
+    listEl.innerHTML = "";
+    var vis = visibleGroups();
+    if (!vis.length) {
+      var n = document.createElement("div");
+      n.className = "notice";
+      n.textContent = entries.length ? "No questions match the current filters." : "No questions yet — they appear here as soon as someone asks one on the site.";
+      listEl.appendChild(n);
+    }
+    vis.forEach(function (g) {
+      var latest = g.items.filter(function (e) { return showTests || !isTest(e); })[0];
+      var card = document.createElement("div"); card.className = "card";
+      var top = document.createElement("div"); top.className = "card-top";
+      var cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = !!picked[g.key];
+      cb.setAttribute("aria-label", "Shortlist for FAQ");
+      cb.addEventListener("change", function () {
+        if (cb.checked) picked[g.key] = true; else delete picked[g.key];
+        try { localStorage.setItem("ti_shortlist_v1", JSON.stringify(Object.keys(picked))); } catch (e) {}
+        renderTray();
+      });
+      var q = document.createElement("p"); q.className = "q"; q.textContent = g.q;
+      top.appendChild(cb); top.appendChild(q); card.appendChild(top);
+
+      var meta = document.createElement("div"); meta.className = "meta";
+      if (latest.mode) {
+        var badge = document.createElement("span");
+        badge.className = "badge " + latest.mode; badge.textContent = latest.mode;
+        meta.appendChild(badge);
+      }
+      if (g.n > 1) {
+        var times = document.createElement("span");
+        times.className = "badge times"; times.textContent = "asked " + g.n + "×";
+        meta.appendChild(times);
+      }
+      var when = document.createElement("span");
+      when.textContent = relTime(g.latest) + " · " + new Date(g.latest).toLocaleString();
+      meta.appendChild(when);
+      if (latest.url) {
+        var link = document.createElement("a"); link.href = latest.url; link.textContent = "view on GitHub";
+        link.target = "_blank"; link.rel = "noopener";
+        meta.appendChild(link);
+      }
+      card.appendChild(meta);
+
+      var a = document.createElement("div");
+      a.className = "a" + (open[g.key] ? " open" : "") + (latest.a ? "" : " none");
+      a.textContent = latest.a || "(no answer captured — the request may have errored)";
+      card.appendChild(a);
+      if ((latest.a || "").length > 260) {
+        var moreWrap = document.createElement("div"); moreWrap.className = "more";
+        var more = document.createElement("button"); more.type = "button";
+        more.textContent = open[g.key] ? "Show less" : "Show full answer";
+        more.addEventListener("click", function () { open[g.key] = !open[g.key]; render(); });
+        moreWrap.appendChild(more); card.appendChild(moreWrap);
+      }
+      listEl.appendChild(card);
+    });
+    renderTray();
+  }
+
+  function renderTray() {
+    var keys = Object.keys(picked);
+    var tray = document.getElementById("tray");
+    tray.hidden = keys.length === 0;
+    document.getElementById("trayCount").textContent = keys.length + " shortlisted";
+  }
+
+  document.getElementById("copyList").addEventListener("click", function () {
+    var qs = groups.filter(function (g) { return picked[g.key]; }).map(function (g) { return g.q; });
+    if (!qs.length) return;
+    var text = "Promote these audience questions to FAQ chips with reviewed canned answers:\n" +
+      qs.map(function (q, i) { return (i + 1) + '. "' + q + '"'; }).join("\n");
+    var done = function () {
+      var btn = document.getElementById("copyList");
+      btn.textContent = "Copied — paste to Claude";
+      setTimeout(function () { btn.textContent = "Copy shortlist for Claude"; }, 2200);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, done);
+    else { window.prompt("Copy this:", text); }
+  });
+  document.getElementById("clearList").addEventListener("click", function () {
+    picked = {};
+    try { localStorage.setItem("ti_shortlist_v1", "[]"); } catch (e) {}
+    render();
+  });
+
+  document.getElementById("search").addEventListener("input", function (e) { term = e.target.value.trim(); render(); });
+  document.getElementById("modeChips").addEventListener("click", function (e) {
+    var btn = e.target.closest("button"); if (!btn) return;
+    mode = btn.dataset.mode;
+    this.querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", b === btn ? "true" : "false"); });
+    render();
+  });
+  document.getElementById("sort").addEventListener("change", function (e) { sort = e.target.value; render(); });
+  document.getElementById("showTests").addEventListener("change", function (e) { showTests = e.target.checked; render(); });
+  document.getElementById("refresh").addEventListener("click", function () { load(); });
+
+  var loadedFromHook = false;
+  function load() {
+    statsEl.textContent = "Loading questions…";
+    fetch(API).then(function (res) {
+      if (res.status === 403) throw new Error("rate");
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      return res.json();
+    }).then(function (files) {
+      var jsons = (files || []).filter(function (f) { return /\.json$/.test(f.name); });
+      return Promise.all(jsons.map(function (f) {
+        return fetch(f.download_url).then(function (r) { return r.json(); }).then(function (d) {
+          return { q: String(d.q || ""), a: d.a == null ? null : String(d.a), mode: String(d.mode || ""), at: String(d.at || ""), url: f.html_url };
+        }).catch(function () { return null; });
+      }));
+    }).then(function (rows) {
+      if (loadedFromHook) return;
+      entries = rows.filter(Boolean).filter(function (e) { return e.q; });
+      regroup(); renderStats(); render();
+    }).catch(function (err) {
+      if (loadedFromHook) return;
+      statsEl.textContent = "";
+      listEl.innerHTML = "";
+      var n = document.createElement("div"); n.className = "notice";
+      n.textContent = String(err && err.message) === "rate"
+        ? "GitHub is rate-limiting this network right now — wait a few minutes and Refresh, or "
+        : "Couldn't load the inbox (" + (err && err.message) + "). Check your connection, or ";
+      var a = document.createElement("a");
+      a.href = "https://github.com/" + REPO + "/tree/questions/data/questions";
+      a.textContent = "browse it on GitHub";
+      n.appendChild(a); n.appendChild(document.createTextNode("."));
+      listEl.appendChild(n);
+    });
+  }
+
+  /* test hook: render fixture entries instead of the network result */
+  window.__qload = function (rows) {
+    loadedFromHook = true;
+    entries = rows;
+    regroup(); renderStats(); render();
+  };
+
+  load();
+})();
+</script>
+</body>
+</html>

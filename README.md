@@ -49,6 +49,8 @@ measured; the bars and the dashed bridge are this rule made visible.
 
 ```
 index.html              markup + the one config knob (TI_WORKER_URL)
+questions.html          unlinked review page for the audience-question
+                        inbox (filters, duplicate grouping, FAQ shortlist)
 assets/style.css        all styling
 assets/data.js          ALL data: framework, calibrated today-scores, lever
                         anchors, presets, measured 1975–2020 series (TI_DATA)
@@ -59,7 +61,7 @@ cloudflare-worker/      key-holding proxy for the public chat (setup in file)
 data/                   archived GSoDI v5.1 dataset + provenance (README)
 tests/                  verify-data.js (CSV ↔ page data diff, 22/22 exact)
                         verify-answers.js (canned FAQ figures vs the data)
-                        battery.js (39-check headless end-to-end suite)
+                        battery.js (44-check headless end-to-end suite)
 .github/workflows/      push to main → GitHub Pages deploy
 ```
 
