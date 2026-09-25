@@ -986,15 +986,23 @@
      typed question and the answer it got to the worker's /log route, which
      files them on the repo's "questions" branch for review. Best effort,
      fire-and-forget; canned chip replays never come through here. */
-  function logExchange(q, a) {
+  function logExchange(q, a, charts) {
     if (dbNS || !window.TI_WORKER_URL) return;
     try {
       fetch(String(window.TI_WORKER_URL).replace(/\/+$/, "") + "/log", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ q: q, a: a, mode: chatMode })
+        body: JSON.stringify({ q: q, a: a, mode: chatMode,
+          charts: charts && charts.length ? charts.slice(0, 6) : undefined })
       }).catch(function () {});
     } catch (e) {}
+  }
+  /* The chart specs recorded since a marker: enough to redraw each chart
+     from TI_DATA on the review page (no images stored anywhere). */
+  function chartsSince(mark) {
+    return transcript.slice(mark).filter(function (m) {
+      return m.t === "chart" || m.t === "multi" || m.t === "delta";
+    });
   }
 
   /* Per-viewer chat persistence in browser storage: best effort only. */
@@ -1606,6 +1614,7 @@
     aiDiv.style.minHeight = "2.7em"; /* room for ~2 lines so late-arriving text doesn't reflow the charts */
     pendingAiDiv = aiDiv;
     askSend.disabled = true;
+    var chartMark = transcript.length;
     chatHistory.push({ role: "user", content: q });
     var turns = chatHistory.slice(0, -1).slice(-8).concat([{
       role: "user",
@@ -1630,10 +1639,10 @@
       aiDiv.textContent = res.text;
       chatHistory.push({ role: "assistant", content: res.text });
       record({ t: "ai", x: res.text });
-      logExchange(q, res.text);
+      logExchange(q, res.text, chartsSince(chartMark));
     }, function (err) {
       chatHistory.pop();
-      logExchange(q, null);
+      logExchange(q, null, chartsSince(chartMark));
       aiDiv.textContent =
         err && err.code === "rate_limited" ? "Rate limited — give it a moment and try again." :
         err && err.code === "cancelled" ? "Cancelled." :
