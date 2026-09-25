@@ -16,6 +16,7 @@ const REPO = '/home/user/30-indicators';
   fs.mkdirSync('/tmp/claude-0/ti-plain/assets', { recursive: true });
   for (const f of ['style.css', 'data.js', 'answers.js', 'app.js']) fs.copyFileSync(REPO + '/assets/' + f, '/tmp/claude-0/ti-plain/assets/' + f);
   fs.writeFileSync('/tmp/claude-0/ti-plain/index.html', setUrl(idxSrc, ''));
+  fs.copyFileSync(REPO + '/questions.html', '/tmp/claude-0/ti-plain/questions.html');
 
   const results = [];
   const T = (name, ok, detail) => { results.push((ok ? 'PASS' : 'FAIL') + '  ' + name + (detail ? '  [' + detail + ']' : '')); };
@@ -120,6 +121,37 @@ const REPO = '/home/user/30-indicators';
   tableRows = await p.evaluate(() => document.querySelectorAll('#tableDialog tbody tr').length);
   T('data table has 30 rows', tableRows === 30, String(tableRows));
   await p.keyboard.press('Escape');
+
+  // ---- questions review page (fixtures via test hook; network load fails gracefully) ----
+  await p.goto('file:///tmp/claude-0/ti-plain/questions.html');
+  await p.waitForTimeout(600);
+  await p.evaluate(() => window.__qload([
+    { q: 'Why is turnout so jagged?', a: 'Because midterms.', mode: 'witty', at: '2026-09-25T00:20:00Z', url: '' },
+    { q: 'why is turnout so jagged?', a: 'A much longer scholarly answer. '.repeat(20), mode: 'scholar', at: '2026-09-24T00:20:00Z', url: '' },
+    { q: 'What about the courts?', a: 'Courts answer.', mode: 'unhinged', at: '2026-09-23T00:20:00Z', url: '' },
+    { q: 'SELF-TEST from debug.html - safe to ignore', a: '(test)', mode: 'debug', at: '2026-09-22T00:20:00Z', url: '' },
+  ]));
+  const qp = await p.evaluate(() => ({
+    cards: document.querySelectorAll('.card').length,
+    grouped: [...document.querySelectorAll('.badge.times')].some(b => /asked 2/.test(b.textContent)),
+    stats: document.getElementById('stats').textContent
+  }));
+  T('questions page: dupes grouped, test entries hidden', qp.cards === 2 && qp.grouped && /3 questions · 2 unique/.test(qp.stats), JSON.stringify(qp));
+  await p.fill('#search', 'courts'); await p.waitForTimeout(100);
+  T('questions page: search filters', await p.evaluate(() => document.querySelectorAll('.card').length) === 1);
+  await p.fill('#search', ''); await p.click('#modeChips button[data-mode="unhinged"]'); await p.waitForTimeout(100);
+  T('questions page: mode filter', await p.evaluate(() => {
+    const cards = document.querySelectorAll('.card');
+    return cards.length === 1 && /courts/.test(cards[0].textContent);
+  }));
+  await p.click('#modeChips button[data-mode=""]'); await p.check('#showTests'); await p.waitForTimeout(100);
+  T('questions page: test entries revealed on demand', await p.evaluate(() => document.querySelectorAll('.card').length) === 3);
+  await p.uncheck('#showTests');
+  await p.evaluate(() => document.querySelector('.card input[type="checkbox"]').click());
+  T('questions page: shortlist tray with copy button', await p.evaluate(() => {
+    const tray = document.getElementById('tray');
+    return !tray.hidden && /1 shortlisted/.test(document.getElementById('trayCount').textContent) && !!document.getElementById('copyList');
+  }));
 
   // ---- worker-shim E2E on test copy with mock ----
   const http = require('http');
