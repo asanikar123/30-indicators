@@ -126,7 +126,8 @@ const REPO = '/home/user/30-indicators';
   await p.goto('file:///tmp/claude-0/ti-plain/questions.html');
   await p.waitForTimeout(600);
   await p.evaluate(() => window.__qload([
-    { q: 'Why is turnout so jagged?', a: 'Because midterms.', mode: 'witty', at: '2026-09-25T00:20:00Z', url: '' },
+    { q: 'Why is turnout so jagged?', a: 'Because midterms.', mode: 'witty', at: '2026-09-25T00:20:00Z', url: '',
+      charts: [{ t: 'chart', i: -1, r: [2015, 2020], m: [2016], ml: 'elections' }, { t: 'delta', e: [{ name: 'X', delta: -5 }, { name: 'Y', delta: 3 }], c: 'cap' }] },
     { q: 'why is turnout so jagged?', a: 'A much longer scholarly answer. '.repeat(20), mode: 'scholar', at: '2026-09-24T00:20:00Z', url: '' },
     { q: 'What about the courts?', a: 'Courts answer.', mode: 'unhinged', at: '2026-09-23T00:20:00Z', url: '' },
     { q: 'SELF-TEST from debug.html - safe to ignore', a: '(test)', mode: 'debug', at: '2026-09-22T00:20:00Z', url: '' },
@@ -134,9 +135,12 @@ const REPO = '/home/user/30-indicators';
   const qp = await p.evaluate(() => ({
     cards: document.querySelectorAll('.card').length,
     grouped: [...document.querySelectorAll('.badge.times')].some(b => /asked 2/.test(b.textContent)),
-    stats: document.getElementById('stats').textContent
+    stats: document.getElementById('stats').textContent,
+    chartSvgs: document.querySelectorAll('.qchart svg').length,
+    chartLine: !!document.querySelector('.qchart path.h-line')
   }));
   T('questions page: dupes grouped, test entries hidden', qp.cards === 2 && qp.grouped && /3 questions · 2 unique/.test(qp.stats), JSON.stringify(qp));
+  T('questions page: chart recipes redrawn from data', qp.chartSvgs === 2 && qp.chartLine, qp.chartSvgs + '/' + qp.chartLine);
   await p.fill('#search', 'courts'); await p.waitForTimeout(100);
   T('questions page: search filters', await p.evaluate(() => document.querySelectorAll('.card').length) === 1);
   await p.fill('#search', ''); await p.click('#modeChips button[data-mode="unhinged"]'); await p.waitForTimeout(100);
@@ -170,6 +174,10 @@ const REPO = '/home/user/30-indicators';
       if (calls === 1) sse(res, [
         { type: 'content_block_start', index: 0, content_block: { type: 'tool_use', id: 't1', name: 'set_year', input: {} } },
         { type: 'content_block_delta', index: 0, delta: { type: 'input_json_delta', partial_json: '{"year":1992}' } },
+        { type: 'message_delta', delta: { stop_reason: 'tool_use' } }]);
+      else if (calls === 3) sse(res, [
+        { type: 'content_block_start', index: 0, content_block: { type: 'tool_use', id: 't2', name: 'show_history', input: {} } },
+        { type: 'content_block_delta', index: 0, delta: { type: 'input_json_delta', partial_json: '{"indicator":"overall"}' } },
         { type: 'message_delta', delta: { stop_reason: 'tool_use' } }]);
       else {
         const last = JSON.parse(body).messages.at(-1);
@@ -208,6 +216,12 @@ const REPO = '/home/user/30-indicators';
   T('worker chat: tool round moved year to 1992', chat.yr === 1992, String(chat.yr));
   T('worker chat: streamed final text', /Now showing 1992/.test(chat.msg || ''), chat.msg);
   T('typed exchange filed to /log with question + answer', logs.length === 1 && logs[0].q === 'show 1992' && /Now showing 1992/.test(logs[0].a || ''), JSON.stringify(logs[0] || null));
+  // a chart-producing exchange logs the chart's recipe (redrawable, no image)
+  await p.fill('#askInput', 'chart the overall trend'); await p.click('#askSend');
+  await p.waitForTimeout(2200);
+  T('chart exchange: chart spec captured in /log', logs.length === 2 && Array.isArray(logs[1].charts) &&
+    logs[1].charts.length === 1 && logs[1].charts[0].t === 'chart' && logs[1].charts[0].i === -1,
+    JSON.stringify(logs[1] && logs[1].charts));
   // chips collapsed to a row after conversation
   T('chips collapse to one row after chat', await p.evaluate(() => document.getElementById('faqChips').getBoundingClientRect().height < 60));
   // fullscreen + era chart with marks via hook
@@ -232,7 +246,7 @@ const REPO = '/home/user/30-indicators';
     return [...document.querySelectorAll('.msg.ai')].some(m => m.textContent === want);
   }));
   // canned recovery chip drives the page: levers move, hero matches the data-derived value
-  const callsBefore = calls;
+  const callsBefore = calls, logsBefore = logs.length;
   await p.click('#faqChips button:has-text("realistic recovery")');
   await p.waitForTimeout(400);
   const rec = await p.evaluate(() => {
@@ -248,7 +262,7 @@ const REPO = '/home/user/30-indicators';
     };
   });
   T('canned recovery chip: levers applied, hero = data-derived ' + rec.want, rec.hero === rec.want, rec.hero);
-  T('canned chips never hit the API or the log', calls === callsBefore && logs.length === 1, calls + ' vs ' + callsBefore + ', logs ' + logs.length);
+  T('canned chips never hit the API or the log', calls === callsBefore && logs.length === logsBefore, calls + ' vs ' + callsBefore + ', logs ' + logs.length);
   srv.close();
 
   // ---- mobile ----

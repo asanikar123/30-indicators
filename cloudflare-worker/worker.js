@@ -90,6 +90,11 @@ export default {
           mode: typeof body.mode === "string" ? body.mode.slice(0, 20) : null,
           at: new Date().toISOString(),
         };
+        // chart specs (not images): small recipes the review page redraws from data
+        if (Array.isArray(body.charts) && body.charts.length) {
+          const cj = JSON.stringify(body.charts.slice(0, 6));
+          if (cj.length <= 8000) doc.charts = JSON.parse(cj);
+        }
         const name = doc.at.replace(/[:.]/g, "-") + "-" + Math.random().toString(36).slice(2, 7);
         const ghBody = JSON.stringify({
           message: "Question from the page",

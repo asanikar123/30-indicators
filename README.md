@@ -61,7 +61,7 @@ cloudflare-worker/      key-holding proxy for the public chat (setup in file)
 data/                   archived GSoDI v5.1 dataset + provenance (README)
 tests/                  verify-data.js (CSV ↔ page data diff, 22/22 exact)
                         verify-answers.js (canned FAQ figures vs the data)
-                        battery.js (44-check headless end-to-end suite)
+                        battery.js (46-check headless end-to-end suite)
 .github/workflows/      push to main → GitHub Pages deploy
 ```
 
