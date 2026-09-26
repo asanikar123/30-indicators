@@ -53,6 +53,18 @@ window.TI_WORKER_URL = "https://thirty-indicators-chat.asanikar123.workers.dev";
             </div>
           </div>
         </div>
+        <div class="term-card" id="termCard" aria-live="polite">
+          <button type="button" class="tc-nav" id="termPrev" aria-label="Previous era">&#9664;</button>
+          <div class="tc-who">
+            <div class="tc-head"><span class="tc-era" id="termEra"></span><span class="tc-dots" id="termDots" aria-hidden="true"></span></div>
+            <div class="tc-yrs" id="termYrs"></div>
+          </div>
+          <div class="tc-num"><span class="tc-big" id="termBig"></span><span class="tc-delta" id="termDelta"></span></div>
+          <p class="tc-story" id="termStory"></p>
+          <button type="button" class="tc-nav" id="termNext" aria-label="Next era">&#9654;</button>
+          <button type="button" class="tc-close" id="termClose" aria-label="Hide the story card">&#10005;</button>
+        </div>
+        <button type="button" class="term-reopen" id="termReopen" hidden>&#9656; The story, 1975 &rarr; today</button>
       </div>
       <div class="right-stack">
         <p class="stack-strip" id="heroYearLabel">Overall index &middot; 2026</p>

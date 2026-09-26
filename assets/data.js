@@ -95,7 +95,36 @@
   var ELECTION_YEARS = [1976, 1980, 1984, 1988, 1992, 1996, 2000, 2004, 2008, 2012, 2016, 2020, 2024];
   var MIDTERM_YEARS = [1978, 1982, 1986, 1990, 1994, 1998, 2002, 2006, 2010, 2014, 2018, 2022];
 
+  /* ---------- Story chapters for the timeline term card ----------
+     One card per presidency. The card's numbers (overall at the chapter's
+     end, change over the chapter) are computed from HIST at runtime; only
+     the prose lives here. Every figure stated in a note is checked by
+     `node tests/verify-terms.js` — run it after editing, and add a check
+     when a note states a new figure. The last chapter (est: true) covers
+     the post-2020 data gap and shows the calibrated today value. */
+  var TERMS = [
+    { who: "Ford years", from: 1975, to: 1977,
+      note: "The record opens with the system answering Watergate: free political parties jumped 19 points in a year, and turnout leapt 38 → 57 in the first post-Nixon election." },
+    { who: "Carter years", from: 1977, to: 1981,
+      note: "A quiet build: local democracy up 10 and gender equality up 7 — the machinery improving while nobody was applauding." },
+    { who: "Reagan years", from: 1981, to: 1989,
+      note: "The steadiest stretch in the record — eight years inside a two-point band, with absence of corruption up 6 and freedom of movement up 5." },
+    { who: "G.H.W. Bush years", from: 1989, to: 1993,
+      note: "As the Cold War ended, civil-society participation jumped 9 points and social group equality 5 — the index's first climb to 77." },
+    { who: "Clinton years", from: 1993, to: 2001,
+      note: "Eight flat years that end on a crack: credible elections dropped 10 points in the 2000 recount year, from 85 to 75." },
+    { who: "G.W. Bush years", from: 2001, to: 2009,
+      note: "Credible elections fell 10 points around the 2000 recount, then rebuilt to 90 by 2008 — and the era ends at 79, the highest overall ever measured." },
+    { who: "Obama years", from: 2009, to: 2017,
+      note: "The best years in the whole record sit here — 79 in 2009 and again in 2012–13 — and so does the steepest single-year fall: freedom of expression dropped 14 points, 89 to 75, crossing into 2017." },
+    { who: "Trump I years", from: 2017, to: 2020,
+      note: "A split screen: freedom of association fell 15 points and Congress's check on the executive 7 — while 2020 turnout hit 62, the highest of all fifty years." },
+    { who: "Since 2020", from: 2020, to: 2026, est: true,
+      note: "Measurement stops in 2020; the 2026 report fills the gap in words — seven significant declines, six new 50-year lows. Today's calibrated 67 is lower than any year actually measured." }
+  ];
+
   window.TI_DATA = {
+    TERMS: TERMS,
     DOMAINS: DOMAINS, LEVERS: LEVERS, INDICATORS: INDICATORS,
     SCALE: SCALE, LEVER_TODAY: LEVER_TODAY, PRESETS: PRESETS, STATUS: STATUS,
     YEAR_MIN: YEAR_MIN, YEAR_TODAY: YEAR_TODAY, HIST: HIST,

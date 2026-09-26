@@ -6,7 +6,8 @@
   var DOMAINS = D.DOMAINS, LEVERS = D.LEVERS, INDICATORS = D.INDICATORS,
       SCALE = D.SCALE, LEVER_TODAY = D.LEVER_TODAY, PRESETS = D.PRESETS,
       STATUS = D.STATUS, YEAR_MIN = D.YEAR_MIN, YEAR_TODAY = D.YEAR_TODAY,
-      HIST = D.HIST, ELECTION_YEARS = D.ELECTION_YEARS, MIDTERM_YEARS = D.MIDTERM_YEARS;
+      HIST = D.HIST, ELECTION_YEARS = D.ELECTION_YEARS, MIDTERM_YEARS = D.MIDTERM_YEARS,
+      TERMS = D.TERMS;
 
 
 
@@ -726,6 +727,7 @@
     lastIsToday = isToday;
     if (tableDialogEl.open) updateTable();
     else tableDirty = true;
+    updateTermCard();
   }
 
   /* The table lives in a dialog that is closed almost all the time, so its 30
@@ -808,6 +810,85 @@
     sliderSettle = setTimeout(function () { document.body.classList.remove("playing"); }, 250);
     setYear(+yearSlider.value, true);
   });
+
+  /* ---------- Story card: one chapter per presidency (TI_DATA.TERMS) ----------
+     Docked under the timeline; the chapter's span is highlighted on the spark.
+     The card follows the year (slider, playback, chat set_year), and its
+     arrows drive the year in return. Numbers computed from OVERALL here;
+     the prose lives in data.js and is checked by tests/verify-terms.js. */
+  var termCard = document.getElementById("termCard");
+  var termEls = {
+    era: document.getElementById("termEra"), yrs: document.getElementById("termYrs"),
+    big: document.getElementById("termBig"), delta: document.getElementById("termDelta"),
+    story: document.getElementById("termStory"), dots: document.getElementById("termDots")
+  };
+  var termReopen = document.getElementById("termReopen");
+  var termBand = document.createElement("div");
+  termBand.className = "spark-band";
+  document.querySelector(".spark-box").appendChild(termBand);
+  var shownTerm = -1;
+
+  function termIndexFor(year) {
+    for (var k = 0; k < TERMS.length; k++) if (year <= TERMS[k].to) return k;
+    return TERMS.length - 1;
+  }
+  function overallAt(y) { return OVERALL[clamp(y, HIST.y0, HIST.y1) - HIST.y0]; }
+
+  function updateTermCard() {
+    if (!termCard || termCard.hidden) return;
+    var k = termIndexFor(currentYear);
+    if (k === shownTerm) return;
+    shownTerm = k;
+    var t = TERMS[k];
+    var end = t.est ? Math.round(baselineMean) : overallAt(t.to);
+    var d = end - overallAt(t.from);
+    termEls.era.textContent = t.who;
+    termEls.yrs.textContent = t.from + "–" + (t.to === YEAR_TODAY ? "today" : t.to);
+    termEls.big.textContent = end;
+    termEls.delta.textContent = t.est ? "▼ est." : (d >= 0 ? "▲ +" + d : "▼ −" + Math.abs(d));
+    termEls.delta.className = "tc-delta " + (t.est || d < 0 ? "tc-down" : "tc-up");
+    termEls.story.textContent = t.note;
+    termEls.dots.textContent = "";
+    TERMS.forEach(function (_, j) {
+      var dot = document.createElement("span");
+      if (j === k) dot.className = "on";
+      termEls.dots.appendChild(dot);
+    });
+    var span = YEAR_TODAY - YEAR_MIN;
+    termBand.style.left = ((t.from - YEAR_MIN) / span * 100) + "%";
+    termBand.style.width = ((t.to - t.from) / span * 100) + "%";
+  }
+
+  function termGo(step) {
+    stopPlay();
+    var k = clamp(termIndexFor(currentYear) + step, 0, TERMS.length - 1);
+    setYear(TERMS[k].to);
+  }
+  document.getElementById("termPrev").addEventListener("click", function () { termGo(-1); });
+  document.getElementById("termNext").addEventListener("click", function () { termGo(1); });
+  document.getElementById("termClose").addEventListener("click", function () {
+    termCard.hidden = true;
+    termBand.hidden = true;
+    termReopen.hidden = false;
+  });
+  termReopen.addEventListener("click", function () {
+    termCard.hidden = false;
+    termBand.hidden = false;
+    termReopen.hidden = true;
+    shownTerm = -1;
+    updateTermCard();
+  });
+  /* swipe on touch: the natural phone gesture for stepping chapters */
+  var touchX = null;
+  termCard.addEventListener("touchstart", function (e) {
+    touchX = e.touches && e.touches.length === 1 ? e.touches[0].clientX : null;
+  }, { passive: true });
+  termCard.addEventListener("touchend", function (e) {
+    if (touchX === null) return;
+    var dx = (e.changedTouches && e.changedTouches[0] ? e.changedTouches[0].clientX : touchX) - touchX;
+    touchX = null;
+    if (Math.abs(dx) > 40) termGo(dx < 0 ? 1 : -1);
+  }, { passive: true });
 
   /* ---------- Ask Claude (artifact "sample" capability) ---------- */
   var chatLauncher = document.getElementById("chatLauncher");
@@ -986,15 +1067,23 @@
      typed question and the answer it got to the worker's /log route, which
      files them on the repo's "questions" branch for review. Best effort,
      fire-and-forget; canned chip replays never come through here. */
-  function logExchange(q, a) {
+  function logExchange(q, a, charts) {
     if (dbNS || !window.TI_WORKER_URL) return;
     try {
       fetch(String(window.TI_WORKER_URL).replace(/\/+$/, "") + "/log", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ q: q, a: a, mode: chatMode })
+        body: JSON.stringify({ q: q, a: a, mode: chatMode,
+          charts: charts && charts.length ? charts.slice(0, 6) : undefined })
       }).catch(function () {});
     } catch (e) {}
+  }
+  /* The chart specs recorded since a marker: enough to redraw each chart
+     from TI_DATA on the review page (no images stored anywhere). */
+  function chartsSince(mark) {
+    return transcript.slice(mark).filter(function (m) {
+      return m.t === "chart" || m.t === "multi" || m.t === "delta";
+    });
   }
 
   /* Per-viewer chat persistence in browser storage: best effort only. */
@@ -1606,6 +1695,7 @@
     aiDiv.style.minHeight = "2.7em"; /* room for ~2 lines so late-arriving text doesn't reflow the charts */
     pendingAiDiv = aiDiv;
     askSend.disabled = true;
+    var chartMark = transcript.length;
     chatHistory.push({ role: "user", content: q });
     var turns = chatHistory.slice(0, -1).slice(-8).concat([{
       role: "user",
@@ -1630,10 +1720,10 @@
       aiDiv.textContent = res.text;
       chatHistory.push({ role: "assistant", content: res.text });
       record({ t: "ai", x: res.text });
-      logExchange(q, res.text);
+      logExchange(q, res.text, chartsSince(chartMark));
     }, function (err) {
       chatHistory.pop();
-      logExchange(q, null);
+      logExchange(q, null, chartsSince(chartMark));
       aiDiv.textContent =
         err && err.code === "rate_limited" ? "Rate limited — give it a moment and try again." :
         err && err.code === "cancelled" ? "Cancelled." :

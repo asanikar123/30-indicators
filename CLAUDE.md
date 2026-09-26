@@ -12,7 +12,10 @@ does; this file is about how to work on it safely.
   everyone). Keep it empty unless the owner says otherwise.
 - `assets/data.js` — ALL data as `window.TI_DATA`. Edit here for any content
   change (scores, names, weights, presets, election years). Never put data
-  in app.js.
+  in app.js. Includes `TERMS`: the timeline story card's chapters (one per
+  presidency + the post-2020 estimated chapter); only the prose lives
+  there — card numbers compute from HIST — and every figure a note states
+  is checked by `node tests/verify-terms.js`.
 - `assets/answers.js` — canned FAQ-chip answers as `window.TI_ANSWERS`
   (scholar + witty voices; unhinged deliberately goes live). Steps run the
   chat's own tools so charts/levers come from TI_DATA; only the prose is
@@ -30,12 +33,15 @@ does; this file is about how to work on it safely.
 - `questions.html` — standalone, unlinked review page for the question
   inbox (reads the `questions` branch via the public GitHub API; search,
   voice filters, duplicate grouping, localStorage shortlist with a
-  copy-for-Claude action). Test entries (mode "debug" / SELF-TEST) are
-  hidden by default. Has its own inline styles mirroring the site tokens.
+  copy-for-Claude action). Redraws each exchange's charts from TI_DATA via
+  the logged chart specs (loads assets/data.js). Test entries (mode
+  "debug" / SELF-TEST) are hidden by default. Has its own inline styles
+  mirroring the site tokens.
 - `cloudflare-worker/worker.js` — standalone key-holding proxy; the API key
   lives only in the worker's secret store, never in this repo. Also serves
-  `/log`: each typed question + answer from the public site is committed as
-  a JSON file to `data/questions/` on the `questions` branch (needs the
+  `/log`: each typed question + answer (plus the charts of the exchange as
+  small redrawable specs, never images) from the public site is committed
+  as a JSON file to `data/questions/` on the `questions` branch (needs the
   GITHUB_TOKEN secret — fine-grained, contents-write, this repo only — in
   the worker's secret store; a safe no-op without it). The `questions`
   branch is an inbox: never merge it to main, and don't open PRs from it.
@@ -72,7 +78,8 @@ does; this file is about how to work on it safely.
 ```
 node tests/verify-data.js                      # data integrity
 node tests/verify-answers.js                   # canned FAQ prose vs the data
-NODE_PATH=$(npm root -g) node tests/battery.js # 44-check e2e suite
+node tests/verify-terms.js                     # story-card prose vs the data
+NODE_PATH=$(npm root -g) node tests/battery.js # 53-check e2e suite
 ```
 
 The battery covers rendering/marks, scenario-button pixel-stability,

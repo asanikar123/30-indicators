@@ -110,6 +110,58 @@ const REPO = '/home/user/30-indicators';
   await p.waitForTimeout(200);
   T('return-to-today restores 2026', await p.evaluate(() => +document.getElementById('yearSlider').value === 2026));
 
+  // story card (one chapter per presidency), docked under the timeline
+  const tcToday = await p.evaluate(() => {
+    const D = window.TI_DATA;
+    const todayMean = String(Math.round(D.INDICATORS.reduce((a, i) => a + i[2], 0) / 30));
+    return {
+      era: document.getElementById('termEra').textContent,
+      big: document.getElementById('termBig').textContent,
+      delta: document.getElementById('termDelta').textContent,
+      want: todayMean,
+      dots: document.querySelectorAll('#termDots span').length,
+      lastOn: document.querySelector('#termDots span:last-child').className === 'on',
+      terms: D.TERMS.length
+    };
+  });
+  T('story card: today shows the estimated chapter', /Since 2020/.test(tcToday.era) && tcToday.big === tcToday.want && /est/.test(tcToday.delta), JSON.stringify(tcToday));
+  T('story card: one dot per chapter, last active', tcToday.dots === tcToday.terms && tcToday.lastOn, tcToday.dots + '/' + tcToday.terms);
+  await p.locator('#yearSlider').evaluate(el => { el.value = 2013; el.dispatchEvent(new Event('input', { bubbles: true })); });
+  await p.waitForTimeout(300);
+  const tcObama = await p.evaluate(() => {
+    const D = window.TI_DATA;
+    const keys = Object.keys(D.HIST.s), n = D.HIST.s[keys[0]].length;
+    const ov = [];
+    for (let k = 0; k < n; k++) { let s = 0; keys.forEach(key => s += D.HIST.s[key][k]); ov.push(Math.round(s / keys.length)); }
+    const t = D.TERMS.find(t => t.who.indexOf('Obama') !== -1);
+    const band = document.querySelector('.spark-band');
+    return {
+      era: document.getElementById('termEra').textContent,
+      big: document.getElementById('termBig').textContent,
+      wantBig: String(ov[t.to - D.HIST.y0]),
+      bandLeft: parseFloat(band.style.left),
+      wantLeft: (t.from - D.YEAR_MIN) / (D.YEAR_TODAY - D.YEAR_MIN) * 100,
+      bandW: parseFloat(band.style.width),
+      wantW: (t.to - t.from) / (D.YEAR_TODAY - D.YEAR_MIN) * 100
+    };
+  });
+  T('story card: 2013 shows Obama chapter with data-derived number', /Obama/.test(tcObama.era) && tcObama.big === tcObama.wantBig, JSON.stringify(tcObama));
+  T('story card: highlight band spans the chapter', Math.abs(tcObama.bandLeft - tcObama.wantLeft) < 0.2 && Math.abs(tcObama.bandW - tcObama.wantW) < 0.2, tcObama.bandLeft + '/' + tcObama.bandW);
+  await p.click('#termPrev'); await p.waitForTimeout(300);
+  const tcPrev = await p.evaluate(() => ({
+    era: document.getElementById('termEra').textContent,
+    yr: +document.getElementById('yearSlider').value
+  }));
+  T('story card: prev arrow steps chapter and drives the year', /G\.W\. Bush/.test(tcPrev.era) && tcPrev.yr === 2009, JSON.stringify(tcPrev));
+  await p.click('#termClose'); await p.waitForTimeout(100);
+  T('story card: close hides card and band, reopen restores', await p.evaluate(() => {
+    const hidden = document.getElementById('termCard').hidden && document.querySelector('.spark-band').hidden &&
+      !document.getElementById('termReopen').hidden;
+    document.getElementById('termReopen').click();
+    return hidden && !document.getElementById('termCard').hidden && document.getElementById('termReopen').hidden;
+  }));
+  await p.click('#timeNote').catch(() => {}); await p.waitForTimeout(200);
+
   // dialogs
   for (const [btn, dlg] of [['#openTable', 'tableDialog'], ['#openAbout', 'aboutDialog']]) {
     await p.click(btn); await p.waitForTimeout(200);
@@ -126,7 +178,8 @@ const REPO = '/home/user/30-indicators';
   await p.goto('file:///tmp/claude-0/ti-plain/questions.html');
   await p.waitForTimeout(600);
   await p.evaluate(() => window.__qload([
-    { q: 'Why is turnout so jagged?', a: 'Because midterms.', mode: 'witty', at: '2026-09-25T00:20:00Z', url: '' },
+    { q: 'Why is turnout so jagged?', a: 'Because midterms.', mode: 'witty', at: '2026-09-25T00:20:00Z', url: '',
+      charts: [{ t: 'chart', i: -1, r: [2015, 2020], m: [2016], ml: 'elections' }, { t: 'delta', e: [{ name: 'X', delta: -5 }, { name: 'Y', delta: 3 }], c: 'cap' }] },
     { q: 'why is turnout so jagged?', a: 'A much longer scholarly answer. '.repeat(20), mode: 'scholar', at: '2026-09-24T00:20:00Z', url: '' },
     { q: 'What about the courts?', a: 'Courts answer.', mode: 'unhinged', at: '2026-09-23T00:20:00Z', url: '' },
     { q: 'SELF-TEST from debug.html - safe to ignore', a: '(test)', mode: 'debug', at: '2026-09-22T00:20:00Z', url: '' },
@@ -134,9 +187,12 @@ const REPO = '/home/user/30-indicators';
   const qp = await p.evaluate(() => ({
     cards: document.querySelectorAll('.card').length,
     grouped: [...document.querySelectorAll('.badge.times')].some(b => /asked 2/.test(b.textContent)),
-    stats: document.getElementById('stats').textContent
+    stats: document.getElementById('stats').textContent,
+    chartSvgs: document.querySelectorAll('.qchart svg').length,
+    chartLine: !!document.querySelector('.qchart path.h-line')
   }));
   T('questions page: dupes grouped, test entries hidden', qp.cards === 2 && qp.grouped && /3 questions · 2 unique/.test(qp.stats), JSON.stringify(qp));
+  T('questions page: chart recipes redrawn from data', qp.chartSvgs === 2 && qp.chartLine, qp.chartSvgs + '/' + qp.chartLine);
   await p.fill('#search', 'courts'); await p.waitForTimeout(100);
   T('questions page: search filters', await p.evaluate(() => document.querySelectorAll('.card').length) === 1);
   await p.fill('#search', ''); await p.click('#modeChips button[data-mode="unhinged"]'); await p.waitForTimeout(100);
@@ -170,6 +226,10 @@ const REPO = '/home/user/30-indicators';
       if (calls === 1) sse(res, [
         { type: 'content_block_start', index: 0, content_block: { type: 'tool_use', id: 't1', name: 'set_year', input: {} } },
         { type: 'content_block_delta', index: 0, delta: { type: 'input_json_delta', partial_json: '{"year":1992}' } },
+        { type: 'message_delta', delta: { stop_reason: 'tool_use' } }]);
+      else if (calls === 3) sse(res, [
+        { type: 'content_block_start', index: 0, content_block: { type: 'tool_use', id: 't2', name: 'show_history', input: {} } },
+        { type: 'content_block_delta', index: 0, delta: { type: 'input_json_delta', partial_json: '{"indicator":"overall"}' } },
         { type: 'message_delta', delta: { stop_reason: 'tool_use' } }]);
       else {
         const last = JSON.parse(body).messages.at(-1);
@@ -208,6 +268,12 @@ const REPO = '/home/user/30-indicators';
   T('worker chat: tool round moved year to 1992', chat.yr === 1992, String(chat.yr));
   T('worker chat: streamed final text', /Now showing 1992/.test(chat.msg || ''), chat.msg);
   T('typed exchange filed to /log with question + answer', logs.length === 1 && logs[0].q === 'show 1992' && /Now showing 1992/.test(logs[0].a || ''), JSON.stringify(logs[0] || null));
+  // a chart-producing exchange logs the chart's recipe (redrawable, no image)
+  await p.fill('#askInput', 'chart the overall trend'); await p.click('#askSend');
+  await p.waitForTimeout(2200);
+  T('chart exchange: chart spec captured in /log', logs.length === 2 && Array.isArray(logs[1].charts) &&
+    logs[1].charts.length === 1 && logs[1].charts[0].t === 'chart' && logs[1].charts[0].i === -1,
+    JSON.stringify(logs[1] && logs[1].charts));
   // chips collapsed to a row after conversation
   T('chips collapse to one row after chat', await p.evaluate(() => document.getElementById('faqChips').getBoundingClientRect().height < 60));
   // fullscreen + era chart with marks via hook
@@ -232,7 +298,7 @@ const REPO = '/home/user/30-indicators';
     return [...document.querySelectorAll('.msg.ai')].some(m => m.textContent === want);
   }));
   // canned recovery chip drives the page: levers move, hero matches the data-derived value
-  const callsBefore = calls;
+  const callsBefore = calls, logsBefore = logs.length;
   await p.click('#faqChips button:has-text("realistic recovery")');
   await p.waitForTimeout(400);
   const rec = await p.evaluate(() => {
@@ -248,7 +314,7 @@ const REPO = '/home/user/30-indicators';
     };
   });
   T('canned recovery chip: levers applied, hero = data-derived ' + rec.want, rec.hero === rec.want, rec.hero);
-  T('canned chips never hit the API or the log', calls === callsBefore && logs.length === 1, calls + ' vs ' + callsBefore + ', logs ' + logs.length);
+  T('canned chips never hit the API or the log', calls === callsBefore && logs.length === logsBefore, calls + ' vs ' + callsBefore + ', logs ' + logs.length);
   srv.close();
 
   // ---- mobile ----
@@ -259,9 +325,12 @@ const REPO = '/home/user/30-indicators';
     const spans = [...document.querySelectorAll('.year-ruler span')].filter(x => getComputedStyle(x).display !== 'none');
     let overlap = false; let prev = null;
     for (const sp of spans) { const r = sp.getBoundingClientRect(); if (prev && r.left < prev) overlap = true; prev = r.right; }
-    return { labels: spans.length, overlap, sparkH: document.querySelector('.spark-box').getBoundingClientRect().height, docW: document.documentElement.scrollWidth, vw: window.innerWidth };
+    return { labels: spans.length, overlap, sparkH: document.querySelector('.spark-box').getBoundingClientRect().height, docW: document.documentElement.scrollWidth, vw: window.innerWidth,
+      cardVisible: document.getElementById('termCard').getBoundingClientRect().height > 30,
+      navHidden: getComputedStyle(document.getElementById('termPrev')).display === 'none' };
   });
   T('mobile: 7 axis labels, no overlap', mm.labels === 7 && !mm.overlap, mm.labels + '/' + mm.overlap);
+  T('mobile: story card shown, arrows swapped for swipe', mm.cardVisible && mm.navHidden);
   T('mobile: compact spark, no horizontal scroll', mm.sparkH <= 50 && mm.docW <= mm.vw + 1, mm.sparkH + '/' + mm.docW + '>' + mm.vw);
   T('mobile: zero errors', merrs.length === 0, merrs.join(';'));
 
