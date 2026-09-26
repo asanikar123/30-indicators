@@ -21,6 +21,12 @@ Democracy in an Age of Conflict*.
   values; the dashed tail bridges illustratively to today. Presidential
   elections are marked (dashed lines + dots), midterms as faint ticks, and
   the x-axis is labeled in election years.
+- **A story card under the timeline** — one chapter per presidency, ending
+  with the post-2020 data gap. Scrubbing or playback swaps chapters as the
+  year crosses each era (highlighted on the timeline); arrows or a swipe
+  step through them. Numbers are computed from the data; the one-sentence
+  notes live in `assets/data.js` and are verified by
+  `tests/verify-terms.js`.
 - **Click any column** for its 45-year measured line chart in a docked panel.
 - **Six levers** and three preset scenarios (Today / Decline / Recovery) for
   counterfactuals.
@@ -61,7 +67,8 @@ cloudflare-worker/      key-holding proxy for the public chat (setup in file)
 data/                   archived GSoDI v5.1 dataset + provenance (README)
 tests/                  verify-data.js (CSV ↔ page data diff, 22/22 exact)
                         verify-answers.js (canned FAQ figures vs the data)
-                        battery.js (46-check headless end-to-end suite)
+                        verify-terms.js (story-card figures vs the data)
+                        battery.js (53-check headless end-to-end suite)
 .github/workflows/      push to main → GitHub Pages deploy
 ```
 

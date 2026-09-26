@@ -110,6 +110,58 @@ const REPO = '/home/user/30-indicators';
   await p.waitForTimeout(200);
   T('return-to-today restores 2026', await p.evaluate(() => +document.getElementById('yearSlider').value === 2026));
 
+  // story card (one chapter per presidency), docked under the timeline
+  const tcToday = await p.evaluate(() => {
+    const D = window.TI_DATA;
+    const todayMean = String(Math.round(D.INDICATORS.reduce((a, i) => a + i[2], 0) / 30));
+    return {
+      era: document.getElementById('termEra').textContent,
+      big: document.getElementById('termBig').textContent,
+      delta: document.getElementById('termDelta').textContent,
+      want: todayMean,
+      dots: document.querySelectorAll('#termDots span').length,
+      lastOn: document.querySelector('#termDots span:last-child').className === 'on',
+      terms: D.TERMS.length
+    };
+  });
+  T('story card: today shows the estimated chapter', /Since 2020/.test(tcToday.era) && tcToday.big === tcToday.want && /est/.test(tcToday.delta), JSON.stringify(tcToday));
+  T('story card: one dot per chapter, last active', tcToday.dots === tcToday.terms && tcToday.lastOn, tcToday.dots + '/' + tcToday.terms);
+  await p.locator('#yearSlider').evaluate(el => { el.value = 2013; el.dispatchEvent(new Event('input', { bubbles: true })); });
+  await p.waitForTimeout(300);
+  const tcObama = await p.evaluate(() => {
+    const D = window.TI_DATA;
+    const keys = Object.keys(D.HIST.s), n = D.HIST.s[keys[0]].length;
+    const ov = [];
+    for (let k = 0; k < n; k++) { let s = 0; keys.forEach(key => s += D.HIST.s[key][k]); ov.push(Math.round(s / keys.length)); }
+    const t = D.TERMS.find(t => t.who.indexOf('Obama') !== -1);
+    const band = document.querySelector('.spark-band');
+    return {
+      era: document.getElementById('termEra').textContent,
+      big: document.getElementById('termBig').textContent,
+      wantBig: String(ov[t.to - D.HIST.y0]),
+      bandLeft: parseFloat(band.style.left),
+      wantLeft: (t.from - D.YEAR_MIN) / (D.YEAR_TODAY - D.YEAR_MIN) * 100,
+      bandW: parseFloat(band.style.width),
+      wantW: (t.to - t.from) / (D.YEAR_TODAY - D.YEAR_MIN) * 100
+    };
+  });
+  T('story card: 2013 shows Obama chapter with data-derived number', /Obama/.test(tcObama.era) && tcObama.big === tcObama.wantBig, JSON.stringify(tcObama));
+  T('story card: highlight band spans the chapter', Math.abs(tcObama.bandLeft - tcObama.wantLeft) < 0.2 && Math.abs(tcObama.bandW - tcObama.wantW) < 0.2, tcObama.bandLeft + '/' + tcObama.bandW);
+  await p.click('#termPrev'); await p.waitForTimeout(300);
+  const tcPrev = await p.evaluate(() => ({
+    era: document.getElementById('termEra').textContent,
+    yr: +document.getElementById('yearSlider').value
+  }));
+  T('story card: prev arrow steps chapter and drives the year', /G\.W\. Bush/.test(tcPrev.era) && tcPrev.yr === 2009, JSON.stringify(tcPrev));
+  await p.click('#termClose'); await p.waitForTimeout(100);
+  T('story card: close hides card and band, reopen restores', await p.evaluate(() => {
+    const hidden = document.getElementById('termCard').hidden && document.querySelector('.spark-band').hidden &&
+      !document.getElementById('termReopen').hidden;
+    document.getElementById('termReopen').click();
+    return hidden && !document.getElementById('termCard').hidden && document.getElementById('termReopen').hidden;
+  }));
+  await p.click('#timeNote').catch(() => {}); await p.waitForTimeout(200);
+
   // dialogs
   for (const [btn, dlg] of [['#openTable', 'tableDialog'], ['#openAbout', 'aboutDialog']]) {
     await p.click(btn); await p.waitForTimeout(200);
@@ -273,9 +325,12 @@ const REPO = '/home/user/30-indicators';
     const spans = [...document.querySelectorAll('.year-ruler span')].filter(x => getComputedStyle(x).display !== 'none');
     let overlap = false; let prev = null;
     for (const sp of spans) { const r = sp.getBoundingClientRect(); if (prev && r.left < prev) overlap = true; prev = r.right; }
-    return { labels: spans.length, overlap, sparkH: document.querySelector('.spark-box').getBoundingClientRect().height, docW: document.documentElement.scrollWidth, vw: window.innerWidth };
+    return { labels: spans.length, overlap, sparkH: document.querySelector('.spark-box').getBoundingClientRect().height, docW: document.documentElement.scrollWidth, vw: window.innerWidth,
+      cardVisible: document.getElementById('termCard').getBoundingClientRect().height > 30,
+      navHidden: getComputedStyle(document.getElementById('termPrev')).display === 'none' };
   });
   T('mobile: 7 axis labels, no overlap', mm.labels === 7 && !mm.overlap, mm.labels + '/' + mm.overlap);
+  T('mobile: story card shown, arrows swapped for swipe', mm.cardVisible && mm.navHidden);
   T('mobile: compact spark, no horizontal scroll', mm.sparkH <= 50 && mm.docW <= mm.vw + 1, mm.sparkH + '/' + mm.docW + '>' + mm.vw);
   T('mobile: zero errors', merrs.length === 0, merrs.join(';'));
 

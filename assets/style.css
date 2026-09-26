@@ -352,6 +352,66 @@
     box-sizing: border-box;
   }
   #yearSlider { --fill-color: var(--ink-2); }
+  /* ---- story card: one chapter per presidency, docked under the timeline ---- */
+  .spark-band {
+    position: absolute; top: 0; bottom: 0; pointer-events: none;
+    background: rgba(165, 28, 48, 0.07);
+    border-left: 1px dashed rgba(165, 28, 48, 0.5);
+    border-right: 1px dashed rgba(165, 28, 48, 0.5);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .spark-band {
+      background: rgba(217, 119, 129, 0.10);
+      border-left-color: rgba(217, 119, 129, 0.55);
+      border-right-color: rgba(217, 119, 129, 0.55);
+    }
+  }
+  :root[data-theme="dark"] .spark-band {
+    background: rgba(217, 119, 129, 0.10);
+    border-left-color: rgba(217, 119, 129, 0.55);
+    border-right-color: rgba(217, 119, 129, 0.55);
+  }
+  .spark-band[hidden] { display: none; }
+  .term-card {
+    display: flex; align-items: center; gap: 14px; position: relative;
+    margin-top: 10px; background: var(--bubble); border-radius: 10px; padding: 9px 13px;
+  }
+  .term-card[hidden] { display: none; }
+  .term-card .tc-nav {
+    flex: none; width: 26px; height: 26px; cursor: pointer; font-size: 11px;
+    background: none; border: 1px solid var(--grid); border-radius: 999px; color: var(--ink-muted);
+  }
+  .term-card .tc-nav:hover { color: var(--accent); border-color: var(--accent); }
+  .term-card .tc-who { flex: 0 0 148px; min-width: 0; }
+  .term-card .tc-head { display: flex; align-items: center; gap: 8px; }
+  .term-card .tc-era {
+    font-size: 0.64rem; letter-spacing: 0.13em; text-transform: uppercase;
+    color: var(--accent); font-weight: 700; white-space: nowrap;
+  }
+  .term-card .tc-dots { display: inline-flex; gap: 3px; }
+  .term-card .tc-dots span {
+    width: 4px; height: 4px; border-radius: 50%; background: var(--baseline);
+  }
+  .term-card .tc-dots span.on { background: var(--accent); }
+  .term-card .tc-yrs { font-family: "Libre Caslon Text", Georgia, serif; font-size: 1.02rem; font-weight: 700; }
+  .term-card .tc-num { display: flex; align-items: baseline; gap: 7px; flex: none; }
+  .term-card .tc-big { font-family: "Libre Caslon Text", Georgia, serif; font-size: 2rem; font-weight: 700; line-height: 1; }
+  .term-card .tc-delta { font-size: 0.78rem; font-weight: 700; white-space: nowrap; }
+  .term-card .tc-delta.tc-down { color: var(--status-critical); }
+  .term-card .tc-delta.tc-up { color: var(--status-good); }
+  .term-card .tc-story { flex: 1; margin: 0; font-size: 0.8rem; line-height: 1.45; color: var(--ink-2); }
+  .term-card .tc-close {
+    position: absolute; top: 3px; right: 5px; background: none; border: none; cursor: pointer;
+    color: var(--ink-muted); font-size: 10px; padding: 3px 5px;
+  }
+  .term-card .tc-close:hover { color: var(--accent); }
+  .term-reopen {
+    margin-top: 8px; background: none; border: none; cursor: pointer; padding: 2px 0;
+    color: var(--ink-muted); font: inherit; font-size: 0.78rem;
+  }
+  .term-reopen:hover { color: var(--accent); }
+  .term-reopen[hidden] { display: none; }
+
   .year-ruler { position: relative; flex: none; height: 13px; }
   .year-ruler span {
     position: absolute;
@@ -609,6 +669,12 @@
     .hero-figure { font-size: 20px; }
     .hero-delta, .low-key { display: none; }
     .spark-box { min-height: 42px; }
+    .term-card { flex-wrap: wrap; gap: 6px 12px; padding: 9px 11px 7px; }
+    .term-card .tc-nav { display: none; } /* swipe steps chapters on touch */
+    .term-card .tc-who { flex: 1 1 auto; }
+    .term-card .tc-num { margin-left: auto; padding-right: 14px; }
+    .term-card .tc-big { font-size: 1.7rem; }
+    .term-card .tc-story { flex-basis: 100%; font-size: 0.78rem; }
     .year-ruler .yr-alt { display: none; }
     .stack-strip { font-size: 9px; padding: 5px 10px 4px; }
     .zone-scenario { padding: 6px 10px 7px; }

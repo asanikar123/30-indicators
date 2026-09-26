@@ -12,7 +12,10 @@ does; this file is about how to work on it safely.
   everyone). Keep it empty unless the owner says otherwise.
 - `assets/data.js` — ALL data as `window.TI_DATA`. Edit here for any content
   change (scores, names, weights, presets, election years). Never put data
-  in app.js.
+  in app.js. Includes `TERMS`: the timeline story card's chapters (one per
+  presidency + the post-2020 estimated chapter); only the prose lives
+  there — card numbers compute from HIST — and every figure a note states
+  is checked by `node tests/verify-terms.js`.
 - `assets/answers.js` — canned FAQ-chip answers as `window.TI_ANSWERS`
   (scholar + witty voices; unhinged deliberately goes live). Steps run the
   chat's own tools so charts/levers come from TI_DATA; only the prose is
@@ -75,7 +78,8 @@ does; this file is about how to work on it safely.
 ```
 node tests/verify-data.js                      # data integrity
 node tests/verify-answers.js                   # canned FAQ prose vs the data
-NODE_PATH=$(npm root -g) node tests/battery.js # 46-check e2e suite
+node tests/verify-terms.js                     # story-card prose vs the data
+NODE_PATH=$(npm root -g) node tests/battery.js # 53-check e2e suite
 ```
 
 The battery covers rendering/marks, scenario-button pixel-stability,
