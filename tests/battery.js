@@ -267,13 +267,14 @@ const REPO = '/home/user/30-indicators';
   let chat = await p.evaluate(() => ({ yr: +document.getElementById('yearSlider').value, msg: [...document.querySelectorAll('.msg.ai')].pop()?.textContent }));
   T('worker chat: tool round moved year to 1992', chat.yr === 1992, String(chat.yr));
   T('worker chat: streamed final text', /Now showing 1992/.test(chat.msg || ''), chat.msg);
-  T('typed exchange filed to /log with question + answer', logs.length === 1 && logs[0].q === 'show 1992' && /Now showing 1992/.test(logs[0].a || ''), JSON.stringify(logs[0] || null));
+  T('typed exchange: send-time stub filed before the answer', logs.length === 2 && logs[0].q === 'show 1992' && logs[0].a === null, JSON.stringify(logs[0] || null));
+  T('typed exchange: completed answer filed after it', /Now showing 1992/.test((logs[1] || {}).a || ''), JSON.stringify(logs[1] || null));
   // a chart-producing exchange logs the chart's recipe (redrawable, no image)
   await p.fill('#askInput', 'chart the overall trend'); await p.click('#askSend');
   await p.waitForTimeout(2200);
-  T('chart exchange: chart spec captured in /log', logs.length === 2 && Array.isArray(logs[1].charts) &&
-    logs[1].charts.length === 1 && logs[1].charts[0].t === 'chart' && logs[1].charts[0].i === -1,
-    JSON.stringify(logs[1] && logs[1].charts));
+  T('chart exchange: chart spec captured in /log', logs.length === 4 && Array.isArray(logs[3].charts) &&
+    logs[3].charts.length === 1 && logs[3].charts[0].t === 'chart' && logs[3].charts[0].i === -1,
+    JSON.stringify(logs[3] && logs[3].charts));
   // chips collapsed to a row after conversation
   T('chips collapse to one row after chat', await p.evaluate(() => document.getElementById('faqChips').getBoundingClientRect().height < 60));
   // fullscreen + era chart with marks via hook

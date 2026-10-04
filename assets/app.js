@@ -1687,6 +1687,11 @@
     addMsg("user", q);
     record({ t: "user", x: q });
     logQuestion(q);
+    /* File the question at send time too: if the answer never completes on
+       this device (tab closed, phone locked mid-stream), the inbox still
+       records that it was asked. The completion below re-files the full
+       exchange; the review page groups the two and shows the answered one. */
+    logExchange(q, null, null);
     var aiDiv = addMsg("ai", "");
     var typing = document.createElement("span");
     typing.className = "typing";
@@ -1723,7 +1728,7 @@
       logExchange(q, res.text, chartsSince(chartMark));
     }, function (err) {
       chatHistory.pop();
-      logExchange(q, null, chartsSince(chartMark));
+      /* no error-path log: the send-time stub above already filed the question */
       aiDiv.textContent =
         err && err.code === "rate_limited" ? "Rate limited — give it a moment and try again." :
         err && err.code === "cancelled" ? "Cancelled." :
